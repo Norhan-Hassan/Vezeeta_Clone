@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vezeeta_Clone.Service\Vezeeta_Clone.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\ApplicationUserIdentity\Commands\Handlers\" />
+    <Folder Include="Features\ApplicationUserIdentity\Commands\Models\" />
+    <Folder Include="Features\ApplicationUserIdentity\Commands\Validators\" />
+    <Folder Include="Features\ApplicationUserIdentity\Queries\Handlers\" />
+    <Folder Include="Features\ApplicationUserIdentity\Queries\Models\" />
+    <Folder Include="Features\ApplicationUserIdentity\Queries\Results\" />
+    <Folder Include="Features\Doctor\Commands\Handlers\" />
+    <Folder Include="Features\Doctor\Commands\Models\" />
+    <Folder Include="Features\Doctor\Commands\Validations\" />
+    <Folder Include="Features\Patient\Commands\Handlers\" />
+    <Folder Include="Features\Patient\Commands\Models\" />
+    <Folder Include="Features\Patient\Commands\Validators\" />
+    <Folder Include="Features\Patient\Queries\Handlers\" />
+    <Folder Include="Features\Patient\Queries\Models\" />
+    <Folder Include="Features\Patient\Queries\Results\" />
+    <Folder Include="Mapping\DoctorMapping\CommandMapping\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+  </ItemGroup>
+
+</Project>
