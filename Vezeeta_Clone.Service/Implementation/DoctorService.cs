@@ -24,7 +24,7 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var doctor = await _doctorRepo.GetTableNoTracking()
                                      .Include(d => d.Specialization)
-                                     .FirstOrDefaultAsync(d => d.Id == id);
+                                     .FirstOrDefaultAsync(d => d.AppUserID == id);
             return doctor;
         }
         #endregion

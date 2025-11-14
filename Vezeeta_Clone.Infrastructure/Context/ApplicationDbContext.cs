@@ -13,7 +13,6 @@ namespace Vezeeta_Clone.Infrastructure.Context
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<Admin> Admins { get; set; }
         public DbSet<DoctorPatient> DoctorPatients { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<DoctorClinic> DoctorClinics { get; set; }
@@ -33,41 +32,38 @@ namespace Vezeeta_Clone.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             builder.Entity<Doctor>(entity =>
             {
 
                 entity.HasOne(d => d.ApplicationUser)
                     .WithOne()
-                    .HasForeignKey<Doctor>(d => d.Id)
+                    .HasForeignKey<Doctor>(d => d.AppUserID)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(d => d.Specialization)
                     .WithMany(s => s.Doctors)
                     .HasForeignKey(d => d.SpecializationId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.Restrict);
             });
+
+
+
             builder.Entity<Patient>(entity =>
             {
 
                 entity.HasOne(p => p.ApplicationUser)
                     .WithOne()
-                    .HasForeignKey<Patient>(p => p.Id)
+                    .HasForeignKey<Patient>(p => p.AppUserID)
                     .OnDelete(DeleteBehavior.Restrict);
 
-            });
-            builder.Entity<Admin>(entity =>
-            {
-
-                entity.HasOne(a => a.ApplicationUser)
-                    .WithOne()
-                    .HasForeignKey<Admin>(a => a.Id)
-                    .OnDelete(DeleteBehavior.Restrict);
             });
 
 
             builder.Entity<DoctorPatient>(entity =>
             {
-                entity.HasKey(dp => dp.ID);
+                entity.Ignore(e => e.ID);
+                entity.HasKey(dp => new { dp.DoctorId, dp.PatientId });
 
                 entity.HasOne(dp => dp.Doctor)
                      .WithMany(d => d.DoctorPatients)
@@ -83,8 +79,8 @@ namespace Vezeeta_Clone.Infrastructure.Context
 
             builder.Entity<DoctorClinic>(entity =>
             {
-
-                entity.HasKey(dc => dc.ID);
+                entity.Ignore(e => e.ID);
+                entity.HasKey(dc => new { dc.DoctorId, dc.ClinicId });
 
                 entity.HasOne(dc => dc.Clinic)
                     .WithMany(dc => dc.DoctorClinics)
@@ -119,6 +115,22 @@ namespace Vezeeta_Clone.Infrastructure.Context
                        .OnDelete(DeleteBehavior.Restrict);
 
             });
+            //one to one between Appointment and AvailableSlot
+            builder.Entity<Appointment>(entity =>
+            {
+                entity.HasKey(a => a.ID);
+                entity.HasOne(a => a.AvailableSlot)
+                       .WithOne(a => a.Appointment)
+                       .HasForeignKey<Appointment>(a => a.SlotId)
+                       .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            foreach (var relationship in builder.Model.GetEntityTypes()
+             .SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
 
             //soft delete for all entities inherits from baseclasss
             foreach (var entityType in builder.Model.GetEntityTypes()
@@ -133,11 +145,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
                     .HasQueryFilter(lambda);
             }
 
-            foreach (var relationship in builder.Model.GetEntityTypes()
-                .SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
+
             base.OnModelCreating(builder);
         }
     }

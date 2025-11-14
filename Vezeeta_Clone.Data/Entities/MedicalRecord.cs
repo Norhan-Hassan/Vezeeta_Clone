@@ -10,6 +10,9 @@ namespace Vezeeta_Clone.Data.Entities
         public string PatientId { get; set; }
         public Patient Patient { get; set; }
 
+        /// <summary>
+        /// not every medical record is linked to an appointment
+        /// </summary>
 
         [ForeignKey("Appointment")]
         public int? AppointmentId { get; set; }

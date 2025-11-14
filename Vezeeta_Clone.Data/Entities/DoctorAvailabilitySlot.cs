@@ -13,8 +13,7 @@ namespace Vezeeta_Clone.Data.Entities
         public int DoctorAvailabilityId { get; set; }
         public DoctorAvailability? Availability { get; set; }
 
-        //[ForeignKey("Appointment")]
-        //public int? AppointmentId { get; set; }
+        //because there would be free solt without apointment
         public Appointment? Appointment { get; set; }
 
 
