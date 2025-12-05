@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Vezeeta_Clone.Core;
 using Vezeeta_Clone.Core.Middleware;
 using Vezeeta_Clone.Data.Entities;
@@ -37,6 +38,17 @@ namespace Vezeeta_Clone.Api
 
             #endregion
 
+            #region Localization
+            builder.Services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[] { "en-US", "ar-EG" };
+                options.SetDefaultCulture(supportedCultures[0])
+                    .AddSupportedCultures(supportedCultures)
+                    .AddSupportedUICultures(supportedCultures);
+            });
+            #endregion
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -46,6 +58,12 @@ namespace Vezeeta_Clone.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            #region Localization Middleware
+            var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
+            #endregion
+
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseHttpsRedirection();
 

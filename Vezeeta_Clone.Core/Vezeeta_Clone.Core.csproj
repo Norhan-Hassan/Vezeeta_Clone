@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Features\ApplicationUserIdentity\Commands\Handlers\" />
-    <Folder Include="Features\ApplicationUserIdentity\Commands\Models\" />
-    <Folder Include="Features\ApplicationUserIdentity\Commands\Validators\" />
     <Folder Include="Features\ApplicationUserIdentity\Queries\Handlers\" />
     <Folder Include="Features\ApplicationUserIdentity\Queries\Models\" />
     <Folder Include="Features\ApplicationUserIdentity\Queries\Results\" />
@@ -36,6 +34,7 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
     <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0" />
   </ItemGroup>
 
 </Project>
