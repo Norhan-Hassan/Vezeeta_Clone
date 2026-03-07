@@ -4,14 +4,27 @@ A comprehensive healthcare appointment booking platform API built with **ASP.NET
 
 ## 🏗️ Architecture Overview
 
-The API follows a **5-layer Onion Architecture** pattern, ensuring separation of concerns, maintainability, and testability:
+The API follows a **5-layer Onion Architecture** pattern combined with **CQRS (Command Query Responsibility Segregation)** and **Mediator Pattern**, ensuring separation of concerns, maintainability, and testability:
 
 ```
 ┌─────────────────────────────────────────────────┐
 │              API Layer (Controllers)             │
 │          - HTTP Endpoints & Routing              │
 │          - Request/Response Handling             │
+│          - Mediator Integration (CQRS)           │
 └─────────────────────────────────────────────────┘
+                        ↓
+            ┌───────────────────────┐
+            │   MediatR Mediator    │
+            │  (CQRS Pipeline)      │
+            └───────────────────────┘
+                   ↙          ↘
+         ┌──────────────┐  ┌──────────────┐
+         │   Commands   │  │    Queries   │
+         │  (Write Ops) │  │  (Read Ops)  │
+         └──────────────┘  └──────────────┘
+                   ↓            ↓
+            Pipeline Behaviors (Validation, Logging, Localization)
                         ↓
 ┌─────────────────────────────────────────────────┐
 │         Infrastructure Layer (Infra)            │
@@ -19,18 +32,22 @@ The API follows a **5-layer Onion Architecture** pattern, ensuring separation of
 │   - External Service Integrations                │
 │   - Authentication & Authorization              │
 │   - Email/Notification Services                 │
+│   - Localization Service (i18n/Arabic-English)  │
 └─────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────┐
 │         Services & Logic Layer (Services)       │
+│   - Command Handlers (IRequestHandler)          │
+│   - Query Handlers (IRequestHandler)            │
 │   - Business Logic Implementation               │
-│   - Service Classes                             │
-│   - Validation & Processing                     │
+│   - Validation & Processing (Pipelines)         │
+│   - Localization Key Management                 │
 └─────────────────────────────────────────────────┘
                         ↓
 ┌─────────────────────────────────────────────────┐
 │         Data Layer (Data Access)                │
 │   - Repository Pattern Implementation           │
+│   - Unit of Work Pattern                        │
 │   - Database Queries & Persistence              │
 │   - Data Mapping & Transformation               │
 └─────────────────────────────────────────────────┘
@@ -41,6 +58,7 @@ The API follows a **5-layer Onion Architecture** pattern, ensuring separation of
 │   - Base Classes & Interfaces                   │
 │   - Domain Enums & Constants                    │
 │   - Business Rules (as attributes)              │
+│   - Localization Keys Constants                 │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -52,6 +70,12 @@ VezeetaCloneAPI/
 │   ├── Controllers/
 │   ├── DTOs/
 │   ├── Middleware/
+│   ├── Resources/                   # Localization Resources
+│   │   ├── ErrorMessages.ar.resx
+│   │   ├── ErrorMessages.en.resx
+│   │   ├── SuccessMessages.ar.resx
+│   │   ├── SuccessMessages.en.resx
+│   │   └── ValidationMessages.ar/en.resx
 │   └── appsettings.json
 │
 ├── 2. Infrastructure/               # External Integration & Services
@@ -61,15 +85,30 @@ VezeetaCloneAPI/
 │   ├── Services/
 │   │   ├── EmailService/
 │   │   ├── NotificationService/
+│   │   ├── LocalizationService/     # i18n Service
+│   │   └── ImageUploadService/
 │   └── Migrations/
 │
-├── 3. Services/                     # Business Logic Layer
-│   ├── AppointmentService/
-│   ├── DoctorService/
-│   ├── PatientService/
-│   ├── MedicalRecordService/
-│   ├── NotificationService/
-│   └── ReviewService/
+├── 3. Services/                     # Business Logic Layer (CQRS Handlers)
+│   ├── Commands/
+│   │   ├── CreateAppointmentCommand/
+│   │   ├── UpdateDoctorCommand/
+│   │   ├── CreateReviewCommand/
+│   │   └── Handlers/
+│   │
+│   ├── Queries/
+│   │   ├── GetDoctorsQuery/
+│   │   ├── GetAppointmentsQuery/
+│   │   ├── GetMedicalRecordQuery/
+│   │   └── Handlers/
+│   │
+│   ├── Pipeline/                    # Mediator Behaviors
+│   │   ├── ValidationBehavior/
+│   │   ├── LoggingBehavior/
+│   │   └── LocalizationBehavior/
+│   │
+│   └── Constants/
+│       └── LocalizationKeys.cs      # All localization key constants
 │
 ├── 4. Data/                         # Data Access Layer
 │   ├── Repositories/
@@ -131,6 +170,190 @@ VezeetaCloneAPI/
 - **Notification**: System notifications for users
 - **UserToken**: JWT token management with refresh token support
 
+## 🔑 Design Patterns
+
+### CQRS (Command Query Responsibility Segregation)
+The API implements complete CQRS pattern separation:
+
+**Commands** - Write Operations (State Changes)
+```csharp
+public class CreateAppointmentCommand : IRequest<CreateAppointmentResponse>
+{
+    public string PatientId { get; set; }
+    public int SlotId { get; set; }
+}
+
+public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointmentCommand, CreateAppointmentResponse>
+{
+    // Implementation with validation and business logic
+}
+```
+
+**Queries** - Read Operations (No State Changes)
+```csharp
+public class GetDoctorsQuery : IRequest<List<DoctorDto>>
+{
+    public int? SpecializationId { get; set; }
+    public int? RegionId { get; set; }
+}
+
+public class GetDoctorsQueryHandler : IRequestHandler<GetDoctorsQuery, List<DoctorDto>>
+{
+    // Implementation with efficient read queries
+}
+```
+
+Benefits:
+- ✅ Clear separation between read and write models
+- ✅ Optimized queries for each operation type
+- ✅ Scalability through separate database schemas if needed
+- ✅ Better testing and maintainability
+
+### Mediator Pattern (MediatR)
+Uses MediatR library for request/response pipeline processing:
+
+**Pipeline Behaviors (Cross-Cutting Concerns)**
+- **ValidationBehavior** - Validates commands/queries before execution
+- **LoggingBehavior** - Logs all requests and responses
+- **LocalizationBehavior** - Adds localization context to requests
+
+Example:
+```csharp
+public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+{
+    public async Task<TResponse> Handle(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
+    {
+        // Validate request
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        return await next();
+    }
+}
+```
+
+## 🌍 Localization (i18n) - Arabic & English
+
+The API supports complete bi-lingual support with **Resource Files (.resx)** for centralized key management:
+
+### Supported Languages
+- 🇸🇦 **Arabic** (ar-SA)
+- 🇬🇧 **English** (en-US)
+
+### Localization Resources Structure
+```
+Resources/
+├── ErrorMessages.ar.resx          # Arabic error messages
+├── ErrorMessages.en.resx          # English error messages
+├── SuccessMessages.ar.resx        # Arabic success messages
+├── SuccessMessages.en.resx        # English success messages
+└── ValidationMessages.ar/en.resx  # Validation message keys
+```
+
+### Localization Keys Constants
+All keys are defined in `LocalizationKeys.cs`:
+```csharp
+public static class LocalizationKeys
+{
+    public static class Appointment
+    {
+        public const string Created = "Appointment.Created";      // "تم إنشاء الموعد بنجاح"
+        public const string Cancelled = "Appointment.Cancelled";  // "تم إلغاء الموعد"
+        public const string NotFound = "Appointment.NotFound";    // "الموعد غير موجود"
+        public const string SlotUnavailable = "Appointment.SlotUnavailable";
+    }
+    
+    public static class Doctor
+    {
+        public const string NotFound = "Doctor.NotFound";
+        public const string AddedSuccessfully = "Doctor.AddedSuccessfully";
+    }
+    
+    public static class Auth
+    {
+        public const string LoginSuccess = "Auth.LoginSuccess";
+        public const string InvalidCredentials = "Auth.InvalidCredentials";
+        public const string UserAlreadyExists = "Auth.UserAlreadyExists";
+    }
+}
+```
+
+### Usage in Controllers & Services
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class AppointmentsController : ControllerBase
+{
+    private readonly IMediator _mediator;
+    private readonly ILocalizationService _localizationService;
+    
+    [HttpPost]
+    public async Task<ActionResult> CreateAppointment(CreateAppointmentCommand command)
+    {
+        var result = await _mediator.Send(command);
+        var message = _localizationService.Get(LocalizationKeys.Appointment.Created);
+        return Ok(new { message, result });
+    }
+}
+```
+
+### Request Language Header
+Clients specify language via request header:
+```
+GET /api/doctors
+Accept-Language: ar-SA
+```
+or
+```
+GET /api/doctors
+Accept-Language: en-US
+```
+
+### LocalizationService Implementation
+```csharp
+public interface ILocalizationService
+{
+    string Get(string key, string language = null);
+    string Get(string key, params object[] args);
+}
+
+public class LocalizationService : ILocalizationService
+{
+    private readonly IStringLocalizer _localizer;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    
+    public string Get(string key, string language = null)
+    {
+        // Retrieves localized value from .resx resource files
+        // Falls back to English if translation not found
+        return _localizer[key];
+    }
+}
+```
+
+### Configuration in Startup
+```csharp
+services.AddLocalization(options => 
+    options.ResourcesPath = "Resources");
+
+services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] 
+    { 
+        new CultureInfo("en-US"),
+        new CultureInfo("ar-SA")
+    };
+    
+    options.DefaultRequestCulture = new RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
+app.UseRequestLocalization();
+```
+
 ## 🔑 Key Features
 
 ### Authentication & Authorization
@@ -172,7 +395,7 @@ VezeetaCloneAPI/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- .NET 9.0 
+- .NET 6.0 or higher
 - SQL Server / SQL Server Express
 - Visual Studio 2022 or VS Code
 
@@ -209,7 +432,7 @@ VezeetaCloneAPI/
    dotnet run
    ```
 
-The API will be available at `` (production).
+The API will be available at `https://localhost:7000` (or your configured port).
 
 ## 📡 API Endpoints
 
@@ -292,23 +515,29 @@ Doctor availability is defined once with duration, and the system auto-generates
 
 | Layer | Technology |
 |-------|-----------|
-| **API** | ASP.NET Core 6+ |
+| **API** | ASP.NET Core 9.0, MediatR (CQRS) |
 | **Database** | SQL Server, Entity Framework Core |
 | **Authentication** | ASP.NET Identity, JWT |
 | **Validation** | Data Annotations, FluentValidation |
 | **Mapping** | AutoMapper |
 | **Logging** | Serilog |
+| **Localization** | .resx Resources (Arabic & English) |
 | **Testing** | xUnit, Moq |
+| **Design Patterns** | Onion Architecture, CQRS, Mediator, Repository, Unit of Work |
 
 ## 📦 Dependencies
 
 Key NuGet packages:
-- `Microsoft.EntityFrameworkCore`
-- `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
-- `System.IdentityModel.Tokens.Jwt`
-- `AutoMapper`
-- `FluentValidation`
-- `Serilog`
+- `Microsoft.EntityFrameworkCore` - ORM
+- `Microsoft.AspNetCore.Identity.EntityFrameworkCore` - Identity management
+- `System.IdentityModel.Tokens.Jwt` - JWT authentication
+- `MediatR` - CQRS mediator pattern
+- `MediatR.Extensions.Microsoft.DependencyInjection` - MediatR DI integration
+- `AutoMapper` - Object mapping
+- `FluentValidation` - Data validation
+- `Serilog` - Structured logging
+- `Microsoft.Extensions.Localization` - Localization (i18n)
+- `Microsoft.AspNetCore.Localization` - Request localization
 
 ## 🧪 Testing Strategy
 
@@ -322,16 +551,29 @@ Tests/
 └── Core.Tests/
 ```
 
-Use xUnit for the testing framework and Moq for mocking dependencies.
+Use xUnit for testing framework and Moq for mocking dependencies.
 
-## 🔄 Development Workflow
+## 🔄 Development Workflow (CQRS-Based)
+
+When adding a new feature, follow this CQRS-aligned workflow:
 
 1. **Create/Modify Entity** in Core layer
 2. **Create Migration** in Infrastructure layer
 3. **Implement Repository** in Data layer
-4. **Create Service** in Services layer
-5. **Create DTOs & Controller** in API layer
-6. **Write Unit Tests** alongside development
+4. **Create CQRS Request** (Command or Query) in Services layer
+   - For write operations: Create **Command** class
+   - For read operations: Create **Query** class
+5. **Implement Handler** in Services layer
+   - Create **CommandHandler** or **QueryHandler**
+   - Add validation and business logic
+   - Add localization key usage
+6. **Register Handler** in Dependency Injection
+7. **Create Controller Endpoint** in API layer
+   - Inject `IMediator`
+   - Send command/query via mediator
+   - Return localized responses
+8. **Create Unit Tests** for handlers and services
+9. **Add Resource Keys** to .resx files (Arabic & English)
 
 ## 🚦 Status Tracking
 
@@ -345,13 +587,16 @@ Appointments support multiple statuses:
 ## 📝 Best Practices Implemented
 
 ✅ **Separation of Concerns** - Each layer has specific responsibilities  
+✅ **CQRS Pattern** - Clear separation between Commands (writes) and Queries (reads)  
+✅ **Mediator Pattern** - Decoupled request handling through MediatR  
 ✅ **DRY Principle** - Reusable components and services  
 ✅ **SOLID Principles** - Dependency injection, interface-based design  
-✅ **Error Handling** - Centralized exception handling middleware  
-✅ **Validation** - Input validation at multiple levels  
+✅ **Error Handling** - Centralized exception handling middleware with localized messages  
+✅ **Validation** - Input validation at multiple levels with localized error messages  
+✅ **Localization (i18n)** - Full Arabic & English support with .resx resource files  
 ✅ **Security** - JWT authentication, password hashing, data protection  
-✅ **Performance** - Async/await, efficient queries  
-✅ **Maintainability** - Clear naming conventions, documentation  
+✅ **Performance** - Async/await, efficient queries, separated read/write models  
+✅ **Maintainability** - Clear naming conventions, organized folder structure, comprehensive documentation  
 
 ## 🐛 Error Handling
 
@@ -383,6 +628,7 @@ All endpoints are documented with:
 3. Write unit tests for new features
 4. Ensure all tests pass
 5. Submit a pull request
+
 
 ## 👥 Support
 
