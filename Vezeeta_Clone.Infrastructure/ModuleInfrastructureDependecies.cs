@@ -12,6 +12,7 @@ namespace Vezeeta_Clone.Infrastructure
 
             services.AddTransient<IDoctorRepo, DoctorRepo>();
             services.AddTransient<IPatientRepo, PatientRepo>();
+            services.AddTransient<ISpecializationRepo, SpecializationRepo>();
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             return services;
         }

@@ -6,7 +6,7 @@ namespace Vezeeta_Clone.Core.Mapping.DoctorMapping
     {
         public DoctorProfile()
         {
-            GetDoctorByIdMapping();
+            DoctorAuthMapping();
         }
     }
 }

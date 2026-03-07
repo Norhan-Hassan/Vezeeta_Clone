@@ -15,5 +15,21 @@
             public const string List = Prefix + "list";
             public const string GetById = Prefix + SingleUser;
         }
+
+        public static class AuthRouting
+        {
+            public const string Prefix = Rule + "auth/";
+            public const string Add = Prefix + "role/create";
+            public const string Update = Prefix + "role/update";
+            public const string Delete = Prefix + "role/delete";
+            public const string DoctorRegister = Prefix + "doctor-register";
+            public const string PatientRegister = Prefix + "patient-register";
+            public const string SignIn = Prefix + "signIn";
+        }
+        public static class SpecializationRouting
+        {
+            public const string Prefix = Rule + "specialization/";
+            public const string Create = Prefix + "create";
+        }
     }
 }

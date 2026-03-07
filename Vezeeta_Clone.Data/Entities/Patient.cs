@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Vezeeta_Clone.Data.Entities.Enums;
 
 namespace Vezeeta_Clone.Data.Entities
 {
@@ -10,6 +11,7 @@ namespace Vezeeta_Clone.Data.Entities
         public string AppUserID { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = default!;
         public DateTime DateOfBirth { get; set; }
+        public BloodType? Blood_Type { get; set; }
         public ICollection<Appointment>? Appointments { get; set; } = new HashSet<Appointment>();
         public ICollection<Review>? Reviews { get; set; } = new HashSet<Review>();
         public ICollection<DoctorPatient> DoctorPatients { get; set; } = new HashSet<DoctorPatient>();

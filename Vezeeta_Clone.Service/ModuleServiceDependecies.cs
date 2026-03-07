@@ -9,6 +9,9 @@ namespace Vezeeta_Clone.Service
         public static IServiceCollection AddServiceDependecy(this IServiceCollection services)
         {
             services.AddTransient<IDoctorService, DoctorService>();
+            services.AddTransient<IAutherizationService, AutherizationService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<ISpecializationService, SpecializationService>();
             return services;
         }
     }

@@ -1,17 +1,17 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using Vezeeta_Clone.Core;
 using Vezeeta_Clone.Core.Middleware;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Infrastructure;
-using Vezeeta_Clone.Infrastructure.Context;
+using Vezeeta_Clone.Infrastructure.Seeder;
 using Vezeeta_Clone.Service;
 namespace Vezeeta_Clone.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -22,34 +22,42 @@ namespace Vezeeta_Clone.Api
             // builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
 
-            #region Identity
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-            #endregion
-
 
             #region Dependency Injection
             builder.Services.AddInfrastructureDependency()
                             .AddServiceDependecy()
-                             .AddCoreDependecy().AddServiceRegistrations();
+                             .AddCoreDependecy().AddServiceRegistrations(builder.Configuration);
 
             #endregion
 
             #region Localization
-            builder.Services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+            //builder.Services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+            builder.Services.AddLocalization();
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[] { "en-US", "ar-EG" };
                 options.SetDefaultCulture(supportedCultures[0])
                     .AddSupportedCultures(supportedCultures)
                     .AddSupportedUICultures(supportedCultures);
+
+                // Clear default providers and add only the ones you need
+                options.RequestCultureProviders.Clear();
+                options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider());
+                options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
             });
             #endregion
 
+            #region Seeding Database Roles And Admin User
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                await RoleSeeder.SeedRolesAsync(roleManager);
+                await UserSeeder.SeedUsersAsync(userManager);
+            }
+            #endregion
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -60,13 +68,13 @@ namespace Vezeeta_Clone.Api
             }
 
             #region Localization Middleware
-            var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+            var options = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
             #endregion
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

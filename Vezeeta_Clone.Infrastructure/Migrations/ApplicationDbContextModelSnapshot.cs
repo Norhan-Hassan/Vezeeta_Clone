@@ -381,7 +381,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<int>("Title")
                         .HasColumnType("int");
 
-                    b.Property<int>("WaitingTimeInMinutes")
+                    b.Property<int?>("WaitingTimeInMinutes")
                         .HasColumnType("int");
 
                     b.HasKey("AppUserID");
@@ -638,6 +638,9 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                 {
                     b.Property<string>("AppUserID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("Blood_Type")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
