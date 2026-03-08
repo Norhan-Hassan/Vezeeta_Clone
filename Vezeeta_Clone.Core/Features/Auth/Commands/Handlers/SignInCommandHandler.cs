@@ -5,11 +5,12 @@ using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
 using Vezeeta_Clone.Data.Entities;
+using Vezeeta_Clone.Data.Results;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 {
-    public class SignInCommandHandler : ResponseHandler, IRequestHandler<SignInCommand, Response<string>>
+    public class SignInCommandHandler : ResponseHandler, IRequestHandler<SignInCommand, Response<JwtAuthResult>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -27,21 +28,18 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             _localizer = localizer;
         }
 
-        public async Task<Response<string>> Handle(SignInCommand request, CancellationToken cancellationToken)
+        public async Task<Response<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-            {
-                return BadRequest<string>(_localizer[SharedResourcesKeys.EmailOrPassNotExist]);
-            }
-            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (!result.Succeeded || user == null)
-            {
-                return BadRequest<string>(_localizer[SharedResourcesKeys.EmailOrPassNotExist]);
-            }
-            var TokenResult = await _authenticationService.GenerateJwtTokenAsync(user);
 
-            return Success<string>(TokenResult, message: _localizer[SharedResourcesKeys.SignInSuccess]);
+            var signInresult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (!signInresult.Succeeded)
+            {
+                return BadRequest<JwtAuthResult>(_localizer[SharedResourcesKeys.EmailOrPassNotExist]);
+            }
+            var result = await _authenticationService.GenerateJwtTokenAsync(user);
+
+            return Success<JwtAuthResult>(result, message: _localizer[SharedResourcesKeys.SignInSuccess]);
         }
     }
 }

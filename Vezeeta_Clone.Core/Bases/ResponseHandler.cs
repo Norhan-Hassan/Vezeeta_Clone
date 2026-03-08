@@ -43,13 +43,13 @@ namespace Vezeeta_Clone.Core.Bases
                 Meta = Meta
             };
         }
-        public Response<T> Unauthorized<T>()
+        public Response<T> Unauthorized<T>(string message = null)
         {
             return new Response<T>()
             {
                 StatusCode = System.Net.HttpStatusCode.Unauthorized,
-                Succeeded = true,
-                Message = _localizer[SharedResourcesKeys.UnAuthorized]
+                Succeeded = false,
+                Message = message == null ? _localizer[SharedResourcesKeys.UnAuthorized] : message
             };
         }
         public Response<T> BadRequest<T>(string Message = null)

@@ -11,5 +11,6 @@ namespace Vezeeta_Clone.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true; // [for soft delete rather than the IsDeleted property in BasEntity]
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<UserToken> Tokens { get; set; } = new HashSet<UserToken>();
     }
 }

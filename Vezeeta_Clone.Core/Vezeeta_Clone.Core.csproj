@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Specializations\Query\**" />
+    <EmbeddedResource Remove="Features\Specializations\Query\**" />
+    <None Remove="Features\Specializations\Query\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
@@ -32,6 +38,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Vezeeta_Clone.Data\Vezeeta_Clone.Data.csproj" />
     <ProjectReference Include="..\Vezeeta_Clone.Service\Vezeeta_Clone.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Auth\Queries\Validators\" />
+    <Folder Include="Features\Specializations\Queries\" />
   </ItemGroup>
 
 </Project>

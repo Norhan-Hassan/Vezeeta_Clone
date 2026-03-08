@@ -30,6 +30,8 @@
         public const string EmailIsNotExist = "EmailIsNotExist";
         public const string EmailOrPassNotExist = "EmailOrPassNotExist";
         public const string SignInSuccess = "SignInSuccess";
+        public const string ValidToken = "ValidToken";
+        public const string InValidToken = "InValidToken";
 
 
 

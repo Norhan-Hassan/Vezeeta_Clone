@@ -11,6 +11,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
 
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<UserToken> Tokens { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<DoctorPatient> DoctorPatients { get; set; }

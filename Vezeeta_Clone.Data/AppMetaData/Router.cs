@@ -25,6 +25,8 @@
             public const string DoctorRegister = Prefix + "doctor-register";
             public const string PatientRegister = Prefix + "patient-register";
             public const string SignIn = Prefix + "signIn";
+            public const string RefreshToken = Prefix + "refresh-token";
+            public const string ValidateToken = Prefix + "check-token-validation";
         }
         public static class SpecializationRouting
         {

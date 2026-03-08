@@ -153,6 +153,9 @@
   <data name="InvalidPhoneNumber" xml:space="preserve">
     <value>يرجى إدخال رقم صالح</value>
   </data>
+  <data name="InValidToken" xml:space="preserve">
+    <value>التوكن غير صالح</value>
+  </data>
   <data name="IsExist" xml:space="preserve">
     <value>هذه القيمه موجوده بالفعل</value>
   </data>
@@ -200,5 +203,8 @@
   </data>
   <data name="UserNameAlreadyExists" xml:space="preserve">
     <value>اسم المستخدم هذا موجود بالفعل</value>
+  </data>
+  <data name="ValidToken" xml:space="preserve">
+    <value>التوكن صالح</value>
   </data>
 </root>
