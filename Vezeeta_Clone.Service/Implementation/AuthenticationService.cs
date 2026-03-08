@@ -121,7 +121,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public async Task<JwtAuthResult> GenerateJwtTokenAsync(ApplicationUser user)
         {
-            var (jwtToken, accessToken) = GetJwtToken(user);
+            var (jwtToken, accessToken) = await GetJwtTokenAsync(user);
 
             //refresh token
             var refreshToken = GetRefreshToken(user.Id);
@@ -173,6 +173,7 @@ namespace Vezeeta_Clone.Service.Implementation
                     Encoding.ASCII.GetBytes(_jwtSettings.Secret)),
 
                 ValidateLifetime = _jwtSettings.ValidateLifeTime,
+                RoleClaimType = ClaimTypes.Role
             };
             //read and validate the token
             try
@@ -225,7 +226,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 throw new SecurityTokenException("user is not found");
             }
 
-            var (newJwtToken, newAccesToken) = GetJwtToken(user); // new access token
+            var (newJwtToken, newAccesToken) = await GetJwtTokenAsync(user); // new access token
 
             var refreshTokenObj = new RefreshToken
             {
@@ -241,10 +242,11 @@ namespace Vezeeta_Clone.Service.Implementation
             return jwtAuthResult;
 
         }
-        private (JwtSecurityToken, string) GetJwtToken(ApplicationUser user)
+        private async Task<(JwtSecurityToken, string)> GetJwtTokenAsync(ApplicationUser user)
         {
+            var roles = await _userManager.GetRolesAsync(user);
             //claims
-            var claims = GetUserClaims(user);
+            var claims = GetUserClaims(user, roles.ToList());
 
             //access token
             var signingCredentials = new SigningCredentials(
@@ -271,15 +273,19 @@ namespace Vezeeta_Clone.Service.Implementation
             };
 
         }
-        private List<Claim> GetUserClaims(ApplicationUser user)
+        private List<Claim> GetUserClaims(ApplicationUser user, List<string> roles)
         {
             var claims = new List<Claim>
             {
                 new Claim(nameof(AppUserClaimModel.Id), user.Id),
                 new Claim(nameof(AppUserClaimModel.Email), user.Email),
-                new Claim(nameof(AppUserClaimModel.UserName), user.UserName),
-                new Claim(nameof(AppUserClaimModel.Role), _userManager.GetRolesAsync(user).Result.FirstOrDefault() ?? string.Empty)
+                new Claim(nameof(AppUserClaimModel.UserName), user.UserName)
+
             };
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             return claims;
         }
         private string GenerateRefreshToken()

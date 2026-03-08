@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Helper;
@@ -55,6 +56,7 @@ namespace Vezeeta_Clone.Infrastructure
                       ValidAudience = jwtSettings.Audience,
                       ValidateAudience = jwtSettings.ValidateAudience,
                       ValidateLifetime = jwtSettings.ValidateLifeTime,
+                      RoleClaimType = ClaimTypes.Role
                   };
               });
 
@@ -72,10 +74,10 @@ namespace Vezeeta_Clone.Infrastructure
 
                 options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
-                    Description = "Enter JWT Token",
+                    Description = "Enter JWT Token without bearer",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Scheme = JwtBearerDefaults.AuthenticationScheme.ToLower(),
                     BearerFormat = "JWT"
                 });

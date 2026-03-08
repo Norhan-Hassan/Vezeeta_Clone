@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
 using Vezeeta_Clone.Core.Features.Auth.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
+using Vezeeta_Clone.Data.Commons;
 
 namespace Vezeeta_Clone.Api.Controllers
 {
@@ -43,7 +45,9 @@ namespace Vezeeta_Clone.Api.Controllers
             return NewResult(response);
         }
 
-        //[Authorize(Roles = Roles.Admin)]
+        //--------------------------------Roles Management---------------------------------
+
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost(Router.AuthRouting.Add)]
         public async Task<IActionResult> AddRole([FromQuery] string roleName)
         {
@@ -52,7 +56,7 @@ namespace Vezeeta_Clone.Api.Controllers
         }
 
 
-        //[Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut(Router.AuthRouting.Update)]
         public async Task<IActionResult> UpdateRole([FromForm] UpdateRoleCommand command)
         {
@@ -60,7 +64,7 @@ namespace Vezeeta_Clone.Api.Controllers
             return NewResult(response);
         }
 
-        //[Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete(Router.AuthRouting.Delete)]
         public async Task<IActionResult> DeleteRole([FromQuery] string id)
         {
