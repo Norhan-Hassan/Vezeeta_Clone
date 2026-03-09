@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using Vezeeta_Clone.Core;
@@ -6,6 +7,7 @@ using Vezeeta_Clone.Core.Middleware;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Infrastructure;
 using Vezeeta_Clone.Infrastructure.Context;
+using Vezeeta_Clone.Infrastructure.Hangfire;
 using Vezeeta_Clone.Infrastructure.Seeder;
 using Vezeeta_Clone.Service;
 namespace Vezeeta_Clone.Api
@@ -27,7 +29,9 @@ namespace Vezeeta_Clone.Api
             #region Dependency Injection
             builder.Services.AddInfrastructureDependency()
                             .AddServiceDependecy()
-                             .AddCoreDependecy().AddServiceRegistrations(builder.Configuration);
+                            .AddCoreDependecy()
+                            .AddServiceRegistrations(builder.Configuration)
+                            .ConfigureHangfire(builder.Configuration);
 
             #endregion
 
@@ -48,7 +52,7 @@ namespace Vezeeta_Clone.Api
             });
             #endregion
 
-            #region Seeding Database Roles And Admin User
+            #region Seeding Database Roles ,Admin User and Doctors' Specializations 
             var app = builder.Build();
             using (var scope = app.Services.CreateScope())
             {
@@ -77,8 +81,26 @@ namespace Vezeeta_Clone.Api
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseHttpsRedirection();
+
+
+            #region Hangfire Dashboard
+            app.UseHangfireDashboard("/Hangfire-Dashboard", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            });
+            #endregion
+
+            #region Recurring Jobs
+            // Example: send appointment reminders daily at 8:00 AM
+            // RecurringJob.AddOrUpdate<INotificationJobService>(
+            //     "daily-appointment-reminders",
+            //     service => service.SendAppointmentReminderAsync(0),
+            //     Cron.Daily(8, 0));
+            #endregion
+
             app.UseAuthentication();
             app.UseAuthorization();
+
 
 
             app.MapControllers();

@@ -2,6 +2,8 @@
 using Vezeeta_Clone.Service.Abstract;
 using Vezeeta_Clone.Service.AppUserAuthServices.Abstract;
 using Vezeeta_Clone.Service.AppUserAuthServices.Implementation;
+using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
+using Vezeeta_Clone.Service.BackgroundJobServices.Implementation;
 using Vezeeta_Clone.Service.Implementation;
 
 namespace Vezeeta_Clone.Service
@@ -15,6 +17,9 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ISpecializationService, SpecializationService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
+            services.AddTransient<INotificationJobService, NotificationJobService>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IBackgroundJobService, BackgroundJobService>();
             return services;
         }
     }

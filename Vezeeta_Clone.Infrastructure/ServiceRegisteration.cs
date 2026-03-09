@@ -10,7 +10,6 @@ using System.Text;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Helper;
 using Vezeeta_Clone.Infrastructure.Context;
-
 namespace Vezeeta_Clone.Infrastructure
 {
     public static class ServiceRegistration
