@@ -1,639 +1,558 @@
 # Vezeeta Clone API
 
-A comprehensive healthcare appointment booking platform API built with **ASP.NET Core** and **Clean Architecture (Onion Architecture)**. This system enables patients to book appointments with doctors, manage medical records, and streamline healthcare provider operations.
+A healthcare appointment booking platform API inspired by [Vezeeta](https://www.vezeeta.com/), built with **ASP.NET Core 9** and **Clean Architecture (Onion Architecture)**. This system enables patients to book appointments with doctors, manage medical records, and streamline healthcare provider operations.
+
+> 🚧 **Project Status:** Under active development — some handlers contain `NotImplementedException` placeholders.
+
+---
 
 ## 🏗️ Architecture Overview
 
-The API follows a **5-layer Onion Architecture** pattern combined with **CQRS (Command Query Responsibility Segregation)** and **Mediator Pattern**, ensuring separation of concerns, maintainability, and testability:
+The project follows a **5-layer Onion Architecture** combined with **CQRS (Command Query Responsibility Segregation)** via **MediatR**, ensuring separation of concerns, maintainability, and testability.
 
 ```
-┌─────────────────────────────────────────────────┐
-│              API Layer (Controllers)             │
-│          - HTTP Endpoints & Routing              │
-│          - Request/Response Handling             │
-│          - Mediator Integration (CQRS)           │
-└─────────────────────────────────────────────────┘
-                        ↓
-            ┌───────────────────────┐
-            │   MediatR Mediator    │
-            │  (CQRS Pipeline)      │
-            └───────────────────────┘
-                   ↙          ↘
-         ┌──────────────┐  ┌──────────────┐
-         │   Commands   │  │    Queries   │
-         │  (Write Ops) │  │  (Read Ops)  │
-         └──────────────┘  └──────────────┘
-                   ↓            ↓
-            Pipeline Behaviors (Validation, Logging, Localization)
-                        ↓
-┌─────────────────────────────────────────────────┐
-│         Infrastructure Layer (Infra)            │
-│   - Database Context & EF Core Configuration    │
-│   - External Service Integrations                │
-│   - Authentication & Authorization              │
-│   - Email/Notification Services                 │
-│   - Localization Service (i18n/Arabic-English)  │
-└─────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────┐
-│         Services & Logic Layer (Services)       │
-│   - Command Handlers (IRequestHandler)          │
-│   - Query Handlers (IRequestHandler)            │
-│   - Business Logic Implementation               │
-│   - Validation & Processing (Pipelines)         │
-│   - Localization Key Management                 │
-└─────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────┐
-│         Data Layer (Data Access)                │
-│   - Repository Pattern Implementation           │
-│   - Unit of Work Pattern                        │
-│   - Database Queries & Persistence              │
-│   - Data Mapping & Transformation               │
-└─────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────┐
-│         Core Layer (Domain Models)              │
-│   - Entity Definitions                          │
-│   - Base Classes & Interfaces                   │
-│   - Domain Enums & Constants                    │
-│   - Business Rules (as attributes)              │
-│   - Localization Keys Constants                 │
-└─────────────────────────────────────────────────┘
+Vezeeta_Clone/
+├── Vezeeta_Clone.Api        → Presentation Layer (Controllers, Middleware, Program.cs)
+├── Vezeeta_Clone.Core    → Application Layer (CQRS Commands/Queries, Handlers, Validators, Mapping)
+├── Vezeeta_Clone.Service          → Business Logic Layer (Service Interfaces & Implementations)
+├── Vezeeta_Clone.Infrastructure   → Infrastructure Layer (EF Core, Repositories, Identity, JWT, Swagger)
+└── Vezeeta_Clone.Data             → Domain Layer (Entities, Enums, DTOs, Constants)
 ```
+
+### Request Flow
+
+```
+HTTP Request
+    ↓
+Controller (AppControllerBase)
+    ↓
+MediatR.Send(Command / Query)
+    ↓
+Pipeline Behaviors (ValidationBehavior)
+    ↓
+Command/Query Handler
+    ↓
+Service Layer (Business Logic)
+    ↓
+Repository Layer (Generic Repository)
+    ↓
+EF Core → SQL Server
+    ↓
+Response<T> → Controller → HTTP Response
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Category | Technology |
+|---|---|
+| **Framework** | ASP.NET Core 9.0 (.NET 9) |
+| **Language** | C# 13.0 |
+| **ORM** | Entity Framework Core 9.0.10 |
+| **Database** | SQL Server |
+| **Authentication** | ASP.NET Core Identity + JWT Bearer Tokens |
+| **Authorization** | Role-based (Admin, Doctor, Patient) |
+| **CQRS & Mediator** | MediatR 14.1.0 |
+| **Object Mapping** | AutoMapper 16.1.0 |
+| **Validation** | FluentValidation 12.1.1 (via MediatR Pipeline Behavior) |
+| **Localization** | IStringLocalizer with .resx resources (English & Arabic) |
+| **API Documentation** | Swashbuckle.AspNetCore 9.0.6 with JWT support |
+
+---
 
 ## 📋 Project Structure
 
 ```
-VezeetaCloneAPI/
-├── 1. API/                          # Presentation Layer
-│   ├── Controllers/
-│   ├── DTOs/
-│   ├── Middleware/
-│   ├── Resources/                   # Localization Resources
-│   │   ├── ErrorMessages.ar.resx
-│   │   ├── ErrorMessages.en.resx
-│   │   ├── SuccessMessages.ar.resx
-│   │   ├── SuccessMessages.en.resx
-│   │   └── ValidationMessages.ar/en.resx
-│   └── appsettings.json
-│
-├── 2. Infrastructure/               # External Integration & Services
-│   ├── DbContext/
-│   ├── Repositories/
-│   ├── Authentication/
-│   ├── Services/
-│   │   ├── EmailService/
-│   │   ├── NotificationService/
-│   │   ├── LocalizationService/     # i18n Service
-│   │   └── ImageUploadService/
-│   └── Migrations/
-│
-├── 3. Services/                     # Business Logic Layer (CQRS Handlers)
-│   ├── Commands/
-│   │   ├── CreateAppointmentCommand/
-│   │   ├── UpdateDoctorCommand/
-│   │   ├── CreateReviewCommand/
-│   │   └── Handlers/
-│   │
-│   ├── Queries/
-│   │   ├── GetDoctorsQuery/
-│   │   ├── GetAppointmentsQuery/
-│   │   ├── GetMedicalRecordQuery/
-│   │   └── Handlers/
-│   │
-│   ├── Pipeline/                    # Mediator Behaviors
-│   │   ├── ValidationBehavior/
-│   │   ├── LoggingBehavior/
-│   │   └── LocalizationBehavior/
-│   │
-│   └── Constants/
-│       └── LocalizationKeys.cs      # All localization key constants
-│
-├── 4. Data/                         # Data Access Layer
-│   ├── Repositories/
-│   │   ├── IRepository/
-│   │   └── Repository/
-│   ├── UnitOfWork/
-│   └── Specifications/
-│
-└── 5. Core/                         # Domain Layer
-    ├── Entities/
-    │   ├── ApplicationUser
-    │   ├── Appointment
-    │   ├── Doctor
-    │   ├── Patient
-    │   ├── Clinic
-    │   ├── MedicalRecord
-    │   ├── Review
-    │   ├── Specialization
-    │   ├── Notification
-    │   └── Others...
-    ├── Enums/
-    │   ├── Status
-    │   ├── Gender
-    │   ├── BloodType
-    │   ├── AvailabilityMethod
-    │   └── Title
-    ├── Interfaces/
-    └── Constants/
+Vezeeta_Clone.Api/
+├── Base/
+│   └── AppControllerBase.cs    # Base controller with MediatR + Response mapping
+├── Controllers/
+│   ├── AuthenticationController.cs      # Register, SignIn, RefreshToken, ChangePassword
+│   └── SpecializationsController.cs     # CRUD for specializations
+├── Program.cs       # App entry point, DI, middleware pipeline
+└── appsettings.json
+
+Vezeeta_Clone.Core/
+├── Bases/
+│   ├── Response.cs                # Generic API response wrapper
+│   └── ResponseHandler.cs              # Standardized response factory methods
+├── Behavior/
+│   └── ValidationBehavior.cs          # MediatR pipeline for FluentValidation
+├── Features/
+│├── Auth/
+│   │   ├── Commands/
+│   │   │   ├── Models/                  # RegisterDoctorCommand, RegisterPatientCommand,
+│   │   │   │           # SignInCommand, ChangePasswordCommand, RefreshTokenCommand
+│   │   │ └── Handlers/             # DoctorAuthCommandHandler, SignInCommandHandler, etc.
+│   │   ├── Queries/
+│   │   │   └── Models/            # AuthenticateUserQuery
+│   │   └── Shared/
+│   │   └── RegisterUserBase.cs      # Shared registration fields
+│   └── Specializations/
+│       ├── Commands/
+│       │   ├── Models/        # CreateSpecializationCommand, UpdateSpecializationCommand
+│       │   └── Handlers/         # SpecializationCommandHandler
+│       └── Queries/
+│           ├── Models/       # GetSpecializationsQuery, GetSubSpecializationBySpecIDQuery
+│         ├── Results/       # Query result DTOs
+│    └── Handlers/     # SpecializationQueryHandler
+├── Middleware/
+│   └── ErrorHandlerMiddleware.cs        # Global exception handling
+├── Resources/
+│   ├── SharedResources.cs
+│   └── SharedResourcesKeys.cs          # Localization key constants
+└── ModuleCoreDependecies.cs       # MediatR, AutoMapper, FluentValidation DI
+
+Vezeeta_Clone.Service/
+├── Abstract/
+│ ├── IAuthenticationService.cs
+│   ├── IAutherizationService.cs
+│   ├── IDoctorService.cs
+│   └── ISpecializationService.cs
+├── AppUserAuthServices/
+│ ├── Abstract/
+│   │   └── ICurrentUserService.cs  # Get current authenticated user from JWT claims
+│   └── Implementation/
+│       └── CurrentUserService.cs
+├── Implementation/
+│   ├── AuthenticationService.cs   # JWT generation, refresh tokens, registration
+│   ├── AutherizationService.cs          # Role CRUD operations
+│   ├── DoctorService.cs
+│   └── SpecializationService.cs
+└── ModuleServiceDependecies.cs     # Service layer DI
+
+Vezeeta_Clone.Infrastructure/
+├── Abstract/                 # Repository interfaces
+├── Context/
+│   └── ApplicationDbContext.cs          # EF Core DbContext with soft delete query filters
+├── InfrastructureBases/
+│ ├── IGenericRepositoryAsync.cs       # Generic repository interface
+│   └── GenericRepositoryAsync.cs      # Generic repository with transactions
+├── Repos/     # Concrete repository implementations
+├── Seeder/
+│   ├── RoleSeeder.cs                    # Seeds Admin, Doctor, Patient roles
+│   ├── UserSeeder.cs              # Seeds default Admin user
+│   └── SpecializationSeeder.cs# Seeds initial specializations
+├── ServiceRegisteration.cs        # Identity, JWT, Swagger configuration
+├── ModuleInfrastructureDependecies.cs   # Repository DI
+└── Migrations/
+
+Vezeeta_Clone.Data/
+├── Entities/    # Domain models
+├── Enums/           # Gender, BloodType, Status, Title, AvailabilityMethod
+├── Commons/
+│   └── Roles.cs # Role constants (Admin, Doctor, Patient)
+├── Helper/
+│   ├── JwtSettings.cs            # JWT configuration model
+│   └── AppUserClaimModel.cs          # Custom claim model
+├── Results/
+│   └── JwtAuthResult.cs       # Access + Refresh token result
+└── AppMetaData/
+    └── Router.cs         # Centralized API route constants
 ```
 
-## 🎯 Core Entities
+---
+
+## 🎯 Domain Entities
 
 ### User Management
-- **ApplicationUser**: Base user class extending `IdentityUser` with profile information
-- **Patient**: Patient-specific details including blood type and date of birth
-- **Doctor**: Medical professional information with specialization and experience
 
-### Appointment System
-- **Appointment**: Links patients with available doctor slots
-- **DoctorAvailability**: Weekly recurring or one-time special schedules
-- **DoctorAvailabilitySlot**: Individual appointment time slots (auto-generated)
+| Entity | Description |
+|---|---|
+| `ApplicationUser` | Extends `IdentityUser` — shared base for all user types (FirstName, LastName, Gender, IsActive, CreatedAt) |
+| `Doctor` | Title, Description, ExperienceInYears, WaitingTimeInMinutes, Picture, Specialization, SubSpecializations |
+| `Patient` | DateOfBirth, BloodType, linked Appointments & Reviews |
 
-### Clinic & Location Management
-- **Clinic**: Healthcare facility with location and contact info
-- **DoctorClinic**: Links doctors to clinics with pricing
-- **Location**: Geographic coordinates (latitude/longitude)
-- **Region/City**: Hierarchical location structure
+### Appointments & Scheduling
 
-### Medical Records & Health Data
-- **MedicalRecord**: Patient health records linked to appointments
-- **Diagnosis**: Doctor-recorded diagnoses with descriptions
-- **EPrescription**: Electronic prescription management
+| Entity | Description |
+|---|---|
+| `DoctorAvailability` | Weekly recurring (`DayOfWeek`) or one-time (`Date`) schedules with start/end times, duration, and availability method (Online/Offline) |
+| `DoctorAvailabilitySlot` | Individual bookable time slots generated from availability |
+| `Appointment` | Links Patient ↔ Slot with Status (Upcoming, Completed, Cancelled, Rescheduled) |
 
-### Social & Review System
-- **Review**: Doctor ratings (0-5) with patient comments
-- **DoctorPatient**: Relationship tracking between doctors and patients
+### Medical & Clinical
 
-### Notifications & Tokens
-- **Notification**: System notifications for users
-- **UserToken**: JWT token management with refresh token support
+| Entity | Description |
+|---|---|
+| `Specialization` | Bilingual (NameAr, NameEn) with SubSpecializations |
+| `SubSpecialization` | Child specializations, many-to-many with Doctors (via `DoctorSubSpecializations` join table) |
+| `Clinic` | Name, Address, Region, Location (lat/lng), PhoneNumber |
+| `DoctorClinic` | Links Doctor ↔ Clinic with Price |
+| `MedicalRecord` | Patient medical history linked to Doctor and optional Appointment |
+| `Diagnosis` | Doctor-recorded diagnoses per MedicalRecord |
+| `EPrescription` | Electronic prescriptions (Medication, Dose, Notes) |
 
-## 🔑 Design Patterns
+### Supporting
 
-### CQRS (Command Query Responsibility Segregation)
-The API implements complete CQRS pattern separation:
+| Entity | Description |
+|---|---|
+| `Review` | Patient ratings with comments for Doctors (max 250 chars) |
+| `DoctorPatient` | Tracks Doctor ↔ Patient relationship (FirstVisitAt, LastVisitAt) |
+| `Notification` | System notifications per user |
+| `UserToken` | JWT + Refresh token persistence with revocation support (JwtId, IsUsed, IsRevoked) |
+| `City` / `Region` / `Location` | Hierarchical geographic structure |
 
-**Commands** - Write Operations (State Changes)
+---
+
+## 🔑 Key Design Patterns & Techniques
+
+### CQRS with MediatR
+
+All operations are separated into **Commands** (write) and **Queries** (read):
+
 ```csharp
-public class CreateAppointmentCommand : IRequest<CreateAppointmentResponse>
+// Command — write operation
+public class CreateSpecializationCommand : IRequest<Response<string>>
 {
-    public string PatientId { get; set; }
-    public int SlotId { get; set; }
+    public string NameAr { get; set; }
+    public string NameEn { get; set; }
 }
 
-public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointmentCommand, CreateAppointmentResponse>
+// Query — read operation
+public class GetSubSpecializationBySpecIDQuery : IRequest<Response<List<GetSubSpecializationBySpecIDQueryResult>>>
 {
-    // Implementation with validation and business logic
+    public int SpecializationID { get; set; }
 }
 ```
 
-**Queries** - Read Operations (No State Changes)
+### Pipeline Behavior (FluentValidation)
+
+Validation runs automatically before handlers via `ValidationBehavior<TRequest, TResponse>`. Any `IValidator<TRequest>` registered in DI is invoked before the handler executes — invalid requests throw a `ValidationException` caught by the global middleware.
+
+### Generic Repository Pattern
+
+All repositories inherit from `GenericRepositoryAsync<T>` providing:
+
+- `AddAsync`, `UpdateAsync`, `DeleteAsync`, `AddRangeAsync`, `UpdateRangeAsync`, `DeleteRangeAsync`
+- `GetTableNoTracking()` / `GetTableAsTracking()`
+- `GetByIntIdAsync()` / `GetByStringIdAsync()`
+- `BeginTransaction()`, `Commit()`, `RollBack()`
+- `SaveChangesAsync()`
+
+### Standardized Response Wrapper
+
+All API responses use `Response<T>`:
+
 ```csharp
-public class GetDoctorsQuery : IRequest<List<DoctorDto>>
+public class Response<T>
 {
-    public int? SpecializationId { get; set; }
-    public int? RegionId { get; set; }
-}
-
-public class GetDoctorsQueryHandler : IRequestHandler<GetDoctorsQuery, List<DoctorDto>>
-{
-    // Implementation with efficient read queries
+    public HttpStatusCode StatusCode { get; set; }
+    public bool Succeeded { get; set; }
+    public string Message { get; set; }
+    public T Data { get; set; }
+  public List<string> Errors { get; set; }
+    public object Meta { get; set; }
 }
 ```
 
-Benefits:
-- ✅ Clear separation between read and write models
-- ✅ Optimized queries for each operation type
-- ✅ Scalability through separate database schemas if needed
-- ✅ Better testing and maintainability
+`ResponseHandler` provides factory methods: `Success()`, `Created()`, `NotFound()`, `BadRequest()`, `Unauthorized()`, `UnprocessableEntity()`, `Deleted()`, `Updated()`.
 
-### Mediator Pattern (MediatR)
-Uses MediatR library for request/response pipeline processing:
+### Global Exception Handling
 
-**Pipeline Behaviors (Cross-Cutting Concerns)**
-- **ValidationBehavior** - Validates commands/queries before execution
-- **LoggingBehavior** - Logs all requests and responses
-- **LocalizationBehavior** - Adds localization context to requests
+`ErrorHandlerMiddleware` catches all unhandled exceptions and maps them to appropriate HTTP status codes:
 
-Example:
+| Exception | HTTP Status |
+|---|---|
+| `UnauthorizedAccessException` | 401 Unauthorized |
+| `ValidationException` (FluentValidation) | 422 Unprocessable Entity |
+| `KeyNotFoundException` | 404 Not Found |
+| `DbUpdateException` | 400 Bad Request |
+| `Exception` (general) | 500 Internal Server Error |
+
+### Soft Delete
+
+Entities inheriting from `BaseEntity` have an `IsDeleted` flag. A **global query filter** is applied automatically in `ApplicationDbContext` using expression trees:
+
 ```csharp
-public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+// All queries on BaseEntity subclasses automatically filter: WHERE IsDeleted = false
+foreach (var entityType in builder.Model.GetEntityTypes()
+    .Where(et => typeof(BaseEntity).IsAssignableFrom(et.ClrType)))
 {
-    public async Task<TResponse> Handle(TRequest request, Func<Task<TResponse>> next, CancellationToken cancellationToken)
-    {
-        // Validate request
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-        return await next();
-    }
+    builder.Entity(entityType.ClrType).HasQueryFilter(entity => entity.IsDeleted == false);
 }
 ```
 
-## 🌍 Localization (i18n) - Arabic & English
+`ApplicationUser` uses `IsActive` instead of `IsDeleted`.
 
-The API supports complete bi-lingual support with **Resource Files (.resx)** for centralized key management:
+### Database Seeding
 
-### Supported Languages
-- 🇸🇦 **Arabic** (ar-SA)
-- 🇬🇧 **English** (en-US)
+On startup, the following are seeded automatically:
 
-### Localization Resources Structure
+- **Roles**: Admin, Doctor, Patient
+- **Admin User**: `Admin@vezeeta.com` / `Admin@123ADM567`
+- **Specializations**: Initial medical specializations
+
+---
+
+## 🔐 Authentication & Authorization
+
+### JWT Authentication Flow
+
 ```
-Resources/
-├── ErrorMessages.ar.resx          # Arabic error messages
-├── ErrorMessages.en.resx          # English error messages
-├── SuccessMessages.ar.resx        # Arabic success messages
-├── SuccessMessages.en.resx        # English success messages
-└── ValidationMessages.ar/en.resx  # Validation message keys
+1. User registers (Doctor/Patient) or signs in
+2. Server validates credentials via ASP.NET Identity
+3. Server generates JWT Access Token + Refresh Token
+4. Refresh Token is persisted in UserToken table
+5. Client sends Access Token in Authorization header
+6. On expiry, client exchanges Refresh Token for new Access Token
+7. Revoked tokens are tracked via IsRevoked flag
 ```
 
-### Localization Keys Constants
-All keys are defined in `LocalizationKeys.cs`:
+### JWT Claims
+
+| Claim | Source |
+|---|---|
+| `Id` | ApplicationUser.Id |
+| `Email` | ApplicationUser.Email |
+| `UserName` | ApplicationUser.UserName |
+| `Role` | First role from UserManager |
+
+### Roles
+
+| Role | Description |
+|---|---|
+| `Admin` | Full system access, seeded on startup |
+| `Doctor` | Medical professional operations |
+| `Patient` | Appointment booking, reviews |
+
+### Current User Service
+
+`ICurrentUserService` extracts the authenticated user from JWT claims at any layer:
+
 ```csharp
-public static class LocalizationKeys
-{
-    public static class Appointment
-    {
-        public const string Created = "Appointment.Created";      // "تم إنشاء الموعد بنجاح"
-        public const string Cancelled = "Appointment.Cancelled";  // "تم إلغاء الموعد"
-        public const string NotFound = "Appointment.NotFound";    // "الموعد غير موجود"
-        public const string SlotUnavailable = "Appointment.SlotUnavailable";
-    }
-    
-    public static class Doctor
-    {
-        public const string NotFound = "Doctor.NotFound";
-        public const string AddedSuccessfully = "Doctor.AddedSuccessfully";
-    }
-    
-    public static class Auth
-    {
-        public const string LoginSuccess = "Auth.LoginSuccess";
-        public const string InvalidCredentials = "Auth.InvalidCredentials";
-        public const string UserAlreadyExists = "Auth.UserAlreadyExists";
-    }
-}
+var user = await _currentUserService.GetCurrentUserAsync();
+var userId = _currentUserService.GetCurrentUserId();
+var roles = await _currentUserService.GetCurrentUserRolesAsync();
 ```
 
-### Usage in Controllers & Services
+---
+
+## 🌍 Localization (i18n)
+
+Supports **English (en-US)** and **Arabic (ar-EG)** via `IStringLocalizer<SharedResources>`.
+
+### Language Selection
+
+Clients specify language via:
+
+- **Query string**: `?culture=ar-EG`
+- **Accept-Language header**: `Accept-Language: ar-EG`
+
+### Localization Keys
+
+All keys are centralized in `SharedResourcesKeys`:
+
 ```csharp
-[ApiController]
-[Route("api/[controller]")]
-public class AppointmentsController : ControllerBase
-{
-    private readonly IMediator _mediator;
-    private readonly ILocalizationService _localizationService;
-    
-    [HttpPost]
-    public async Task<ActionResult> CreateAppointment(CreateAppointmentCommand command)
-    {
-        var result = await _mediator.Send(command);
-        var message = _localizationService.Get(LocalizationKeys.Appointment.Created);
-        return Ok(new { message, result });
-    }
-}
+public const string NotFound = "NotFound";
+public const string AddSuccess = "AddSuccess";
+public const string EmailAlreadyExists = "EmailAlreadyExists";
+public const string FailedToRegister = "FailedToRegister";
+public const string PasswordChangedSuccess = "PasswordChangedSuccess";
+// ... and more
 ```
 
-### Request Language Header
-Clients specify language via request header:
-```
-GET /api/doctors
-Accept-Language: ar-SA
-```
-or
-```
-GET /api/doctors
-Accept-Language: en-US
-```
+---
 
-### LocalizationService Implementation
+## 📡 API Endpoints
+
+### Authentication (`api/v1/auth/`)
+
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `POST` | `doctor-register` | Register a new doctor | ❌ |
+| `POST` | `patient-register` | Register a new patient | ❌ |
+| `POST` | `signIn` | Sign in and get JWT tokens | ❌ |
+| `POST` | `refresh-token` | Get new access token via refresh token | ❌ |
+| `GET` | `check-token-validation` | Validate a JWT token | ❌ |
+| `POST` | `change-password` | Change current user password | ✅ |
+| `POST` | `role/create` | Create a new role | ✅ |
+| `PUT` | `role/update` | Update an existing role | ✅ |
+| `DELETE` | `role/delete` | Delete a role | ✅ |
+
+### Doctors (`api/v1/doctor/`)
+
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `GET` | `list` | List all doctors | ❌ |
+| `GET` | `{Id:Guid}` | Get doctor by ID | ❌ |
+
+### Specializations (`api/v1/specialization/`)
+
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `POST` | `create` | Create a specialization | ✅ |
+| `PUT` | `update` | Update a specialization | ✅ |
+| `GET` | `{SpecializationID:int}/sub-specializations` | Get sub-specializations by specialization ID | ❌ |
+
+### Centralized Routing
+
+All routes are defined as constants in `Router.cs` — no magic strings in controllers:
+
 ```csharp
-public interface ILocalizationService
+public static class AuthRouting
 {
-    string Get(string key, string language = null);
-    string Get(string key, params object[] args);
-}
-
-public class LocalizationService : ILocalizationService
-{
-    private readonly IStringLocalizer _localizer;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    
-    public string Get(string key, string language = null)
-    {
-        // Retrieves localized value from .resx resource files
-        // Falls back to English if translation not found
-        return _localizer[key];
-    }
+ public const string Prefix = Rule + "auth/";
+    public const string DoctorRegister = Prefix + "doctor-register";
+    public const string SignIn = Prefix + "signIn";
 }
 ```
 
-### Configuration in Startup
-```csharp
-services.AddLocalization(options => 
-    options.ResourcesPath = "Resources");
+---
 
-services.Configure<RequestLocalizationOptions>(options =>
-{
-    var supportedCultures = new[] 
-    { 
-        new CultureInfo("en-US"),
-        new CultureInfo("ar-SA")
-    };
-    
-    options.DefaultRequestCulture = new RequestCulture("en-US");
-    options.SupportedCultures = supportedCultures;
-    options.SupportedUICultures = supportedCultures;
-});
+## 💾 Database Diagram (Entity Relationships)
 
-app.UseRequestLocalization();
+```
+ApplicationUser (IdentityUser)
+ ├── 1:1 → Doctor
+ │           ├── N:1 → Specialization
+    │           │       └── 1:N → SubSpecialization
+  │           ├── N:N → SubSpecialization (via DoctorSubSpecializations)
+    │           ├── 1:N → DoctorClinic → Clinic
+    │           │             ├── N:1 → Region → City
+    │           │        └── N:1 → Location
+    │           ├── 1:N → DoctorAvailability
+    │           │           └── 1:N → DoctorAvailabilitySlot
+    │     │      └── 1:1 → Appointment
+    │   ├── 1:N → DoctorPatient
+    │      └── 1:N → Review
+    │
+    ├── 1:1 → Patient
+    │           ├── 1:N → Appointment
+    │           ├── 1:N → DoctorPatient
+    │└── 1:N → Review
+    │
+    ├── 1:N → Notification
+    └── 1:N → UserToken
+
+MedicalRecord
+    ├── N:1 → Doctor
+  ├── N:1 → Patient
+    ├── N:1 → Appointment (optional)
+    ├── 1:N → Diagnosis
+    └── 1:N → EPrescription
 ```
 
-## 🔑 Key Features
+All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading deletes.
 
-### Authentication & Authorization
-- JWT-based authentication
-- Refresh token mechanism
-- Role-based access control (Patient, Doctor, Admin)
-- Secure token storage and revocation
+---
 
-### Appointment Management
-- Book appointments with available slots
-- Support for recurring doctor schedules
-- One-time special availability
-- Appointment status tracking (Upcoming, Completed, Cancelled)
-- Auto-generated time slots based on duration
+## 📦 NuGet Dependencies
 
-### Medical Records
-- Complete patient medical history
-- Diagnosis tracking per appointment
-- Electronic prescription management
-- Medical record creation independent of appointments
+| Package | Version | Purpose |
+|---|---|---|
+| `Microsoft.EntityFrameworkCore.SqlServer` | 9.0.10 | SQL Server provider |
+| `Microsoft.AspNetCore.Identity.EntityFrameworkCore` | 9.0.10 | Identity with EF Core |
+| `Microsoft.AspNetCore.Authentication.JwtBearer` | 9.0.13 | JWT authentication |
+| `MediatR` | 14.1.0 | CQRS mediator pattern |
+| `AutoMapper` | 16.1.0 | Object-to-object mapping |
+| `FluentValidation` | 12.1.1 | Request validation |
+| `FluentValidation.DependencyInjectionExtensions` | 12.1.1 | FluentValidation DI integration |
+| `Swashbuckle.AspNetCore` | 9.0.6 | Swagger/OpenAPI documentation |
+| `Swashbuckle.AspNetCore.Annotations` | 9.0.6 | Swagger endpoint annotations |
 
-### Doctor Management
-- Specialization-based search
-- Doctor availability management
-- Clinic associations with pricing
-- Experience and qualification tracking
-- Patient review system with ratings
-
-### Location & Search
-- City and region management
-- Clinic location with coordinates
-- Geographic-based search capabilities
-
-### Data Integrity
-- Soft delete mechanism using `IsDeleted` and `IsActive` flags
-- Audit trails with `CreatedAt` timestamps
-- Referential integrity through foreign keys
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- .NET 6.0 or higher
-- SQL Server / SQL Server Express
-- Visual Studio 2022 or VS Code
 
-### Installation
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- SQL Server (LocalDB, Express, or full)
+- Visual Studio 2022+ or VS Code
+
+### Setup
 
 1. **Clone the repository**
+
    ```bash
-   git clone <repository-url>
-   cd VezeetaCloneAPI
+   git clone https://github.com/Norhan-Hassan/Vezeeta_Clone.git
+   cd Vezeeta_Clone
    ```
 
-2. **Install dependencies**
-   ```bash
-   dotnet restore
-   ```
+2. **Configure the database connection**
 
-3. **Configure database connection**
-   Update `appsettings.json` in the API project:
+   Update `appsettings.json` in `Vezeeta_Clone.Api`:
+
    ```json
-   {
+ {
      "ConnectionStrings": {
-       "DefaultConnection": "Server=your_server;Database=VezeetaDb;Trusted_Connection=true;"
+       "DefaultConnection": "Server=YOUR_SERVER;Database=VezeetaCloneDb;Trusted_Connection=true;TrustServerCertificate=true;"
+     },
+     "JwtSettings": {
+       "Secret": "YourSuperSecretKeyHere_MustBeAtLeast32Characters",
+"Issuer": "VezeetaCloneAPI",
+       "Audience": "VezeetaCloneClient",
+       "ValidateIssuer": true,
+       "ValidateAudience": true,
+       "ValidateLifeTime": true,
+       "ValidateIssuerSigningKey": true,
+       "AccessTokenExpireDate": 1,
+       "RefreshTokenExpireDate": 6
      }
    }
    ```
 
-4. **Run migrations**
+3. **Apply migrations**
+
    ```bash
-   dotnet ef database update
+dotnet ef database update --project Vezeeta_Clone.Infrastructure --startup-project Vezeeta_Clone.Api
    ```
 
-5. **Run the application**
+4. **Run the application**
+
    ```bash
-   dotnet run
+   dotnet run --project Vezeeta_Clone.Api
    ```
 
-The API will be available at `https://localhost:7000` (or your configured port).
+5. **Access Swagger UI**
 
-## 📡 API Endpoints
+   ```
+   https://localhost:{port}/swagger
+   ```
 
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/refresh` - Refresh access token
-- `POST /api/auth/logout` - User logout
+### Default Admin Credentials
 
-### Doctors
-- `GET /api/doctors` - List all doctors
-- `GET /api/doctors/{id}` - Get doctor details
-- `GET /api/doctors/specialization/{id}` - Get doctors by specialization
-- `POST /api/doctors/{id}/availability` - Add availability
-- `GET /api/doctors/{id}/availability` - Get availability
-
-### Appointments
-- `GET /api/appointments` - List user appointments
-- `POST /api/appointments` - Book appointment
-- `GET /api/appointments/{id}` - Get appointment details
-- `PATCH /api/appointments/{id}/status` - Update appointment status
-- `DELETE /api/appointments/{id}` - Cancel appointment
-
-### Medical Records
-- `GET /api/medical-records` - List patient records
-- `POST /api/medical-records` - Create medical record
-- `GET /api/medical-records/{id}` - Get record details
-- `POST /api/medical-records/{id}/diagnosis` - Add diagnosis
-- `POST /api/medical-records/{id}/prescription` - Add prescription
-
-### Reviews
-- `GET /api/reviews/doctor/{id}` - Get doctor reviews
-- `POST /api/reviews` - Create review
-- `PATCH /api/reviews/{id}` - Update review
-
-### Clinics & Locations
-- `GET /api/clinics` - List clinics
-- `GET /api/cities` - List cities
-- `GET /api/regions/{cityId}` - Get regions by city
-
-## 🔐 Authentication Flow
-
-```
-User Registration/Login
-         ↓
-Validate Credentials
-         ↓
-Generate JWT Token + Refresh Token
-         ↓
-Store Refresh Token in Database (UserToken)
-         ↓
-Return Access Token + Refresh Token
-         ↓
-Client stores tokens (Access: Memory, Refresh: Secure Cookie)
-         ↓
-On Token Expiry: Use Refresh Token to get new Access Token
-         ↓
-Revoke old tokens on logout
-```
-
-## 💾 Database Design Highlights
-
-### Soft Delete Strategy
-Instead of permanently deleting records, we use:
-- `BaseEntity.IsDeleted` flag
-- `ApplicationUser.IsActive` flag
-- All queries filter out soft-deleted records
-
-### Relationships
-- **One-to-Many**: City → Regions, Doctor → Appointments
-- **Many-to-Many**: Doctor ↔ Patient (via DoctorPatient), Doctor ↔ Clinic (via DoctorClinic)
-- **One-to-One**: Patient ↔ ApplicationUser, Doctor ↔ ApplicationUser
-
-### Appointment Slot Generation
-Doctor availability is defined once with duration, and the system auto-generates individual slots:
-- **DoctorAvailability**: Defines 10 AM - 5 PM, 30-min slots
-- **DoctorAvailabilitySlot**: Auto-generates [10:00-10:30], [10:30-11:00], etc.
-
-## 🛠️ Technology Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **API** | ASP.NET Core 9.0, MediatR (CQRS) |
-| **Database** | SQL Server, Entity Framework Core |
-| **Authentication** | ASP.NET Identity, JWT |
-| **Validation** | Data Annotations, FluentValidation |
-| **Mapping** | AutoMapper |
-| **Logging** | Serilog |
-| **Localization** | .resx Resources (Arabic & English) |
-| **Testing** | xUnit, Moq |
-| **Design Patterns** | Onion Architecture, CQRS, Mediator, Repository, Unit of Work |
-
-## 📦 Dependencies
-
-Key NuGet packages:
-- `Microsoft.EntityFrameworkCore` - ORM
-- `Microsoft.AspNetCore.Identity.EntityFrameworkCore` - Identity management
-- `System.IdentityModel.Tokens.Jwt` - JWT authentication
-- `MediatR` - CQRS mediator pattern
-- `MediatR.Extensions.Microsoft.DependencyInjection` - MediatR DI integration
-- `AutoMapper` - Object mapping
-- `FluentValidation` - Data validation
-- `Serilog` - Structured logging
-- `Microsoft.Extensions.Localization` - Localization (i18n)
-- `Microsoft.AspNetCore.Localization` - Request localization
-
-## 🧪 Testing Strategy
-
-Each layer should have corresponding unit tests:
-
-```
-Tests/
-├── API.Tests/
-├── Services.Tests/
-├── Data.Tests/
-└── Core.Tests/
-```
-
-Use xUnit for testing framework and Moq for mocking dependencies.
-
-## 🔄 Development Workflow (CQRS-Based)
-
-When adding a new feature, follow this CQRS-aligned workflow:
-
-1. **Create/Modify Entity** in Core layer
-2. **Create Migration** in Infrastructure layer
-3. **Implement Repository** in Data layer
-4. **Create CQRS Request** (Command or Query) in Services layer
-   - For write operations: Create **Command** class
-   - For read operations: Create **Query** class
-5. **Implement Handler** in Services layer
-   - Create **CommandHandler** or **QueryHandler**
-   - Add validation and business logic
-   - Add localization key usage
-6. **Register Handler** in Dependency Injection
-7. **Create Controller Endpoint** in API layer
-   - Inject `IMediator`
-   - Send command/query via mediator
-   - Return localized responses
-8. **Create Unit Tests** for handlers and services
-9. **Add Resource Keys** to .resx files (Arabic & English)
-
-## 🚦 Status Tracking
-
-Appointments support multiple statuses:
-- `Upcoming` - Scheduled appointment
-- `Completed` - Appointment finished
-- `Cancelled` - Appointment cancelled by patient/doctor
-- `NoShow` - Patient didn't attend
-- `Rescheduled` - Appointment rescheduled
-
-## 📝 Best Practices Implemented
-
-✅ **Separation of Concerns** - Each layer has specific responsibilities  
-✅ **CQRS Pattern** - Clear separation between Commands (writes) and Queries (reads)  
-✅ **Mediator Pattern** - Decoupled request handling through MediatR  
-✅ **DRY Principle** - Reusable components and services  
-✅ **SOLID Principles** - Dependency injection, interface-based design  
-✅ **Error Handling** - Centralized exception handling middleware with localized messages  
-✅ **Validation** - Input validation at multiple levels with localized error messages  
-✅ **Localization (i18n)** - Full Arabic & English support with .resx resource files  
-✅ **Security** - JWT authentication, password hashing, data protection  
-✅ **Performance** - Async/await, efficient queries, separated read/write models  
-✅ **Maintainability** - Clear naming conventions, organized folder structure, comprehensive documentation  
-
-## 🐛 Error Handling
-
-Global exception handling middleware catches and logs:
-- `NotFoundException` - Resource not found (404)
-- `UnauthorizedException` - Authentication failures (401)
-- `ForbiddenException` - Authorization failures (403)
-- `BadRequestException` - Validation errors (400)
-- `ConflictException` - Business logic conflicts (409)
-- `InternalServerException` - Unexpected errors (500)
-
-## 📚 API Documentation
-
-Swagger/OpenAPI documentation is auto-generated at:
-```
-https://localhost:7000/swagger/ui
-```
-
-All endpoints are documented with:
-- Request/response schemas
-- Required/optional parameters
-- Authorization requirements
-- Example values
-
-## 🔗 Contributing
-
-1. Create a feature branch
-2. Follow the architecture guidelines
-3. Write unit tests for new features
-4. Ensure all tests pass
-5. Submit a pull request
-
-
-## 👥 Support
-
-For issues, questions, or suggestions, please create an issue in the repository.
+| Field | Value |
+|---|---|
+| **Email** | `Admin@vezeeta.com` |
+| **Password** | `Admin@123ADM567` |
 
 ---
 
-**Built with ❤️ using Clean Architecture principles**
+## ✅ Best Practices Implemented
+
+- **Clean Architecture** — strict layer separation with dependency inversion
+- **CQRS Pattern** — Commands and Queries are separate classes with dedicated handlers
+- **MediatR Pipeline** — cross-cutting concerns (validation) via `IPipelineBehavior`
+- **Generic Repository** — reusable data access with full transaction support
+- **Centralized Routing** — all API routes defined as constants in `Router.cs`
+- **Standardized Responses** — consistent `Response<T>` wrapper for all endpoints
+- **Global Error Handling** — middleware catches and formats all exceptions consistently
+- **Soft Delete** — global EF Core query filters on `IsDeleted` via expression trees
+- **Database Seeding** — roles, admin user, and specializations seeded on startup
+- **Bilingual Support** — full Arabic & English localization via resource files
+- **JWT Security** — access + refresh token pattern with database-backed revocation
+- **Current User Abstraction** — `ICurrentUserService` for clean auth context access
+- **Restrict Delete Behavior** — all foreign keys use `DeleteBehavior.Restrict`
+
+---
+
+## 👥 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Follow the existing architecture patterns (Commands/Queries in Features, Services, Repos)
+4. Ensure localization keys are added for both languages
+5. Submit a pull request
+
+---
+
+## 📄 License
+
+This project is for educational purposes — a clone of the Vezeeta platform to demonstrate Clean Architecture with .NET 9.
+
+---
+
+**Built with ❤️ using Clean Architecture, CQRS, and .NET 9**

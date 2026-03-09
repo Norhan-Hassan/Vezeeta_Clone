@@ -7,12 +7,12 @@ using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Auth.Queries.Handlers
 {
-    public class AuthenticateUserHandler : ResponseHandler, IRequestHandler<AuthenticateUserQuery, Response<string>>
+    public class AuthenticateUserQueryHandler : ResponseHandler, IRequestHandler<AuthenticateUserQuery, Response<string>>
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticateUserHandler(IStringLocalizer<SharedResources> localizer,
+        public AuthenticateUserQueryHandler(IStringLocalizer<SharedResources> localizer,
                                     IAuthenticationService authenticationService) : base(localizer)
         {
             _authenticationService = authenticationService;

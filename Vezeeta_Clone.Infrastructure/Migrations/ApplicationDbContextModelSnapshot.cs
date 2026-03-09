@@ -22,6 +22,21 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DoctorSubSpecialization", b =>
+                {
+                    b.Property<string>("DoctorsAppUserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SubSpecializationsID")
+                        .HasColumnType("int");
+
+                    b.HasKey("DoctorsAppUserID", "SubSpecializationsID");
+
+                    b.HasIndex("SubSpecializationsID");
+
+                    b.ToTable("DoctorSubSpecializations", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -265,7 +280,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.HasIndex("SlotId")
                         .IsUnique();
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.City", b =>
@@ -285,7 +300,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("City");
+                    b.ToTable("City", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Clinic", b =>
@@ -323,7 +338,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("RegionId");
 
-                    b.ToTable("Clinics");
+                    b.ToTable("Clinics", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Diagnosis", b =>
@@ -357,7 +372,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("MedicalRecordId");
 
-                    b.ToTable("Diagnoses");
+                    b.ToTable("Diagnoses", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Doctor", b =>
@@ -388,7 +403,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorAvailability", b =>
@@ -433,7 +448,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorAvailabilities");
+                    b.ToTable("DoctorAvailabilities", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorAvailabilitySlot", b =>
@@ -466,7 +481,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("DoctorAvailabilityId");
 
-                    b.ToTable("DoctorAvailabilitySlots");
+                    b.ToTable("DoctorAvailabilitySlots", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorClinic", b =>
@@ -487,7 +502,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("ClinicId");
 
-                    b.ToTable("DoctorClinics");
+                    b.ToTable("DoctorClinics", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorPatient", b =>
@@ -511,7 +526,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("DoctorPatients");
+                    b.ToTable("DoctorPatients", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.EPrescription", b =>
@@ -544,7 +559,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("MedicalRecordId");
 
-                    b.ToTable("EPrescriptions");
+                    b.ToTable("EPrescriptions", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Location", b =>
@@ -566,7 +581,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.MedicalRecord", b =>
@@ -602,7 +617,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("MedicalRecords");
+                    b.ToTable("MedicalRecords", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Notification", b =>
@@ -631,7 +646,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Patient", b =>
@@ -647,7 +662,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("AppUserID");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Region", b =>
@@ -672,7 +687,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Regions");
+                    b.ToTable("Regions", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Review", b =>
@@ -710,7 +725,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Specialization", b =>
@@ -721,19 +736,49 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Specializations");
+                    b.ToTable("Specializations", (string)null);
+                });
+
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.SubSpecialization", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.ToTable("SubSpecializations", (string)null);
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserToken", b =>
@@ -773,7 +818,22 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersTokens");
+                    b.ToTable("UsersTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DoctorSubSpecialization", b =>
+                {
+                    b.HasOne("Vezeeta_Clone.Data.Entities.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("DoctorsAppUserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vezeeta_Clone.Data.Entities.SubSpecialization", null)
+                        .WithMany()
+                        .HasForeignKey("SubSpecializationsID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1059,6 +1119,17 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.SubSpecialization", b =>
+                {
+                    b.HasOne("Vezeeta_Clone.Data.Entities.Specialization", "Specialization")
+                        .WithMany("SubSpecializations")
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Specialization");
+                });
+
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserToken", b =>
                 {
                     b.HasOne("Vezeeta_Clone.Data.Entities.ApplicationUser", "AppUser")
@@ -1127,6 +1198,8 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Specialization", b =>
                 {
                     b.Navigation("Doctors");
+
+                    b.Navigation("SubSpecializations");
                 });
 #pragma warning restore 612, 618
         }

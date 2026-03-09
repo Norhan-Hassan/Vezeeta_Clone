@@ -41,8 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Auth\Queries\Validators\" />
-    <Folder Include="Features\Specializations\Queries\" />
+    <Folder Include="Features\Auth\Queries\Results\" />
   </ItemGroup>
 
 </Project>

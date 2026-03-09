@@ -28,5 +28,6 @@ namespace Vezeeta_Clone.Infrastructure.Seeder
                 await _userManager.AddToRoleAsync(defaultUserAdmin, Roles.Admin);
             }
         }
+
     }
 }

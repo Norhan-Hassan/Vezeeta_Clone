@@ -5,6 +5,7 @@ using Vezeeta_Clone.Core;
 using Vezeeta_Clone.Core.Middleware;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Infrastructure;
+using Vezeeta_Clone.Infrastructure.Context;
 using Vezeeta_Clone.Infrastructure.Seeder;
 using Vezeeta_Clone.Service;
 namespace Vezeeta_Clone.Api
@@ -54,8 +55,10 @@ namespace Vezeeta_Clone.Api
                 var services = scope.ServiceProvider;
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var context = services.GetRequiredService<ApplicationDbContext>();
                 await RoleSeeder.SeedRolesAsync(roleManager);
                 await UserSeeder.SeedUsersAsync(userManager);
+                await SpecializationSeeder.SeedSpecializationAsync(context);
             }
             #endregion
 

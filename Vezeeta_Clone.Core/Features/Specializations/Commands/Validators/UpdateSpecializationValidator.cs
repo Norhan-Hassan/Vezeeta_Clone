@@ -6,15 +6,18 @@ using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Validators
 {
-    public class CreateSpecializationValidator : AbstractValidator<CreateSpecializationCommand>
+    public class UpdateSpecializationValidator : AbstractValidator<UpdateSpecializationCommand>
     {
+
         #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ISpecializationService _specializationService;
         #endregion
 
+
         #region Constructors
-        public CreateSpecializationValidator(IStringLocalizer<SharedResources> localizer, ISpecializationService specializationService)
+        public UpdateSpecializationValidator(IStringLocalizer<SharedResources> localizer,
+                                                  ISpecializationService specializationService)
         {
             _localizer = localizer;
             _specializationService = specializationService;
@@ -26,6 +29,11 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Validators
         #region Functions
         public void ApplyValidationRules()
         {
+            RuleFor(x => x.Id)
+              .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
+              .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required]);
+
+
             RuleFor(x => x.NameAr)
                .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
                .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required]);
@@ -37,10 +45,9 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Validators
         public void ApplyCustomValidationRules()
         {
             RuleFor(x => x)
-                .MustAsync(async (model, cancellation) => !await _specializationService.IsSpecializationExist(specializationNameAr: model.NameAr, specializationNameEn: model.NameEn))
-            .WithMessage(x => _localizer[SharedResourcesKeys.IsExist]);
+               .MustAsync(async (model, cancellation) => !await _specializationService.IsSpecializationExist(specializationNameAr: model.NameAr, specializationNameEn: model.NameEn, currentId: model.Id))
+           .WithMessage(x => _localizer[SharedResourcesKeys.IsExist]);
         }
         #endregion
-
     }
 }

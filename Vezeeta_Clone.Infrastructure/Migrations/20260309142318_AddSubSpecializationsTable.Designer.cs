@@ -12,8 +12,8 @@ using Vezeeta_Clone.Infrastructure.Context;
 namespace Vezeeta_Clone.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260205200845_ModifyAndUpdateRefreshTokenTable")]
-    partial class ModifyAndUpdateRefreshTokenTable
+    [Migration("20260309142318_AddSubSpecializationsTable")]
+    partial class AddSubSpecializationsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DoctorSubSpecialization", b =>
+                {
+                    b.Property<string>("DoctorsAppUserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("SubSpecializationsID")
+                        .HasColumnType("int");
+
+                    b.HasKey("DoctorsAppUserID", "SubSpecializationsID");
+
+                    b.HasIndex("SubSpecializationsID");
+
+                    b.ToTable("DoctorSubSpecializations", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -384,7 +399,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<int>("Title")
                         .HasColumnType("int");
 
-                    b.Property<int>("WaitingTimeInMinutes")
+                    b.Property<int?>("WaitingTimeInMinutes")
                         .HasColumnType("int");
 
                     b.HasKey("AppUserID");
@@ -642,6 +657,9 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<string>("AppUserID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("Blood_Type")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -721,13 +739,14 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -736,7 +755,36 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.ToTable("Specializations");
                 });
 
-            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserRefreshToken", b =>
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.SubSpecialization", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("SpecializationId");
+
+                    b.ToTable("SubSpecializations");
+                });
+
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserToken", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -773,7 +821,22 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRefreshTokens");
+                    b.ToTable("UsersTokens");
+                });
+
+            modelBuilder.Entity("DoctorSubSpecialization", b =>
+                {
+                    b.HasOne("Vezeeta_Clone.Data.Entities.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("DoctorsAppUserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vezeeta_Clone.Data.Entities.SubSpecialization", null)
+                        .WithMany()
+                        .HasForeignKey("SubSpecializationsID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1059,10 +1122,21 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserRefreshToken", b =>
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.SubSpecialization", b =>
+                {
+                    b.HasOne("Vezeeta_Clone.Data.Entities.Specialization", "Specialization")
+                        .WithMany("SubSpecializations")
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Specialization");
+                });
+
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserToken", b =>
                 {
                     b.HasOne("Vezeeta_Clone.Data.Entities.ApplicationUser", "AppUser")
-                        .WithMany("UserRefreshTokens")
+                        .WithMany("Tokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1074,7 +1148,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                 {
                     b.Navigation("Notifications");
 
-                    b.Navigation("UserRefreshTokens");
+                    b.Navigation("Tokens");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.City", b =>
@@ -1127,6 +1201,8 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Specialization", b =>
                 {
                     b.Navigation("Doctors");
+
+                    b.Navigation("SubSpecializations");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,6 +7,8 @@ namespace Vezeeta_Clone.Core.Mapping.SpecializationMapping
         public SpecializationProfile()
         {
             CreateSpecializationMapping();
+            UpdateSpecializationMapping();
+            GetSupSpecializationBySpecID();
         }
     }
 }

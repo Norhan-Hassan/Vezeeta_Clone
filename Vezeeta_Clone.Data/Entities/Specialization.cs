@@ -2,8 +2,9 @@
 {
     public class Specialization : BaseEntity
     {
-        public string Name { get; set; }
-        public string? Description { get; set; }
+        public string NameEn { get; set; }
+        public string NameAr { get; set; }
+        public ICollection<SubSpecialization> SubSpecializations { get; set; } = new HashSet<SubSpecialization>();
         public ICollection<Doctor>? Doctors { get; set; } = new HashSet<Doctor>();
     }
 }

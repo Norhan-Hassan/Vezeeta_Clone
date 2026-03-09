@@ -7,7 +7,7 @@ using Vezeeta_Clone.Data.Commons;
 
 namespace Vezeeta_Clone.Api.Controllers
 {
-    public class AutherizationController : AppControllerBase
+    public class AuthorizationController : AppControllerBase
     {
 
         [Authorize(Roles = Roles.Admin)]

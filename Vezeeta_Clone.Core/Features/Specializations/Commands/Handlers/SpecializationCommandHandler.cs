@@ -9,8 +9,10 @@ using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Handlers
 {
-    public class CreateSpecializationHandler : ResponseHandler,
-                                            IRequestHandler<CreateSpecializationCommand, Response<string>>
+    public class SpecializationCommandHandler : ResponseHandler,
+                                            IRequestHandler<CreateSpecializationCommand, Response<string>>,
+                                            IRequestHandler<UpdateSpecializationCommand, Response<string>>
+
     {
         #region Fields
         private readonly ISpecializationService _specializationService;
@@ -19,7 +21,7 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Handlers
         #endregion
 
         #region Constructors
-        public CreateSpecializationHandler(IStringLocalizer<SharedResources> localizer,
+        public SpecializationCommandHandler(IStringLocalizer<SharedResources> localizer,
                                             IMapper mapper,
                                             ISpecializationService specializationService) : base(localizer)
         {
@@ -44,6 +46,31 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Handlers
                 return BadRequest<string>(_localizer[SharedResourcesKeys.FailToAdd]);
 
         }
+
+        public async Task<Response<string>> Handle(UpdateSpecializationCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var specialization = await _specializationService.GetSpecializationById(request.Id);
+                var mappedSpecialization = _mapper.Map(request, specialization);
+
+                //update in database
+                var result = await _specializationService.UpdateSpecialization(specialization);
+                if (result == "success")
+                {
+                    return Success<string>(null, null, _localizer[SharedResourcesKeys.Updated]);
+                }
+                else
+                    return BadRequest<string>(_localizer[SharedResourcesKeys.FailToUpdate]);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound<string>(_localizer[SharedResourcesKeys.NotFound]);
+            }
+
+        }
+
+
         #endregion
     }
 }

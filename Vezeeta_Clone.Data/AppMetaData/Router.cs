@@ -33,6 +33,8 @@
         {
             public const string Prefix = Rule + "specialization/";
             public const string Create = Prefix + "create";
+            public const string Update = Prefix + "update";
+            public const string SubSpecializations = Prefix + "{SpecializationID:int}/sub-specializations";
         }
     }
 }

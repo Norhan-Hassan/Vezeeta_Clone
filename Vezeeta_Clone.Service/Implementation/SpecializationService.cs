@@ -23,14 +23,36 @@ namespace Vezeeta_Clone.Service.Implementation
             await _specializationRepo.SaveChangesAsync();
             return "success";
         }
-
-        public async Task<bool> IsSpecializationExist(string specializationName)
+        public async Task<string> UpdateSpecialization(Specialization specialization)
         {
-            var result = await _specializationRepo.GetTableNoTracking().AnyAsync(x => x.Name == specializationName);
-            if (result == true)
-                return true;
-            else
-                return false;
+            if (specialization == null)
+                throw new ArgumentNullException(nameof(specialization));
+            await _specializationRepo.UpdateAsync(specialization);
+            await _specializationRepo.SaveChangesAsync();
+            return "success";
+        }
+        public async Task<bool> IsSpecializationExist(string specializationNameAr, string specializationNameEn, int? currentId = null)
+        {
+            return await _specializationRepo.GetTableNoTracking()
+                                            .AnyAsync(x => (x.NameEn == specializationNameEn ||
+                                                      x.NameAr == specializationNameAr) && x.ID != currentId);
+        }
+
+        public async Task<Specialization> GetSpecializationById(int id)
+        {
+            var specialization = await _specializationRepo.GetByIntIdAsync(id);
+            if (specialization == null)
+                throw new KeyNotFoundException($"Specialization with ID {id} not found");
+            return specialization;
+        }
+
+        public async Task<List<SubSpecialization>> GetSubSpecializationBySpecIDAsync(int specializationId)
+        {
+            var subSpecializations = await _specializationRepo.GetTableNoTracking()
+                                                        .Where(s => s.ID == specializationId)
+                                                        .SelectMany(s => s.SubSpecializations)
+                                                        .ToListAsync();
+            return subSpecializations;
         }
     }
 }

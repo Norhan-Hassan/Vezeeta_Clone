@@ -29,6 +29,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<SubSpecialization> SubSpecializations { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -46,6 +47,11 @@ namespace Vezeeta_Clone.Infrastructure.Context
                     .WithMany(s => s.Doctors)
                     .HasForeignKey(d => d.SpecializationId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(d => d.SubSpecializations)
+                    .WithMany(s => s.Doctors)
+                    .UsingEntity(j => j.ToTable("DoctorSubSpecializations"));
+
             });
 
 

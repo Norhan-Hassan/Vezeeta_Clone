@@ -19,6 +19,7 @@ namespace Vezeeta_Clone.Data.Entities
         [ForeignKey("Specialization")]
         public int? SpecializationId { get; set; }
         public Specialization? Specialization { get; set; }
+        public ICollection<SubSpecialization>? SubSpecializations { get; set; } = new HashSet<SubSpecialization>();
         public ICollection<Review>? Reviews { get; set; } = new HashSet<Review>();
         public ICollection<DoctorClinic>? DoctorClinics { get; set; } = new HashSet<DoctorClinic>();
         public ICollection<DoctorPatient> DoctorPatients { get; set; } = new HashSet<DoctorPatient>();
