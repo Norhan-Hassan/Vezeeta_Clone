@@ -37,8 +37,21 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
         }
         public void ApplyCustomValidationRules()
         {
-            // Custom validation to check if the role exists before updating
-            //and also to check if the new role name doesn't already exist to prevent duplicates
+
+            // check if the new role name doesn't already exist to prevent duplicates
+
+            RuleFor(x => x)
+                .MustAsync(async (model, cancellation) =>
+                {
+                    var roleExists = await _autherzationService.IsRoleExist(model.RoleName);
+                    if (roleExists)
+                    {
+                        return false;
+                    }
+                    var isUpdated = await _autherzationService.UpdateRoleAync(model.Id, model.RoleName);
+                    return isUpdated;
+                })
+                .WithMessage(x => _localizer[SharedResourcesKeys.RoleExist]);
         }
         #endregion
 

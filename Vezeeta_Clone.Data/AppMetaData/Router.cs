@@ -27,6 +27,7 @@
             public const string SignIn = Prefix + "signIn";
             public const string RefreshToken = Prefix + "refresh-token";
             public const string ValidateToken = Prefix + "check-token-validation";
+            public const string ChangePassword = Prefix + "change-password";
         }
         public static class SpecializationRouting
         {

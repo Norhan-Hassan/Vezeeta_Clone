@@ -123,6 +123,9 @@
   <data name="BadRequest" xml:space="preserve">
     <value>Bad Request In Processing this request</value>
   </data>
+  <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
+    <value>Current Password Is Incorrect</value>
+  </data>
   <data name="Deleted" xml:space="preserve">
     <value>Deleted Successfully</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="EmailOrPassNotExist" xml:space="preserve">
     <value>Email or password is invalid</value>
+  </data>
+  <data name="FailedToChangePassword" xml:space="preserve">
+    <value>Failed To Change Password</value>
   </data>
   <data name="FailedToRegister" xml:space="preserve">
     <value>Failed To Register</value>
@@ -174,6 +180,9 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="PasswordChangedSuccess" xml:space="preserve">
+    <value>Password Changed Successfully</value>
+  </data>
   <data name="PasswordCriteria" xml:space="preserve">
     <value>Password must include letters and numbers </value>
   </data>
@@ -183,8 +192,11 @@
   <data name="Required" xml:space="preserve">
     <value>This Field is required</value>
   </data>
+  <data name="RoleExist" xml:space="preserve">
+    <value>Thia role name already exist</value>
+  </data>
   <data name="SignInSuccess" xml:space="preserve">
-    <value>Signed In Successfully !</value>
+    <value>Signed In Successfully </value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Operation is Done Successfully</value>
@@ -203,6 +215,9 @@
   </data>
   <data name="UserNameAlreadyExists" xml:space="preserve">
     <value>This User Name Already Exists</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User is not Found</value>
   </data>
   <data name="ValidToken" xml:space="preserve">
     <value>This token is valid</value>

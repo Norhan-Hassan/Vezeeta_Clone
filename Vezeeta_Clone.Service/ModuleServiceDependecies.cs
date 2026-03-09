@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Vezeeta_Clone.Service.Abstract;
+using Vezeeta_Clone.Service.AppUserAuthServices.Abstract;
+using Vezeeta_Clone.Service.AppUserAuthServices.Implementation;
 using Vezeeta_Clone.Service.Implementation;
 
 namespace Vezeeta_Clone.Service
@@ -12,6 +14,7 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<IAutherizationService, AutherizationService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ISpecializationService, SpecializationService>();
+            services.AddTransient<ICurrentUserService, CurrentUserService>();
             return services;
         }
     }

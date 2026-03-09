@@ -8,6 +8,7 @@
         public const string BadRequest = "BadRequest";
         public const string UnprocessableEntity = "UnprocessableEntity";
         public const string NotFound = "NotFound";
+        public const string UserNotFound = "UserNotFound";
         public const string Updated = "Updated";
         public const string NoData = "NoData";
         public const string FailToAdd = "FailToAdd";
@@ -32,8 +33,10 @@
         public const string SignInSuccess = "SignInSuccess";
         public const string ValidToken = "ValidToken";
         public const string InValidToken = "InValidToken";
-
-
+        public const string RoleExist = "RoleExist";
+        public const string PasswordChangedSuccess = "PasswordChangedSuccess";
+        public const string FailedToChangePassword = "FailedToChangePassword";
+        public const string CurrentPasswordIsIncorrect = "CurrentPasswordIsIncorrect";
 
     }
 }
