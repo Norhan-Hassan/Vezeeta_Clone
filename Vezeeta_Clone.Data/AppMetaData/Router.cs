@@ -11,9 +11,11 @@
 
         public static class DoctorRouting
         {
-            public const string Prefix = Rule + "doctor/";
+            public const string Prefix = Rule + "doctors/";
             public const string List = Prefix + "list";
             public const string GetById = Prefix + SingleUser;
+            public const string GetReviews = Prefix + SingleUser + "/reviews";
+            public const string GetExamination = Prefix + SingleUser + "/examination-details";
         }
 
         public static class AuthRouting
@@ -31,9 +33,10 @@
         }
         public static class SpecializationRouting
         {
-            public const string Prefix = Rule + "specialization/";
+            public const string Prefix = Rule + "specializations/";
             public const string Create = Prefix + "create";
             public const string Update = Prefix + "update";
+            public const string List = Prefix;
             public const string SubSpecializations = Prefix + "{SpecializationID:int}/sub-specializations";
         }
     }

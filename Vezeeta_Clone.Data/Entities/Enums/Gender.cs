@@ -5,8 +5,8 @@ namespace Vezeeta_Clone.Data.Entities.Enums
     public enum Gender
     {
         [EnumMember(Value = "Male")]
-        Male,
+        Male = 1,
         [EnumMember(Value = "Female")]
-        Female
+        Female = 2
     }
 }

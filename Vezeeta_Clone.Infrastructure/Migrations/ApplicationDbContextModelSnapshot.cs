@@ -280,7 +280,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.HasIndex("SlotId")
                         .IsUnique();
 
-                    b.ToTable("Appointments", (string)null);
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.City", b =>
@@ -294,13 +294,17 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("City", (string)null);
+                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Clinic", b =>
@@ -338,7 +342,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("RegionId");
 
-                    b.ToTable("Clinics", (string)null);
+                    b.ToTable("Clinics");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Diagnosis", b =>
@@ -372,13 +376,16 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("MedicalRecordId");
 
-                    b.ToTable("Diagnoses", (string)null);
+                    b.ToTable("Diagnoses");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Doctor", b =>
                 {
                     b.Property<string>("AppUserID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ClinicId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -387,8 +394,14 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<int>("ExperienceInYears")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsProfileComplete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("SpecializationId")
                         .HasColumnType("int");
@@ -396,14 +409,23 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<int>("Title")
                         .HasColumnType("int");
 
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("WaitingTimeInMinutes")
                         .HasColumnType("int");
 
                     b.HasKey("AppUserID");
 
+                    b.HasIndex("ClinicId")
+                        .IsUnique()
+                        .HasFilter("[ClinicId] IS NOT NULL");
+
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("Doctors", (string)null);
+                    b.HasIndex("UniversityId");
+
+                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorAvailability", b =>
@@ -413,9 +435,6 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
 
                     b.Property<DateOnly?>("Date")
                         .HasColumnType("date");
@@ -444,11 +463,9 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ClinicId");
-
                     b.HasIndex("DoctorId");
 
-                    b.ToTable("DoctorAvailabilities", (string)null);
+                    b.ToTable("DoctorAvailabilities");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorAvailabilitySlot", b =>
@@ -458,6 +475,9 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<int>("DoctorAvailabilityId")
                         .HasColumnType("int");
@@ -481,28 +501,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("DoctorAvailabilityId");
 
-                    b.ToTable("DoctorAvailabilitySlots", (string)null);
-                });
-
-            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorClinic", b =>
-                {
-                    b.Property<string>("DoctorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ClinicId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("DoctorId", "ClinicId");
-
-                    b.HasIndex("ClinicId");
-
-                    b.ToTable("DoctorClinics", (string)null);
+                    b.ToTable("DoctorAvailabilitySlots");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorPatient", b =>
@@ -526,7 +525,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("DoctorPatients", (string)null);
+                    b.ToTable("DoctorPatients");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.EPrescription", b =>
@@ -559,7 +558,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("MedicalRecordId");
 
-                    b.ToTable("EPrescriptions", (string)null);
+                    b.ToTable("EPrescriptions");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Location", b =>
@@ -581,7 +580,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.MedicalRecord", b =>
@@ -617,7 +616,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("MedicalRecords", (string)null);
+                    b.ToTable("MedicalRecords");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Notification", b =>
@@ -646,7 +645,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Patient", b =>
@@ -662,7 +661,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("AppUserID");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Region", b =>
@@ -679,7 +678,11 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -687,7 +690,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Regions", (string)null);
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Review", b =>
@@ -716,8 +719,8 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.HasKey("ID");
 
@@ -725,7 +728,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Specialization", b =>
@@ -749,7 +752,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Specializations", (string)null);
+                    b.ToTable("Specializations");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.SubSpecialization", b =>
@@ -778,7 +781,31 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("SpecializationId");
 
-                    b.ToTable("SubSpecializations", (string)null);
+                    b.ToTable("SubSpecializations");
+                });
+
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.University", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Universities");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.UserToken", b =>
@@ -818,7 +845,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersTokens", (string)null);
+                    b.ToTable("UsersTokens");
                 });
 
             modelBuilder.Entity("DoctorSubSpecialization", b =>
@@ -952,31 +979,38 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Vezeeta_Clone.Data.Entities.Clinic", "Clinic")
+                        .WithOne("Doctor")
+                        .HasForeignKey("Vezeeta_Clone.Data.Entities.Doctor", "ClinicId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Vezeeta_Clone.Data.Entities.Specialization", "Specialization")
                         .WithMany("Doctors")
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Vezeeta_Clone.Data.Entities.University", "University")
+                        .WithMany("Doctors")
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
 
+                    b.Navigation("Clinic");
+
                     b.Navigation("Specialization");
+
+                    b.Navigation("University");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorAvailability", b =>
                 {
-                    b.HasOne("Vezeeta_Clone.Data.Entities.Clinic", "Clinic")
-                        .WithMany()
-                        .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Vezeeta_Clone.Data.Entities.Doctor", "Doctor")
                         .WithMany("Availability")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Clinic");
 
                     b.Navigation("Doctor");
                 });
@@ -990,25 +1024,6 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Availability");
-                });
-
-            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorClinic", b =>
-                {
-                    b.HasOne("Vezeeta_Clone.Data.Entities.Clinic", "Clinic")
-                        .WithMany("DoctorClinics")
-                        .HasForeignKey("ClinicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Vezeeta_Clone.Data.Entities.Doctor", "Doctor")
-                        .WithMany("DoctorClinics")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Clinic");
-
-                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorPatient", b =>
@@ -1155,14 +1170,13 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Clinic", b =>
                 {
-                    b.Navigation("DoctorClinics");
+                    b.Navigation("Doctor")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Doctor", b =>
                 {
                     b.Navigation("Availability");
-
-                    b.Navigation("DoctorClinics");
 
                     b.Navigation("DoctorPatients");
 
@@ -1200,6 +1214,11 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Navigation("Doctors");
 
                     b.Navigation("SubSpecializations");
+                });
+
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.University", b =>
+                {
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

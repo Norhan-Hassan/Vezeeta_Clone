@@ -54,5 +54,13 @@ namespace Vezeeta_Clone.Service.Implementation
                                                         .ToListAsync();
             return subSpecializations;
         }
+
+        public Task<List<Specialization>> GetSpecializationsAsync()
+        {
+            var specializations = _specializationRepo.GetTableNoTracking()
+                                                     //.OrderByDescending(s => s.Doctors!.Count) //later when i have doctors data to order by the number of doctors in each specialization
+                                                     .Take(8).ToListAsync();
+            return specializations;
+        }
     }
 }

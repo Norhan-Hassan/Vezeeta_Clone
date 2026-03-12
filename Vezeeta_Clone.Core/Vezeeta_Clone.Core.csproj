@@ -42,6 +42,9 @@
 
   <ItemGroup>
     <Folder Include="Features\Auth\Queries\Results\" />
+    <Folder Include="Features\Doctors\Commands\Handlers\" />
+    <Folder Include="Features\Doctors\Commands\Models\" />
+    <Folder Include="Features\Doctors\Commands\Validators\" />
   </ItemGroup>
 
 </Project>

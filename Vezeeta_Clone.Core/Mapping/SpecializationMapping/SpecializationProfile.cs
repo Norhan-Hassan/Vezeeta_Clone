@@ -9,6 +9,7 @@ namespace Vezeeta_Clone.Core.Mapping.SpecializationMapping
             CreateSpecializationMapping();
             UpdateSpecializationMapping();
             GetSupSpecializationBySpecID();
+            GetSpecializationsQueryMapping();
         }
     }
 }

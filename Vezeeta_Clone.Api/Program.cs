@@ -63,6 +63,8 @@ namespace Vezeeta_Clone.Api
                 await RoleSeeder.SeedRolesAsync(roleManager);
                 await UserSeeder.SeedUsersAsync(userManager);
                 await SpecializationSeeder.SeedSpecializationAsync(context);
+                await CityRegionSeeder.SeedCityRegionsAsync(context);
+                await UniversitySeeder.SeedUniversitiesAsync(context);
             }
             #endregion
 

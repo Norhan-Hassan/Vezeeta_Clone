@@ -2,9 +2,9 @@
 {
     public enum Status
     {
-        Upcoming,
-        Completed,
-        Cancelled,
-        Rescheduled
+        Upcoming = 1,
+        Completed = 2,
+        Cancelled = 3,
+        Rescheduled = 4
     }
 }

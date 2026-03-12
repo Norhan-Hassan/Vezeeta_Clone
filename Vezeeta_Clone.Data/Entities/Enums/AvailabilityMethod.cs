@@ -5,8 +5,8 @@ namespace Vezeeta_Clone.Data.Entities.Enums
     public enum AvailabilityMethod
     {
         [EnumMember(Value = "Online")]
-        Online,
+        Online = 1,
         [EnumMember(Value = "Offline")]
-        Offline
+        Offline = 2
     }
 }

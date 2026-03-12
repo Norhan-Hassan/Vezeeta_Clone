@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Vezeeta_Clone.Data.Commons;
 
 namespace Vezeeta_Clone.Data.Entities
 {
-    public class BaseEntity
+    public class BaseEntity : LocalizableEntity
     {
         [Key]
         public int ID { get; set; }

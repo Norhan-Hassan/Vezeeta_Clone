@@ -5,8 +5,8 @@ namespace Vezeeta_Clone.Data.Entities
 {
     public class Review : BaseEntity
     {
-        [Range(0, 5)]
-        public int Rating { get; set; }
+        [Range(0.0, 5.0)]
+        public double Rating { get; set; }
 
         [MaxLength(250)]
         public string? Comment { get; set; }
@@ -21,7 +21,6 @@ namespace Vezeeta_Clone.Data.Entities
         [ForeignKey("Doctor")]
         public string DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
-
 
     }
 }

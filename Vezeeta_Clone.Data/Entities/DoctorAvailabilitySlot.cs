@@ -6,6 +6,7 @@ namespace Vezeeta_Clone.Data.Entities
     {
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public DateOnly Date { get; set; }
         public bool IsBooked { get; set; } = false;
         public string? LockedReason { get; set; }
 
@@ -13,7 +14,7 @@ namespace Vezeeta_Clone.Data.Entities
         public int DoctorAvailabilityId { get; set; }
         public DoctorAvailability? Availability { get; set; }
 
-        //because there would be free solt without apointment
+        //because there would be free solt without apointment(may =be)
         public Appointment? Appointment { get; set; }
 
 

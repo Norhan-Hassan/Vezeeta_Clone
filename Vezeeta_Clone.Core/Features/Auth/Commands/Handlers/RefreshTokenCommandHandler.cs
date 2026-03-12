@@ -9,12 +9,12 @@ using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 {
-    public class RefreshTokenHandler : ResponseHandler, IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
+    public class RefreshTokenCommandHandler : ResponseHandler, IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IStringLocalizer<SharedResources> _localizer;
 
-        public RefreshTokenHandler(IAuthenticationService authenticationService,
+        public RefreshTokenCommandHandler(IAuthenticationService authenticationService,
                                     IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
             _localizer = localizer;

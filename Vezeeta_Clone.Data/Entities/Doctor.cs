@@ -15,13 +15,24 @@ namespace Vezeeta_Clone.Data.Entities
         public int ExperienceInYears { get; set; }
         public int? WaitingTimeInMinutes { get; set; }
         public string? Picture { get; set; }
+        public decimal Price { get; set; }
+
+        [ForeignKey("Clinic")]
+        public int? ClinicId { get; set; }
+        public Clinic? Clinic { get; set; }
+
+        [ForeignKey("University")]
+        public int UniversityId { get; set; }
+        public University University { get; set; }
+
+        public bool IsProfileComplete { get; set; } = false;
 
         [ForeignKey("Specialization")]
         public int? SpecializationId { get; set; }
         public Specialization? Specialization { get; set; }
         public ICollection<SubSpecialization>? SubSpecializations { get; set; } = new HashSet<SubSpecialization>();
         public ICollection<Review>? Reviews { get; set; } = new HashSet<Review>();
-        public ICollection<DoctorClinic>? DoctorClinics { get; set; } = new HashSet<DoctorClinic>();
+
         public ICollection<DoctorPatient> DoctorPatients { get; set; } = new HashSet<DoctorPatient>();
         public ICollection<DoctorAvailability> Availability { get; set; } = new HashSet<DoctorAvailability>();
 

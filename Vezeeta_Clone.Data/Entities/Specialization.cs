@@ -4,6 +4,7 @@
     {
         public string NameEn { get; set; }
         public string NameAr { get; set; }
+        public string LocalizedName => GetLocalizedName(NameEn, NameAr);////
         public ICollection<SubSpecialization> SubSpecializations { get; set; } = new HashSet<SubSpecialization>();
         public ICollection<Doctor>? Doctors { get; set; } = new HashSet<Doctor>();
     }

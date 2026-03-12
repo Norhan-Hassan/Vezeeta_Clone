@@ -6,6 +6,7 @@ namespace Vezeeta_Clone.Data.Entities
     {
         public string NameEn { get; set; }
         public string NameAr { get; set; }
+        public string LocalizedName => GetLocalizedName(NameEn, NameAr);////
 
         [ForeignKey("Specialization")]
         public int SpecializationId { get; set; }

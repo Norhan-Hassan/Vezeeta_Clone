@@ -20,17 +20,20 @@ namespace Vezeeta_Clone.Service.Implementation
         private readonly IPatientRepo _patientRepo;
         private readonly JwtSettings _jwtSettings;
         private readonly IRefreshTokenRepo _refreshTokenRepo;
+        private readonly ISubSpecializationRepo _subSpecializationRepo;
         public AuthenticationService(UserManager<ApplicationUser> userManager,
                                       IDoctorRepo doctorRepo,
                                       IPatientRepo patientRepo,
                                       JwtSettings jwtSettings,
-                                      IRefreshTokenRepo refreshTokenRepo)
+                                      IRefreshTokenRepo refreshTokenRepo,
+                                      ISubSpecializationRepo subSpecializationRepo)
         {
             _userManager = userManager;
             _patientRepo = patientRepo;
             _doctorRepo = doctorRepo;
             _jwtSettings = jwtSettings;
             _refreshTokenRepo = refreshTokenRepo;
+            _subSpecializationRepo = subSpecializationRepo;
         }
 
 
@@ -57,6 +60,7 @@ namespace Vezeeta_Clone.Service.Implementation
                     throw new InvalidOperationException("Failed to assign role (Doctor): " +
                         string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
+                doctor.IsProfileComplete = false; // to next step of choosing speialization and sub specialization
                 await _doctorRepo.AddAsync(doctor);
                 await _doctorRepo.SaveChangesAsync();
                 transaction.Commit();

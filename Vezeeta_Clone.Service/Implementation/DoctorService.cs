@@ -17,16 +17,101 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             _doctorRepo = doctorRepo;
         }
+
+
         #endregion
 
         #region Methods
-        public async Task<Doctor> GetDoctorByIDAsync(string id)
+        public async Task<Doctor?> GetDoctorByIDAsync(string id)
         {
             var doctor = await _doctorRepo.GetTableNoTracking()
                                      .Include(d => d.Specialization)
+                                     .ThenInclude(s => s!.SubSpecializations)
+                                     .Include(d => d.ApplicationUser)
+                                     .Include(d => d.University)
                                      .FirstOrDefaultAsync(d => d.AppUserID == id);
             return doctor;
+        }
+        public async Task<Doctor?> GetDoctorWithClinicByIDAsync(string id)
+        {
+            var doctor = await _doctorRepo.GetTableNoTracking()
+                                     .Include(d => d.ApplicationUser)
+                                     .Include(d => d.Clinic).ThenInclude(c => c.Region).ThenInclude(r => r.City)
+                                     .FirstOrDefaultAsync(d => d.AppUserID == id);
+            return doctor;
+        }
+
+
+        public IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId)
+        {
+            var doctors = _doctorRepo.GetAllDoctorsWithIncludesAsQuerable();
+            var filteredDoctors = doctors;
+            if (specializationId.HasValue)
+            {
+                filteredDoctors = filteredDoctors.Where(d => d.SpecializationId == specializationId);
+            }
+            if (cityId.HasValue)
+            {
+                filteredDoctors = filteredDoctors.Where(d => d.Clinic!.Region.CityId == cityId);
+                if (regionId.HasValue)
+                {
+                    filteredDoctors = filteredDoctors.Where(d => d.Clinic!.RegionId == regionId);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                filteredDoctors = filteredDoctors.Where(d => d.ApplicationUser.FirstName.Contains(search) ||
+                                                        d.ApplicationUser.LastName.Contains(search) ||
+                                                        d.Clinic!.Name.Contains(search));
+            }
+            return filteredDoctors;
+        }
+
+
+        public async Task<(double Average, int Count)> GetDoctorRatingInfo(string id)
+        {
+            var result = await _doctorRepo.GetTableNoTracking().Include(d => d.Reviews)
+                .Where(d => d.AppUserID == id)
+                .Select(d => new
+                {
+                    Average = d.Reviews!.Any() ? d.Reviews!.Average(r => r.Rating) : 0,
+                    Count = d.Reviews!.Any() ? d.Reviews!.Count() : 0
+                }).FirstOrDefaultAsync();
+
+            return (result!.Average, result!.Count);
+        }
+
+        public IQueryable<Review> GetDoctorReviews(string id)
+        {
+            var reviews = _doctorRepo.GetTableNoTracking()
+                                            .Include(d => d.Reviews)
+                                            .Where(d => d.AppUserID == id)
+                                            .SelectMany(d => d.Reviews!)
+                                            .Include(r => r.Patient);
+
+            return reviews;
         }
         #endregion
     }
 }
+//public async Task<double> GetDoctorAverageRatingNumber(string id)
+//{
+//    var doctorRatingNumber = await _doctorRepo.GetTableNoTracking()
+//                             .Include(d => d.Reviews)
+//                             .Where(d => d.AppUserID == id)
+//                             .Select(d => d.Reviews.Any()
+//                                          ? d.Reviews.Average(r => r.Rating)
+//                                          : 0).FirstOrDefaultAsync();
+
+//    return doctorRatingNumber;
+//}
+
+//public async Task<int> GetDoctorRatingCount(string id)
+//{
+//    var doctorRatingCount = await _doctorRepo.GetTableNoTracking()
+//                                  .Include(d => d.Reviews)
+//                                  .Where(d => d.AppUserID == id)
+//                                  .Select(d => d.Reviews.Count()).FirstOrDefaultAsync();
+//    return doctorRatingCount;
+//}

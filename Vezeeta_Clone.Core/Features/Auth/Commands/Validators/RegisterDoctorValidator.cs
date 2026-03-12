@@ -47,6 +47,10 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
                .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
                .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required]);
 
+            RuleFor(x => x.UniversityId)
+              .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
+              .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required]);
+
             RuleFor(x => x.Email)
                .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
                .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required])

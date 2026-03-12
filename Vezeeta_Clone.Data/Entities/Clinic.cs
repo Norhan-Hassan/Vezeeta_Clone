@@ -13,7 +13,6 @@ namespace Vezeeta_Clone.Data.Entities
 
         public Location ClinicLocation { get; set; }
         public string PhoneNumber { get; set; }
-
-        public ICollection<DoctorClinic>? DoctorClinics { get; set; } = new HashSet<DoctorClinic>();
+        public Doctor Doctor { get; set; }
     }
 }

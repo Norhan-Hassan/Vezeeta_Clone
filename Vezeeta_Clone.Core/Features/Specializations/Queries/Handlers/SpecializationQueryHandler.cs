@@ -9,8 +9,11 @@ using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Specializations.Queries.Handlers
 {
-    public class SpecializationQueryHandler : ResponseHandler, IRequestHandler<GetSpecializationsQuery, Response<List<GetSpecializationsQueryResult>>>,
-         IRequestHandler<GetSubSpecializationBySpecIDQuery, Response<List<GetSubSpecializationBySpecIDQueryResult>>>
+    public class SpecializationQueryHandler : ResponseHandler,
+                                              IRequestHandler<GetSpecializationsQuery, Response<List<GetSpecializationsQueryResult>>>,
+                                             IRequestHandler<GetSubSpecializationBySpecIDQuery, Response<List<GetSubSpecializationBySpecIDQueryResult>>>
+
+
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
@@ -24,9 +27,18 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Queries.Handlers
             _specializationService = specializationService;
         }
 
-        public Task<Response<List<GetSpecializationsQueryResult>>> Handle(GetSpecializationsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetSpecializationsQueryResult>>> Handle(GetSpecializationsQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var specializations = await _specializationService.GetSpecializationsAsync();
+            if (specializations != null)
+            {
+                var mappedSpecializations = _mapper.Map<List<GetSpecializationsQueryResult>>(specializations);
+                return Success(mappedSpecializations);
+            }
+            else
+            {
+                return NotFound<List<GetSpecializationsQueryResult>>(_localizer[SharedResourcesKeys.NotFound]);
+            }
         }
         public async Task<Response<List<GetSubSpecializationBySpecIDQueryResult>>> Handle(GetSubSpecializationBySpecIDQuery request, CancellationToken cancellationToken)
         {

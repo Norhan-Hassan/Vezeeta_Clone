@@ -5,5 +5,6 @@ namespace Vezeeta_Clone.Infrastructure.Abstract
 {
     public interface IDoctorRepo : IGenericRepositoryAsync<Doctor>
     {
+        IQueryable<Doctor> GetAllDoctorsWithIncludesAsQuerable();
     }
 }

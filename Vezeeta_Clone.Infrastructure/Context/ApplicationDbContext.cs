@@ -13,10 +13,10 @@ namespace Vezeeta_Clone.Infrastructure.Context
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserToken> Tokens { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<University> Universities { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<DoctorPatient> DoctorPatients { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
-        public DbSet<DoctorClinic> DoctorClinics { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<City> City { get; set; }
@@ -42,6 +42,12 @@ namespace Vezeeta_Clone.Infrastructure.Context
                     .WithOne()
                     .HasForeignKey<Doctor>(d => d.AppUserID)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.Clinic)
+                       .WithOne(c => c.Doctor)
+                       .HasForeignKey<Doctor>(d => d.ClinicId)
+                       .OnDelete(DeleteBehavior.Restrict);
+
 
                 entity.HasOne(d => d.Specialization)
                     .WithMany(s => s.Doctors)
@@ -82,22 +88,6 @@ namespace Vezeeta_Clone.Infrastructure.Context
                        .HasForeignKey(db => db.PatientId)
                        .OnDelete(DeleteBehavior.Restrict);
 
-            });
-
-            builder.Entity<DoctorClinic>(entity =>
-            {
-                entity.Ignore(e => e.ID);
-                entity.HasKey(dc => new { dc.DoctorId, dc.ClinicId });
-
-                entity.HasOne(dc => dc.Clinic)
-                    .WithMany(dc => dc.DoctorClinics)
-                    .HasForeignKey(dc => dc.ClinicId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(dc => dc.Doctor)
-                       .WithMany(dc => dc.DoctorClinics)
-                       .HasForeignKey(dc => dc.DoctorId)
-                       .OnDelete(DeleteBehavior.Restrict);
             });
 
 

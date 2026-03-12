@@ -63,7 +63,7 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
 
         public virtual async Task DeleteAsync(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            _dbContext.Entry(entity).State = EntityState.Deleted;
         }
         public virtual async Task DeleteRangeAsync(ICollection<T> entities)
         {

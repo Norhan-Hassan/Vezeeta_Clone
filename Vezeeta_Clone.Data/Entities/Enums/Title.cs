@@ -5,13 +5,13 @@ namespace Vezeeta_Clone.Data.Entities.Enums
     public enum Title
     {
         [EnumMember(Value = "Professor")]
-        Professor,
+        Professor = 1,
         [EnumMember(Value = "Lecturer")]
-        Lecturer,
+        Lecturer = 2,
         [EnumMember(Value = "Consultant")]
-        Consultant,
+        Consultant = 3,
         [EnumMember(Value = "Specialist")]
-        Specialist
+        Specialist = 4
 
     }
 }

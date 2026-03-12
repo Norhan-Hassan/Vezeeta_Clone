@@ -11,6 +11,21 @@ namespace Vezeeta_Clone.Api.Controllers
     public class SpecializationsController : AppControllerBase
     {
 
+
+        [HttpGet(Router.SpecializationRouting.List)]
+        public async Task<IActionResult> GetSpecializations()
+        {
+            var response = await _mediator.Send(new GetSpecializationsQuery());
+            return NewResult(response);
+        }
+
+        [HttpGet(Router.SpecializationRouting.SubSpecializations)]
+        public async Task<IActionResult> GetSubSpecializationsBySpecID([FromRoute] GetSubSpecializationBySpecIDQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
         [HttpPost(Router.SpecializationRouting.Create)]
         public async Task<IActionResult> CreateSpecialization([FromForm] CreateSpecializationCommand request)
         {
@@ -28,11 +43,6 @@ namespace Vezeeta_Clone.Api.Controllers
         }
 
 
-        [HttpGet(Router.SpecializationRouting.SubSpecializations)]
-        public async Task<IActionResult> GetSubSpecializationsBySpecID([FromRoute] GetSubSpecializationBySpecIDQuery query)
-        {
-            var response = await _mediator.Send(query);
-            return NewResult(response);
-        }
+
     }
 }

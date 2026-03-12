@@ -13,5 +13,14 @@ namespace Vezeeta_Clone.Infrastructure.Repos
         {
             _doctor = _dbContext.Set<Doctor>();
         }
+
+        public IQueryable<Doctor> GetAllDoctorsWithIncludesAsQuerable()
+        {
+            var doctors = base.GetTableNoTracking()
+                                     .Include(d => d.Specialization)
+                                     .Include(d => d.ApplicationUser)
+                                     .Include(d => d.Clinic).ThenInclude(c => c.Region).AsQueryable();
+            return doctors;
+        }
     }
 }

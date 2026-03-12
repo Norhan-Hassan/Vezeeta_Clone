@@ -5,20 +5,20 @@ namespace Vezeeta_Clone.Data.Entities.Enums
     public enum BloodType
     {
         [EnumMember(Value = "A+")]
-        Apositive,
+        Apositive = 1,
         [EnumMember(Value = "A-")]
-        Anegative,
+        Anegative = 2,
         [EnumMember(Value = "B+")]
-        Bpositive,
+        Bpositive = 3,
         [EnumMember(Value = "B-")]
-        Bnegative,
+        Bnegative = 4,
         [EnumMember(Value = "AB+")]
-        ABpositive,
+        ABpositive = 5,
         [EnumMember(Value = "AB-")]
-        ABnegative,
+        ABnegative = 6,
         [EnumMember(Value = "O+")]
-        Opositive,
+        Opositive = 7,
         [EnumMember(Value = "O-")]
-        Onegative
+        Onegative = 8
     }
 }
