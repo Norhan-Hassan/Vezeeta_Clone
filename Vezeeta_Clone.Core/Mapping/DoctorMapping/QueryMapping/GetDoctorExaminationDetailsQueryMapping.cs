@@ -11,7 +11,8 @@ namespace Vezeeta_Clone.Core.Mapping.DoctorMapping
                 .ForMember(dest => dest.WaitingTimeInMinutes, opt => opt.MapFrom(src => src.WaitingTimeInMinutes))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                  .ForMember(dest => dest.ClinicAddress, opt => opt.MapFrom(src => src.Clinic!.Address))
-                 .ForMember(dest => dest.ClinicCity, opt => opt.MapFrom(src => src.Clinic!.Region.City.LocalizedName));
+                 .ForMember(dest => dest.ClinicCity, opt => opt.MapFrom(src => src.Clinic!.Region.City.LocalizedName))
+                 .ForMember(dest => dest.ClinicRegion, opt => opt.MapFrom(src => src.Clinic!.Region.LocalizedName));
         }
     }
 }

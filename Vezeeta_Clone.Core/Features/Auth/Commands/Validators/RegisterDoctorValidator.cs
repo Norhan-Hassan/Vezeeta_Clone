@@ -79,6 +79,10 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
                .When(x => !string.IsNullOrEmpty(x.Password))
                .WithMessage(x => _localizer[SharedResourcesKeys.PassMatchConfirm]);
 
+            RuleFor(x => x.SpecializationId)
+                .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
+                .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required]);
+
         }
         public void ApplyCustomValidationRules()
         {
