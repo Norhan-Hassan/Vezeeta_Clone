@@ -45,6 +45,7 @@
     <Folder Include="Features\Doctors\Commands\Handlers\" />
     <Folder Include="Features\Doctors\Commands\Models\" />
     <Folder Include="Features\Doctors\Commands\Validators\" />
+    <Folder Include="Mapping\ClinicMapping\QueryMapping\" />
   </ItemGroup>
 
 </Project>

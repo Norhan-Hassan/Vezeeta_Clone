@@ -92,6 +92,21 @@ namespace Vezeeta_Clone.Service.Implementation
 
             return reviews;
         }
+        public async Task UpdateDoctorAsync(Doctor doctor)
+        {
+            try
+            {
+                await _doctorRepo.UpdateAsync(doctor);
+                await _doctorRepo.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred while updating the doctor: {ex.Message}");
+                throw; // Rethrow the exception to be handled by the caller
+            }
+        }
+
         #endregion
     }
 }

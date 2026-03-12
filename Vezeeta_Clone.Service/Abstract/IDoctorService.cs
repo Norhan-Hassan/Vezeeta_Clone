@@ -9,5 +9,6 @@ namespace Vezeeta_Clone.Service.Abstract
         IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId);
         Task<(double Average, int Count)> GetDoctorRatingInfo(string id);
         IQueryable<Review> GetDoctorReviews(string id);
+        Task UpdateDoctorAsync(Doctor doctor);
     }
 }

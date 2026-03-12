@@ -35,8 +35,5 @@ namespace Vezeeta_Clone.Data.Entities
 
         public ICollection<DoctorPatient> DoctorPatients { get; set; } = new HashSet<DoctorPatient>();
         public ICollection<DoctorAvailability> Availability { get; set; } = new HashSet<DoctorAvailability>();
-
-
-
     }
 }

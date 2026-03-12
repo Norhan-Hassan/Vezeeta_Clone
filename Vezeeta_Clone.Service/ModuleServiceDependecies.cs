@@ -16,6 +16,7 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<IAutherizationService, AutherizationService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ISpecializationService, SpecializationService>();
+            services.AddTransient<IClinicService, ClinicService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<INotificationJobService, NotificationJobService>();
             services.AddTransient<IEmailService, EmailService>();

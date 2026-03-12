@@ -37,6 +37,7 @@
         public const string PasswordChangedSuccess = "PasswordChangedSuccess";
         public const string FailedToChangePassword = "FailedToChangePassword";
         public const string CurrentPasswordIsIncorrect = "CurrentPasswordIsIncorrect";
+        public const string OneClinicOnly = "OneClinicOnly";
 
     }
 }

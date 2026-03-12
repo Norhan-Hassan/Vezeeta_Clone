@@ -17,6 +17,14 @@
             public const string GetReviews = Prefix + SingleUser + "/reviews";
             public const string GetExamination = Prefix + SingleUser + "/examination-details";
         }
+        public static class ClinicRouting
+        {
+            public const string Prefix = Rule + "clinics/";
+            public const string List = Prefix + "list";
+            public const string RegisterClinic = Prefix + "register-to-doctor";
+
+
+        }
 
         public static class AuthRouting
         {

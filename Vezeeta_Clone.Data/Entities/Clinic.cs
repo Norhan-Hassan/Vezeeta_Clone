@@ -11,8 +11,11 @@ namespace Vezeeta_Clone.Data.Entities
         public int RegionId { get; set; }
         public Region Region { get; set; }
 
+        [ForeignKey("ClinicLocation")]
+        public int LocationId { get; set; }
         public Location ClinicLocation { get; set; }
         public string PhoneNumber { get; set; }
+
         public Doctor Doctor { get; set; }
     }
 }
