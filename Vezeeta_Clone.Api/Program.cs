@@ -73,7 +73,12 @@ namespace Vezeeta_Clone.Api
             {
                 // app.MapOpenApi();
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "API v2");
+                });
+
             }
 
             #region Localization Middleware

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
@@ -7,6 +8,7 @@ using Vezeeta_Clone.Data.AppMetaData;
 
 namespace Vezeeta_Clone.Api.Controllers
 {
+    [ApiVersion("1")]
     public class AuthenticationController : AppControllerBase
     {
         [HttpPost(Router.AuthRouting.DoctorRegister)]

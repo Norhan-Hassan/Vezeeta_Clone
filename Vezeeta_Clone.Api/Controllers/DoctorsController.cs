@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Doctors.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 
 namespace Vezeeta_Clone.Api.Controllers
 {
+    [ApiVersion("1")]
     public class DoctorsController : AppControllerBase
     {
         [HttpGet(Router.DoctorRouting.List)]

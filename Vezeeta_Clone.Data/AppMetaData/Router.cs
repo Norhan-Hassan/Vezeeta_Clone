@@ -1,9 +1,9 @@
 ﻿namespace Vezeeta_Clone.Data.AppMetaData
-{
+{//{version:apiVersion}
     public static class Router
     {
         public const string Route = "api";
-        public const string Version = "v1";
+        public const string Version = "v{version:apiVersion}";
         public const string Rule = Route + "/" + Version + "/";
         public const string SingleUser = "{Id:Guid}";
         public const string SingleEntity = "{Id:int}";

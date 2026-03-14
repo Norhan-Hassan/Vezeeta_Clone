@@ -1,4 +1,5 @@
 ﻿
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Specializations.Commands.Models;
@@ -7,7 +8,7 @@ using Vezeeta_Clone.Data.AppMetaData;
 
 namespace Vezeeta_Clone.Api.Controllers
 {
-
+    [ApiVersion("1")]
     public class SpecializationsController : AppControllerBase
     {
 

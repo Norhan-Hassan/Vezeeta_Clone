@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
@@ -7,10 +8,12 @@ using Vezeeta_Clone.Data.Commons;
 
 namespace Vezeeta_Clone.Api.Controllers
 {
+    [ApiVersion("1")]
+    [Authorize(Roles = Roles.Admin)]
     public class AuthorizationController : AppControllerBase
     {
 
-        [Authorize(Roles = Roles.Admin)]
+
         [HttpPost(Router.AuthRouting.Add)]
         public async Task<IActionResult> AddRole([FromQuery] string roleName)
         {
@@ -19,7 +22,7 @@ namespace Vezeeta_Clone.Api.Controllers
         }
 
 
-        [Authorize(Roles = Roles.Admin)]
+
         [HttpPut(Router.AuthRouting.Update)]
         public async Task<IActionResult> UpdateRole([FromForm] UpdateRoleCommand command)
         {
@@ -27,7 +30,7 @@ namespace Vezeeta_Clone.Api.Controllers
             return NewResult(response);
         }
 
-        [Authorize(Roles = Roles.Admin)]
+
         [HttpDelete(Router.AuthRouting.Delete)]
         public async Task<IActionResult> DeleteRole([FromQuery] string id)
         {

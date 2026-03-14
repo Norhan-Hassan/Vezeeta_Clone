@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using System.Text;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Helper;
 using Vezeeta_Clone.Infrastructure.Context;
+
 namespace Vezeeta_Clone.Infrastructure
 {
     public static class ServiceRegistration
@@ -30,7 +32,6 @@ namespace Vezeeta_Clone.Infrastructure
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-
 
             //JWT Authentication
             var jwtSettings = new JwtSettings();
@@ -63,10 +64,19 @@ namespace Vezeeta_Clone.Infrastructure
             services.AddSwaggerGen(options =>
             {
                 // API Info
+
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Vezeeta Clone",
-                    Version = "v1"
+                    Version = "v1",
+                    Description = "Initial version"
+                });
+
+                options.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Title = "Vezeeta Clone",
+                    Version = "v2",
+                    Description = "Updated version with new features"
                 });
 
                 options.EnableAnnotations();
@@ -98,6 +108,20 @@ namespace Vezeeta_Clone.Infrastructure
                     }
                 });
             });
+
+            // API Versioning
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1);
+                options.ReportApiVersions = true;
+                //options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            }).AddApiExplorer(options =>
+                {
+                    options.GroupNameFormat = "'v'VVV";
+                    options.SubstituteApiVersionInUrl = true;
+                });
 
 
             return services;
