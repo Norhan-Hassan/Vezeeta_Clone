@@ -4,7 +4,7 @@ using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Doctors.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 
-namespace Vezeeta_Clone.Api.Controllers
+namespace Vezeeta_Clone.Api.Controllers.V1
 {
     [ApiVersion("1")]
     public class DoctorsController : AppControllerBase

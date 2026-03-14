@@ -6,7 +6,7 @@ using Vezeeta_Clone.Core.Features.Clinics.Commands.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 using Vezeeta_Clone.Data.Commons;
 
-namespace Vezeeta_Clone.Api.Controllers
+namespace Vezeeta_Clone.Api.Controllers.V1
 {
     [ApiVersion("1")]
     [Authorize(Roles = Roles.Doctor)]

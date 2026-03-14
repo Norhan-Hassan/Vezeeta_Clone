@@ -6,7 +6,7 @@ using Vezeeta_Clone.Core.Features.Specializations.Commands.Models;
 using Vezeeta_Clone.Core.Features.Specializations.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 
-namespace Vezeeta_Clone.Api.Controllers
+namespace Vezeeta_Clone.Api.Controllers.V1
 {
     [ApiVersion("1")]
     public class SpecializationsController : AppControllerBase
@@ -42,8 +42,5 @@ namespace Vezeeta_Clone.Api.Controllers
             return NewResult(response);
 
         }
-
-
-
     }
 }
