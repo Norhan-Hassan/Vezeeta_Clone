@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
+using Vezeeta_Clone.Core.Features.Doctors.Commands.Models;
 using Vezeeta_Clone.Core.Features.Doctors.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 
@@ -34,6 +35,13 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         public async Task<IActionResult> GetDoctorExaminationDetails([FromRoute] GetDoctorExaminationDetailsQuery query)
         {
             var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
+        [HttpPost(Router.DoctorRouting.CompleteInfo)]
+        public async Task<IActionResult> CompleteDoctorInfo([FromBody] CompleteDoctorInfoCommand command)
+        {
+            var response = await _mediator.Send(command);
             return NewResult(response);
         }
     }

@@ -33,7 +33,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
                 await _clinicRepo.AddAsync(clinic);
                 await _clinicRepo.SaveChangesAsync();
-                doctor.ClinicId = clinic.ID;
+                clinic.DoctorId = doctor.AppUserID;
                 await _doctorRepo.UpdateAsync(doctor);
                 await _doctorRepo.SaveChangesAsync();
                 transaction.Commit();

@@ -8,6 +8,7 @@
         public int? ExperienceInYears { get; set; }
         public string? ClinicRegion { get; set; }
 
+
         public GetDoctorsPaginatedQueryResult(string fullName, int experienceInYears, string specialization, string? clinicRegion, string? picture)
         {
             FullName = fullName;

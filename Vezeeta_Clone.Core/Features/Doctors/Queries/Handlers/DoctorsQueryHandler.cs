@@ -32,7 +32,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 
         public async Task<Response<PaginatedResult<GetDoctorsPaginatedQueryResult>>> Handle(GetDoctorsPaginatedQuery request, CancellationToken cancellationToken)
         {
-            //excution direct on database to get only required data without loading the whole doctor entity
+
             Expression<Func<Doctor, GetDoctorsPaginatedQueryResult>> expression =
                 ex => new GetDoctorsPaginatedQueryResult(
                     string.Concat(ex.ApplicationUser.FirstName, " ", ex.ApplicationUser.LastName),
@@ -41,7 +41,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
                     ex.Clinic!.Region.LocalizedName,
                     ex.Picture);
 
-            var filteredQuery = _doctorService.FilteredDoctorsAsQuerable(request.specializationId, request.Search, request.cityId, request.regionId);
+            var filteredQuery = _doctorService.FilteredDoctorsAsQuerable(request.specializationId, request.Search, request.cityId, request.regionId, request.OrderBy);
 
             var paginatedResult = await filteredQuery.Select(expression).ToPaginatedListAsync(request.PageNumber ?? 1, request.PageSize ?? 10);
             if (paginatedResult.TotalCount == 0)

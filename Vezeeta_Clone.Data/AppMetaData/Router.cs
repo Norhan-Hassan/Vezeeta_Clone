@@ -16,6 +16,7 @@
             public const string GetById = Prefix + SingleUser;
             public const string GetReviews = Prefix + SingleUser + "/reviews";
             public const string GetExamination = Prefix + SingleUser + "/examination-details";
+            public const string CompleteInfo = Prefix + "complete-info";
         }
         public static class ClinicRouting
         {

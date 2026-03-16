@@ -38,6 +38,8 @@
         public const string FailedToChangePassword = "FailedToChangePassword";
         public const string CurrentPasswordIsIncorrect = "CurrentPasswordIsIncorrect";
         public const string OneClinicOnly = "OneClinicOnly";
+        public const string DoctorCompleteInfo = "DoctorCompleteInfo";
+        public const string FailedToCompleteDoctorInfo = "FailedToCompleteDoctorInfo";
 
     }
 }

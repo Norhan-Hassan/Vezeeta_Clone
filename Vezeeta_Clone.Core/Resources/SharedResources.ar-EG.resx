@@ -129,6 +129,9 @@
   <data name="Deleted" xml:space="preserve">
     <value>تم الحذف بنجاح</value>
   </data>
+  <data name="DoctorCompleteInfo" xml:space="preserve">
+    <value>تم استكمال بيناتك بنجاح</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>الايميل</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="FailedToChangePassword" xml:space="preserve">
     <value>فشلت عملية تغيير كلمة المرور</value>
+  </data>
+  <data name="FailedToCompleteDoctorInfo" xml:space="preserve">
+    <value>فشل استكمال بيناتك</value>
   </data>
   <data name="FailedToRegister" xml:space="preserve">
     <value>فشلت عملية تسجيل المستخدم</value>

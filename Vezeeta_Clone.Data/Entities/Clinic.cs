@@ -16,6 +16,11 @@ namespace Vezeeta_Clone.Data.Entities
         public Location ClinicLocation { get; set; }
         public string PhoneNumber { get; set; }
 
-        public Doctor Doctor { get; set; }
+        public int? WaitingTimeInMinutes { get; set; }
+        public decimal Price { get; set; }
+
+        [ForeignKey("Doctor")]
+        public string? DoctorId { get; set; }
+        public Doctor? Doctor { get; set; }
     }
 }

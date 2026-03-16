@@ -11,6 +11,8 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Models
         public int RegionId { get; set; }
         public LocationDto ClinicLocation { get; set; }
         public string PhoneNumber { get; set; }
+        public int WaitingTimeInMinutes { get; set; }
+        public decimal Price { get; set; }
     }
 
 }

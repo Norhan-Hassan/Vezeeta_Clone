@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
+using Vezeeta_Clone.Data.Helper;
 using Vezeeta_Clone.Infrastructure.Abstract;
 using Vezeeta_Clone.Service.Abstract;
 
@@ -9,13 +10,15 @@ namespace Vezeeta_Clone.Service.Implementation
     {
         #region Fields
         private readonly IDoctorRepo _doctorRepo;
+        private readonly ISubSpecializationRepo _subSpecializationRepo;
         #endregion
 
 
         #region Constructors
-        public DoctorService(IDoctorRepo doctorRepo)
+        public DoctorService(IDoctorRepo doctorRepo, ISubSpecializationRepo subSpecializationRepo)
         {
             _doctorRepo = doctorRepo;
+            _subSpecializationRepo = subSpecializationRepo;
         }
 
 
@@ -26,9 +29,17 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var doctor = await _doctorRepo.GetTableNoTracking()
                                      .Include(d => d.Specialization)
-                                     .ThenInclude(s => s!.SubSpecializations)
+                                     .Include(s => s!.SubSpecializations)
                                      .Include(d => d.ApplicationUser)
                                      .Include(d => d.University)
+                                     .FirstOrDefaultAsync(d => d.AppUserID == id);
+            return doctor;
+        }
+
+        public async Task<Doctor?> GetDoctorByWithoutIncludesAsync(string id)
+        {
+            var doctor = await _doctorRepo.GetTableNoTracking()
+
                                      .FirstOrDefaultAsync(d => d.AppUserID == id);
             return doctor;
         }
@@ -42,10 +53,12 @@ namespace Vezeeta_Clone.Service.Implementation
         }
 
 
-        public IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId)
+        public IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId, OrderingCriteria? orderBy)
         {
-            var doctors = _doctorRepo.GetAllDoctorsWithIncludesAsQuerable();
+            var doctors = _doctorRepo.GetAllDoctorsWithIncludesAsQuerable().Where(d => d.Clinic != null && d.Clinic.DoctorId != null);
+
             var filteredDoctors = doctors;
+
             if (specializationId.HasValue)
             {
                 filteredDoctors = filteredDoctors.Where(d => d.SpecializationId == specializationId);
@@ -64,6 +77,17 @@ namespace Vezeeta_Clone.Service.Implementation
                 filteredDoctors = filteredDoctors.Where(d => d.ApplicationUser.FirstName.Contains(search) ||
                                                         d.ApplicationUser.LastName.Contains(search) ||
                                                         d.Clinic!.Name.Contains(search));
+            }
+            if (orderBy.HasValue)
+            {
+                filteredDoctors = orderBy switch
+                {
+                    OrderingCriteria.topRated => filteredDoctors.OrderByDescending(d => d.Reviews!.Average(r => r.Rating)),
+                    OrderingCriteria.priceLowToHigh => filteredDoctors.OrderBy(d => d.Clinic!.Price),
+                    OrderingCriteria.priceHighToLow => filteredDoctors.OrderByDescending(d => d.Clinic!.Price),
+                    OrderingCriteria.lessWaitingTime => filteredDoctors.OrderBy(d => d.Clinic!.WaitingTimeInMinutes),
+                    _ => filteredDoctors
+                };
             }
             return filteredDoctors;
         }
@@ -105,6 +129,27 @@ namespace Vezeeta_Clone.Service.Implementation
                 Console.WriteLine($"An error occurred while updating the doctor: {ex.Message}");
                 throw; // Rethrow the exception to be handled by the caller
             }
+        }
+
+        public async Task<bool> CompleteDoctorInfoAsync(Doctor doctor, int[]? subSpecIds, string description)
+        {
+            if (doctor.IsProfileComplete == false)
+            {
+
+                if (subSpecIds != null && subSpecIds.Any())
+                {
+                    var subspecs = await _subSpecializationRepo.GetTableNoTracking()
+                                            .Where(s => subSpecIds.Contains(s.ID))
+                                            .ToListAsync();
+                    doctor.SubSpecializations = subspecs;
+                }
+                doctor.Description = description;
+                doctor.IsProfileComplete = true;
+                await _doctorRepo.UpdateAsync(doctor);
+                await _doctorRepo.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         #endregion

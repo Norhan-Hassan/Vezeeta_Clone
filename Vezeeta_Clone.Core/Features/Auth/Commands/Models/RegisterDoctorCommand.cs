@@ -8,7 +8,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Models
     public class RegisterDoctorCommand : RegisterUserBase, IRequest<Response<string>>
     {
         public Title Title { get; set; }
-        public string Description { get; set; }
         public int SpecializationId { get; set; }
         public int ExperienceInYears { get; set; }
         public int UniversityId { get; set; }

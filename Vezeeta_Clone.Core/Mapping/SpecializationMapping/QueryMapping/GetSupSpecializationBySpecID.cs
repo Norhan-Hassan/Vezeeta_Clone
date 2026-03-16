@@ -7,7 +7,8 @@ namespace Vezeeta_Clone.Core.Mapping.SpecializationMapping
     {
         public void GetSupSpecializationBySpecID()
         {
-            CreateMap<SubSpecialization, GetSubSpecializationBySpecIDQueryResult>();
+            CreateMap<SubSpecialization, GetSubSpecializationBySpecIDQueryResult>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.LocalizedName));
         }
     }
 }

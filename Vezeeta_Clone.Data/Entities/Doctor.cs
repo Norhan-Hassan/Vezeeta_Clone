@@ -11,15 +11,10 @@ namespace Vezeeta_Clone.Data.Entities
         public string AppUserID { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = default!;
         public Title Title { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int ExperienceInYears { get; set; }
-        public int? WaitingTimeInMinutes { get; set; }
         public string? Picture { get; set; }
-        public decimal Price { get; set; }
 
-        [ForeignKey("Clinic")]
-        public int? ClinicId { get; set; }
-        public Clinic? Clinic { get; set; }
 
         [ForeignKey("University")]
         public int UniversityId { get; set; }
@@ -30,6 +25,7 @@ namespace Vezeeta_Clone.Data.Entities
         [ForeignKey("Specialization")]
         public int? SpecializationId { get; set; }
         public Specialization? Specialization { get; set; }
+        public Clinic? Clinic { get; set; }
         public ICollection<SubSpecialization>? SubSpecializations { get; set; } = new HashSet<SubSpecialization>();
         public ICollection<Review>? Reviews { get; set; } = new HashSet<Review>();
 

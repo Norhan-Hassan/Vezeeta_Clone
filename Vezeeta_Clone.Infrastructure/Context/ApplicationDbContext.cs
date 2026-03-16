@@ -45,7 +45,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
 
                 entity.HasOne(d => d.Clinic)
                        .WithOne(c => c.Doctor)
-                       .HasForeignKey<Doctor>(d => d.ClinicId)
+                       .HasForeignKey<Clinic>(c => c.DoctorId)
                        .OnDelete(DeleteBehavior.Restrict);
 
 
