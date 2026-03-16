@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,22 @@ namespace Vezeeta_Clone.Infrastructure
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie().AddGoogle(options =>
+            {
+                var clientId = configuration["Authentication:Google:ClientId"];
+                if (clientId == null)
+                {
+                    throw new ArgumentNullException(nameof(clientId));
+                }
+                var clientSecret = configuration["Authentication:Google:ClientSecret"];
+
+                if (clientSecret == null)
+                {
+                    throw new ArgumentNullException(nameof(clientSecret));
+                }
+                options.ClientId = clientId;
+                options.ClientSecret = clientSecret;
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
               {
                   x.RequireHttpsMetadata = false;
@@ -108,6 +125,13 @@ namespace Vezeeta_Clone.Infrastructure
                     }
                 });
             });
+
+            ////google auth
+            //services.AddAuthentication().AddGoogle(googleOptions =>
+            //{
+            //    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+            //    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+            //});
 
             // API Versioning
             services.AddApiVersioning(options =>

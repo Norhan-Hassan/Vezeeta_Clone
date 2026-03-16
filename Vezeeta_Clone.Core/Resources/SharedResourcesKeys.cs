@@ -40,6 +40,11 @@
         public const string OneClinicOnly = "OneClinicOnly";
         public const string DoctorCompleteInfo = "DoctorCompleteInfo";
         public const string FailedToCompleteDoctorInfo = "FailedToCompleteDoctorInfo";
+        public const string ScheduleAdded = "ScheduleAdded";
+        public const string EndTimeMustBeGreaterThanStartTime = "EndTimeMustBeGreaterThanStartTime";
+        public const string DurationMustBeGreaterThan5 = "DurationMustBeGreaterThan5";
+        public const string ScheduleExist = "ScheduleExist";
+        public const string RequireToHaveClinic = "RequireToHaveClinic";
 
     }
 }

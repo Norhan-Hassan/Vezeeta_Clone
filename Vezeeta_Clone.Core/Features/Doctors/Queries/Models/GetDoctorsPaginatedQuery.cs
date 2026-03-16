@@ -7,10 +7,8 @@ using Vezeeta_Clone.Data.Helper;
 namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Models
 {
 
-    public class GetDoctorsPaginatedQuery : IRequest<Response<PaginatedResult<GetDoctorsPaginatedQueryResult>>>
+    public class GetDoctorsPaginatedQuery : PaginationFilter, IRequest<Response<PaginatedResult<GetDoctorsPaginatedQueryResult>>>
     {
-        public int? PageNumber { get; set; }
-        public int? PageSize { get; set; }
         public OrderingCriteria? OrderBy { get; set; }
         public string? Search { get; set; }
         public int? cityId { get; set; }

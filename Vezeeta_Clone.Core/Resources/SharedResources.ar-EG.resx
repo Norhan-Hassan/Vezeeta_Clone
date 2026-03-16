@@ -132,6 +132,9 @@
   <data name="DoctorCompleteInfo" xml:space="preserve">
     <value>تم استكمال بيناتك بنجاح</value>
   </data>
+  <data name="DurationMustBeGreaterThan5" xml:space="preserve">
+    <value>يجب ان تزيد المده او تساوي خمس دقائق</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>الايميل</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="EmailOrPassNotExist" xml:space="preserve">
     <value>هناك خطأ في الايميل او الباسوورد </value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>وقت الانتهاء يجب ان يكون اكبر من وقت البدايه</value>
   </data>
   <data name="FailedToChangePassword" xml:space="preserve">
     <value>فشلت عملية تغيير كلمة المرور</value>
@@ -201,8 +207,17 @@
   <data name="Required" xml:space="preserve">
     <value>هذا الحقل مطلوب</value>
   </data>
+  <data name="RequireToHaveClinic" xml:space="preserve">
+    <value>يجب ان تسجل عيادتك قبل هذه الخطوه او تختار خيار الاونلاين</value>
+  </data>
   <data name="RoleExist" xml:space="preserve">
     <value>هذا الاسم موجود بالفعل اختر اسم اخر</value>
+  </data>
+  <data name="ScheduleAdded" xml:space="preserve">
+    <value>تم تسجيل جدولك بنجاح</value>
+  </data>
+  <data name="ScheduleExist" xml:space="preserve">
+    <value>يوجد جدول بالفعل يحتوي على مواعيد مشابهه</value>
   </data>
   <data name="SignInSuccess" xml:space="preserve">
     <value>تم تسجيل الدخول بنجاح</value>

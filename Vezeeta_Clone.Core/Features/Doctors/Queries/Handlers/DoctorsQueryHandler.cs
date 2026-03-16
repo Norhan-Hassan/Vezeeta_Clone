@@ -43,7 +43,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 
             var filteredQuery = _doctorService.FilteredDoctorsAsQuerable(request.specializationId, request.Search, request.cityId, request.regionId, request.OrderBy);
 
-            var paginatedResult = await filteredQuery.Select(expression).ToPaginatedListAsync(request.PageNumber ?? 1, request.PageSize ?? 10);
+            var paginatedResult = await filteredQuery.Select(expression).ToPaginatedListAsync(request.PageNumber, request.PageSize);
             if (paginatedResult.TotalCount == 0)
                 return NotFound<PaginatedResult<GetDoctorsPaginatedQueryResult>>(_localizer[SharedResourcesKeys.NoData]);
             return Success(paginatedResult);
@@ -53,7 +53,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             Expression<Func<Review, GetDoctorReviewsQueryResult>> expression =
                 ex => new GetDoctorReviewsQueryResult(ex.Rating, ex.Comment, ex.CreatedAt, string.Concat(ex.Patient!.ApplicationUser.FirstName, " ", ex.Patient.ApplicationUser.LastName), ex.Patient.GetAge());
             var reviewsQuery = _doctorService.GetDoctorReviews(request.DoctorId);
-            var paginatedResult = await reviewsQuery.Select(expression).ToPaginatedListAsync(request.PageNumber ?? 1, request.PageSize ?? 10);
+            var paginatedResult = await reviewsQuery.Select(expression).ToPaginatedListAsync(request.PageNumber, request.PageSize);
             if (paginatedResult.TotalCount == 0)
                 return NotFound<PaginatedResult<GetDoctorReviewsQueryResult>>(_localizer[SharedResourcesKeys.NoData]);
             return Success(paginatedResult);

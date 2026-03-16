@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Features\Specializations\Query\**" />
     <EmbeddedResource Remove="Features\Specializations\Query\**" />
@@ -17,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="16.1.0" />
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
@@ -41,8 +45,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Appointments\Commands\Models\" />
+    <Folder Include="Features\Appointments\Commands\Validators\" />
+    <Folder Include="Features\Appointments\Queries\Models\" />
+    <Folder Include="Features\Appointments\Queries\Results\" />
     <Folder Include="Features\Auth\Queries\Results\" />
-    <Folder Include="Features\Appointments\" />
     <Folder Include="Mapping\ClinicMapping\QueryMapping\" />
   </ItemGroup>
 

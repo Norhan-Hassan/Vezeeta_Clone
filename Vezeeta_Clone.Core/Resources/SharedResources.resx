@@ -132,6 +132,9 @@
   <data name="DoctorCompleteInfo" xml:space="preserve">
     <value>Your Profile Is Complete Now</value>
   </data>
+  <data name="DurationMustBeGreaterThan5" xml:space="preserve">
+    <value>Duration Must Be Greater Than or equal to 5</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="EmailOrPassNotExist" xml:space="preserve">
     <value>Email or password is invalid</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>End-Time Must Be Greater Than Start-Time</value>
   </data>
   <data name="FailedToChangePassword" xml:space="preserve">
     <value>Failed To Change Password</value>
@@ -201,8 +207,17 @@
   <data name="Required" xml:space="preserve">
     <value>This Field is required</value>
   </data>
+  <data name="RequireToHaveClinic" xml:space="preserve">
+    <value>You must have clinic to make your schedule or choose online option</value>
+  </data>
   <data name="RoleExist" xml:space="preserve">
     <value>Thia role name already exist</value>
+  </data>
+  <data name="ScheduleAdded" xml:space="preserve">
+    <value>Your Schedule Set Sucessfully</value>
+  </data>
+  <data name="ScheduleExist" xml:space="preserve">
+    <value>The schedule overlaps with an existing schedule</value>
   </data>
   <data name="SignInSuccess" xml:space="preserve">
     <value>Signed In Successfully </value>
