@@ -107,7 +107,7 @@ namespace Vezeeta_Clone.Api
                 // recurring job
                 backgroundJobService.AddOrUpdateRecurring<ISlotGenerationService>(
                     "maintain-doctor-slots",
-                    service => service.MaintainFutureSlotsAsync(4),
+                    service => service.MaintainFutureSlotsAsync(12),
                     Cron.Daily(2)
                 );
             }

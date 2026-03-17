@@ -50,7 +50,7 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
             RuleFor(x => x)
                 .Must((command, cancellation) =>
                 {
-                    return command.DayOfWeek == null && command.Date == null;
+                    return !(command.DayOfWeek == null && command.Date == null);
                 })
                 .WithMessage(_localizer[SharedResourcesKeys.RequiredOneScheduleCriteria]);
 

@@ -44,8 +44,10 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var exist = await _doctorAvailabilityRepo.GetTableNoTracking()
                                                        .Where(a => a.DoctorId == doctorId)
-                                                       .Where(a => a.Date == schedule.Date || a.DayOfWeek == schedule.DayOfWeek)
-                                                       .Where(a => a.StartTime < schedule.EndTime && a.EndTime > schedule.StartTime)
+                                                       .Where(a =>
+                                                             (a.Date == schedule.Date && schedule.Date != null) ||
+                                                             (a.Date == null && schedule.Date == null && a.DayOfWeek == schedule.DayOfWeek)
+                                                       ).Where(a => a.StartTime < schedule.EndTime && a.EndTime > schedule.StartTime)
                                                        .AnyAsync();
             return exist;
         }
