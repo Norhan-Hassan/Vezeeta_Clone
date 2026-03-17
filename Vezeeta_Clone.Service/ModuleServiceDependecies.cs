@@ -18,10 +18,12 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<ISpecializationService, SpecializationService>();
             services.AddTransient<IClinicService, ClinicService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
-            services.AddTransient<IScheduleService, ScheduleService>();
+            services.AddTransient<IDoctorAvailabilityService, DoctorAvailabilityService>();
             services.AddTransient<INotificationJobService, NotificationJobService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IBackgroundJobService, BackgroundJobService>();
+            services.AddTransient<ISlotGenerationService, SlotGenerationService>();
+            //services.AddScoped<ISlotGenerationJobService, SlotGenerationJobService>();
             return services;
         }
     }

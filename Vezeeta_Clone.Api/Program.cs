@@ -98,11 +98,14 @@ namespace Vezeeta_Clone.Api
             #endregion
 
             #region Recurring Jobs
-            // Example: send appointment reminders daily at 8:00 AM
+            //send appointment reminders daily at 8:00 AM
             // RecurringJob.AddOrUpdate<INotificationJobService>(
             //     "daily-appointment-reminders",
             //     service => service.SendAppointmentReminderAsync(0),
             //     Cron.Daily(8, 0));
+
+
+
             #endregion
 
             app.UseAuthentication();

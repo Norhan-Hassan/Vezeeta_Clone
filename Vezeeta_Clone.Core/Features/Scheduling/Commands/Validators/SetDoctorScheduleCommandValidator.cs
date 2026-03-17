@@ -9,10 +9,10 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
     public class SetDoctorScheduleCommandValidator : AbstractValidator<SetDoctorScheduleCommand>
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
-        private readonly IScheduleService _scheduleService;
+        private readonly IDoctorAvailabilityService _scheduleService;
         public SetDoctorScheduleCommandValidator(IStringLocalizer<SharedResources> localizer,
 
-                                                 IScheduleService scheduleService)
+                                                 IDoctorAvailabilityService scheduleService)
         {
             _localizer = localizer;
             _scheduleService = scheduleService;

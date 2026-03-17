@@ -3,17 +3,21 @@ using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Entities.Enums;
 using Vezeeta_Clone.Infrastructure.Abstract;
 using Vezeeta_Clone.Service.Abstract;
+using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
 {
-    public class ScheduleService : IScheduleService
+    public class DoctorAvailabilityService : IDoctorAvailabilityService
     {
         private readonly IDoctorService _doctorService;
-
+        private readonly IBackgroundJobService _backgroundJobService;
         private readonly IDoctorAvailabilityRepo _doctorAvailabilityRepo;
-        public ScheduleService(IDoctorService doctorService, IDoctorAvailabilityRepo doctorAvailabilityRepo)
+        public DoctorAvailabilityService(IDoctorService doctorService,
+                                    IDoctorAvailabilityRepo doctorAvailabilityRepo,
+                                    IBackgroundJobService backgroundJobService)
         {
             _doctorService = doctorService;
+            _backgroundJobService = backgroundJobService;
             _doctorAvailabilityRepo = doctorAvailabilityRepo;
         }
 
@@ -61,6 +65,10 @@ namespace Vezeeta_Clone.Service.Implementation
                 schedule.DoctorId = doctorId;
                 await _doctorAvailabilityRepo.AddAsync(schedule);
                 await _doctorAvailabilityRepo.SaveChangesAsync();
+
+                // 2. Trigger slot generation immediately
+                var jobId = await _backgroundJobService.EnqueueAsync<ISlotGenerationService>(
+                                        x => x.GenerateSlotsAsync(schedule.DoctorId, 4));
                 return "success";
             }
             return "fail";

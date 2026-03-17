@@ -17,9 +17,10 @@ namespace Vezeeta_Clone.Service.BackgroundJobServices.Implementation
             _recurringJobManager = recurringJobManager;
         }
 
-        public void Enqueue<T>(Expression<Func<T, Task>> methodCall)
+        public async Task<string> EnqueueAsync<T>(Expression<Func<T, Task>> methodCall)
         {
-            BackgroundJob.Enqueue(methodCall);
+            var jobId = BackgroundJob.Enqueue(methodCall);
+            return await Task.FromResult(jobId);
         }
 
         public void Schedule<T>(Expression<Func<T, Task>> methodCall, TimeSpan delay)

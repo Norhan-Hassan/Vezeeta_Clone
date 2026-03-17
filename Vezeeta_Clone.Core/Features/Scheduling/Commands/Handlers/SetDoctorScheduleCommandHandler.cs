@@ -14,10 +14,10 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IScheduleService _scheduleService;
+        private readonly IDoctorAvailabilityService _scheduleService;
         private readonly IMapper _mapper;
         public SetDoctorScheduleCommandHandler(IStringLocalizer<SharedResources> localizer,
-                                            IScheduleService scheduleService,
+                                            IDoctorAvailabilityService scheduleService,
                                             ICurrentUserService currentUserService,
                                             IMapper mapper) : base(localizer)
         {
