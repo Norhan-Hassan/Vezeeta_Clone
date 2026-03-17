@@ -30,7 +30,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Commands.Handlers
         {
             //get doctor
             var doctorId = _currentUserService.GetCurrentUserId();
-            var doctor = await _doctorService.GetDoctorByWithoutIncludesAsync(doctorId);
+            var doctor = await _doctorService.GetDoctorByIdWithoutIncludesAsync(doctorId);
 
             var result = await _doctorService.CompleteDoctorInfoAsync(doctor, request.SubSpecializations, request.Description);
             if (result)

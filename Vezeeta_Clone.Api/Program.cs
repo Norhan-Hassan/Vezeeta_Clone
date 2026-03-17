@@ -10,6 +10,8 @@ using Vezeeta_Clone.Infrastructure.Context;
 using Vezeeta_Clone.Infrastructure.Hangfire;
 using Vezeeta_Clone.Infrastructure.Seeder;
 using Vezeeta_Clone.Service;
+using Vezeeta_Clone.Service.Abstract;
+using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
 namespace Vezeeta_Clone.Api
 {
     public class Program
@@ -98,13 +100,17 @@ namespace Vezeeta_Clone.Api
             #endregion
 
             #region Recurring Jobs
-            //send appointment reminders daily at 8:00 AM
-            // RecurringJob.AddOrUpdate<INotificationJobService>(
-            //     "daily-appointment-reminders",
-            //     service => service.SendAppointmentReminderAsync(0),
-            //     Cron.Daily(8, 0));
-
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var backgroundJobService = services.GetRequiredService<IBackgroundJobService>();
+                // recurring job
+                backgroundJobService.AddOrUpdateRecurring<ISlotGenerationService>(
+                    "maintain-doctor-slots",
+                    service => service.MaintainFutureSlotsAsync(4),
+                    Cron.Daily(2)
+                );
+            }
 
             #endregion
 

@@ -47,6 +47,12 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
                 .GreaterThanOrEqualTo(5)
                 .WithMessage(_localizer[SharedResourcesKeys.DurationMustBeGreaterThan5]);
 
+            RuleFor(x => x)
+                .Must((command, cancellation) =>
+                {
+                    return command.DayOfWeek == null && command.Date == null;
+                })
+                .WithMessage(_localizer[SharedResourcesKeys.RequiredOneScheduleCriteria]);
 
 
         }

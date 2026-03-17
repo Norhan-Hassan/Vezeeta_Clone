@@ -207,6 +207,9 @@
   <data name="Required" xml:space="preserve">
     <value>This Field is required</value>
   </data>
+  <data name="RequiredOneScheduleCriteria" xml:space="preserve">
+    <value>You should provide The Day of week or just specific date</value>
+  </data>
   <data name="RequireToHaveClinic" xml:space="preserve">
     <value>You must have clinic to make your schedule or choose online option</value>
   </data>

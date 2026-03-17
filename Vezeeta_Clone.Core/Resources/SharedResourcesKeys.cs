@@ -45,6 +45,7 @@
         public const string DurationMustBeGreaterThan5 = "DurationMustBeGreaterThan5";
         public const string ScheduleExist = "ScheduleExist";
         public const string RequireToHaveClinic = "RequireToHaveClinic";
+        public const string RequiredOneScheduleCriteria = "RequiredOneScheduleCriteria";
 
     }
 }

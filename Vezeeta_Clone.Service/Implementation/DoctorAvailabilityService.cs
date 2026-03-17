@@ -30,7 +30,16 @@ namespace Vezeeta_Clone.Service.Implementation
             return availabilities;
 
         }
+        public async Task<List<string>> GetDoctorsWithAvailability()
+        {
+            var doctorIds = await _doctorAvailabilityRepo
+                                        .GetTableNoTracking()
+                                        .Select(a => a.DoctorId)
+                                        .Distinct()
+                                        .ToListAsync();
 
+            return doctorIds;
+        }
         private async Task<bool> CheckAvailabilityOverlap(string doctorId, DoctorAvailability schedule)
         {
             var exist = await _doctorAvailabilityRepo.GetTableNoTracking()
@@ -66,7 +75,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 await _doctorAvailabilityRepo.AddAsync(schedule);
                 await _doctorAvailabilityRepo.SaveChangesAsync();
 
-                // 2. Trigger slot generation immediately
+                //background job to generate slots
                 var jobId = await _backgroundJobService.EnqueueAsync<ISlotGenerationService>(
                                         x => x.GenerateSlotsAsync(schedule.DoctorId, 4));
                 return "success";

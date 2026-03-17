@@ -36,10 +36,10 @@ namespace Vezeeta_Clone.Service.Implementation
             return doctor;
         }
 
-        public async Task<Doctor?> GetDoctorByWithoutIncludesAsync(string id)
+        public async Task<Doctor?> GetDoctorByIdWithoutIncludesAsync(string id)
         {
             var doctor = await _doctorRepo.GetTableNoTracking()
-
+                                    .Include(d => d.ApplicationUser)
                                      .FirstOrDefaultAsync(d => d.AppUserID == id);
             return doctor;
         }
@@ -151,6 +151,8 @@ namespace Vezeeta_Clone.Service.Implementation
             }
             return false;
         }
+
+
 
         #endregion
     }

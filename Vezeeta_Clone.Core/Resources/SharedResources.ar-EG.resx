@@ -207,6 +207,9 @@
   <data name="Required" xml:space="preserve">
     <value>هذا الحقل مطلوب</value>
   </data>
+  <data name="RequiredOneScheduleCriteria" xml:space="preserve">
+    <value>يجب ان تدخل يوم الاسبوع او يوم محدد </value>
+  </data>
   <data name="RequireToHaveClinic" xml:space="preserve">
     <value>يجب ان تسجل عيادتك قبل هذه الخطوه او تختار خيار الاونلاين</value>
   </data>
