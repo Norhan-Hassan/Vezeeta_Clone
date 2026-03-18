@@ -17,6 +17,7 @@
             public const string GetReviews = Prefix + SingleUser + "/reviews";
             public const string GetExamination = Prefix + SingleUser + "/examination-details";
             public const string CompleteInfo = Prefix + "complete-info";
+            public const string GetSlots = Prefix + SingleUser + "/available-slots";
         }
 
         public static class ScheduleRouting
@@ -24,6 +25,14 @@
             public const string Prefix = Rule + "schedules/";
             public const string AddSchedule = Prefix + "add";
         }
+
+        public static class AppointmentRouting
+        {
+            public const string Prefix = Rule + "appointments/";
+            public const string BookAppointment = Prefix + "book";
+            public const string CancelAppointment = Prefix + SingleEntity + "/cancel";
+        }
+
         public static class ClinicRouting
         {
             public const string Prefix = Rule + "clinics/";

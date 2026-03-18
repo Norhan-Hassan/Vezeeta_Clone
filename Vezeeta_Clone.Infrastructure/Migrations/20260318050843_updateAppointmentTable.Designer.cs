@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vezeeta_Clone.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Vezeeta_Clone.Infrastructure.Context;
 namespace Vezeeta_Clone.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260318050843_updateAppointmentTable")]
+    partial class updateAppointmentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -520,17 +523,8 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<string>("LockedReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("ID");
 

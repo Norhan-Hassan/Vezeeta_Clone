@@ -120,6 +120,12 @@
   <data name="AddSuccess" xml:space="preserve">
     <value>Added Successfully</value>
   </data>
+  <data name="AppointmentBooked" xml:space="preserve">
+    <value>Appointment at this slot time is booked successfully</value>
+  </data>
+  <data name="AppointmentBookFailed" xml:space="preserve">
+    <value>Failed to book this appointment , try again later</value>
+  </data>
   <data name="BadRequest" xml:space="preserve">
     <value>Bad Request In Processing this request</value>
   </data>
@@ -168,6 +174,9 @@
   <data name="FailToUpdate" xml:space="preserve">
     <value>Not Able To update this resource</value>
   </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
   <data name="InvalidPhoneNumber" xml:space="preserve">
     <value>This Phone Number is invalid</value>
   </data>
@@ -176,6 +185,9 @@
   </data>
   <data name="IsExist" xml:space="preserve">
     <value>This is Already Exist </value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
   </data>
   <data name="NoData" xml:space="preserve">
     <value>There is no data to be shown</value>
@@ -216,6 +228,9 @@
   <data name="RoleExist" xml:space="preserve">
     <value>Thia role name already exist</value>
   </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
   <data name="ScheduleAdded" xml:space="preserve">
     <value>Your Schedule Set Sucessfully</value>
   </data>
@@ -225,8 +240,20 @@
   <data name="SignInSuccess" xml:space="preserve">
     <value>Signed In Successfully </value>
   </data>
+  <data name="SlotAlreadyBooked" xml:space="preserve">
+    <value>This slot has booked by someone else</value>
+  </data>
   <data name="Success" xml:space="preserve">
     <value>Operation is Done Successfully</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
   </data>
   <data name="UnAuthorized" xml:space="preserve">
     <value>UnAuthorized to proceed</value>
@@ -248,5 +275,8 @@
   </data>
   <data name="ValidToken" xml:space="preserve">
     <value>This token is valid</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
   </data>
 </root>

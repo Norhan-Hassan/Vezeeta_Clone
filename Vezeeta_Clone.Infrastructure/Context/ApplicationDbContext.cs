@@ -120,6 +120,14 @@ namespace Vezeeta_Clone.Infrastructure.Context
                        .WithOne(a => a.Appointment)
                        .HasForeignKey<Appointment>(a => a.SlotId)
                        .OnDelete(DeleteBehavior.Restrict);
+
+
+                entity.HasOne(a => a.Patient)
+                     .WithMany(p => p.Appointments)
+                     .HasForeignKey(a => a.PatientId)
+                     .OnDelete(DeleteBehavior.Restrict);
+
+
             });
 
             foreach (var relationship in builder.Model.GetEntityTypes()

@@ -23,7 +23,8 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IBackgroundJobService, BackgroundJobService>();
             services.AddTransient<ISlotGenerationService, SlotGenerationService>();
-            //services.AddScoped<ISlotGenerationJobService, SlotGenerationJobService>();
+            services.AddTransient<ISlotService, SlotService>();
+            services.AddTransient<IAppointmentService, AppointmentService>();
             return services;
         }
     }

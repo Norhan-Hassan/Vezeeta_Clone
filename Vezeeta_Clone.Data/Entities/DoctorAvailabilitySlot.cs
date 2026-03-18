@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Vezeeta_Clone.Data.Entities.Enums;
 
 namespace Vezeeta_Clone.Data.Entities
 {
@@ -7,6 +9,7 @@ namespace Vezeeta_Clone.Data.Entities
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
         public DateOnly Date { get; set; }
+        public SlotStatus Status { get; set; } = SlotStatus.Available;
         public bool IsBooked { get; set; } = false;
         public string? LockedReason { get; set; }
 
@@ -17,6 +20,7 @@ namespace Vezeeta_Clone.Data.Entities
         //because there would be free solt without apointment(may =be)
         public Appointment? Appointment { get; set; }
 
-
+        [Timestamp]
+        public byte[] RowVersion { get; set; }  // Concurrency token
     }
 }

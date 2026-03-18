@@ -17,6 +17,8 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
         IRequestHandler<GetDoctorReviewsQuery, Response<PaginatedResult<GetDoctorReviewsQueryResult>>>,
         IRequestHandler<GetDoctorDetailsQuery, Response<GetDoctorDetailsQueryResult>>,
         IRequestHandler<GetDoctorExaminationDetailsQuery, Response<GetDoctorExaminationDetailsQueryResult>>
+
+
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IDoctorService _doctorService;
@@ -48,6 +50,9 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
                 return NotFound<PaginatedResult<GetDoctorsPaginatedQueryResult>>(_localizer[SharedResourcesKeys.NoData]);
             return Success(paginatedResult);
         }
+
+
+
         public async Task<Response<PaginatedResult<GetDoctorReviewsQueryResult>>> Handle(GetDoctorReviewsQuery request, CancellationToken cancellationToken)
         {
             Expression<Func<Review, GetDoctorReviewsQueryResult>> expression =
@@ -71,6 +76,8 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             return Success(doctorMapped);
         }
 
+
+
         public async Task<Response<GetDoctorExaminationDetailsQueryResult>> Handle(GetDoctorExaminationDetailsQuery request, CancellationToken cancellationToken)
         {
             var doctor = await _doctorService.GetDoctorWithClinicByIDAsync(request.Id);
@@ -80,5 +87,9 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             var doctorExaminationDetailsMapped = _mapper.Map<GetDoctorExaminationDetailsQueryResult>(doctor);
             return Success(doctorExaminationDetailsMapped);
         }
+
+
+
+
     }
 }

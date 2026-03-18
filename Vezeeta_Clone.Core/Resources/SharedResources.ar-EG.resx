@@ -120,6 +120,12 @@
   <data name="AddSuccess" xml:space="preserve">
     <value>تمت الاضافه بنجاح</value>
   </data>
+  <data name="AppointmentBooked" xml:space="preserve">
+    <value>تم تسجيل الحجز في هذا الموعد بنجاح</value>
+  </data>
+  <data name="AppointmentBookFailed" xml:space="preserve">
+    <value>فشلت عملية الحجز الرجاء المحاوله لاحقا</value>
+  </data>
   <data name="BadRequest" xml:space="preserve">
     <value>حدث خطا ما اثناء معالجة الطلب</value>
   </data>
@@ -168,6 +174,9 @@
   <data name="FailToUpdate" xml:space="preserve">
     <value>فشلت عملية التعديل</value>
   </data>
+  <data name="Friday" xml:space="preserve">
+    <value>الجمعه</value>
+  </data>
   <data name="InvalidPhoneNumber" xml:space="preserve">
     <value>يرجى إدخال رقم صالح</value>
   </data>
@@ -176,6 +185,9 @@
   </data>
   <data name="IsExist" xml:space="preserve">
     <value>هذه القيمه موجوده بالفعل</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>الاثنين</value>
   </data>
   <data name="NoData" xml:space="preserve">
     <value>لا يوجد بيانات لعرضها</value>
@@ -216,6 +228,9 @@
   <data name="RoleExist" xml:space="preserve">
     <value>هذا الاسم موجود بالفعل اختر اسم اخر</value>
   </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>السبت</value>
+  </data>
   <data name="ScheduleAdded" xml:space="preserve">
     <value>تم تسجيل جدولك بنجاح</value>
   </data>
@@ -225,8 +240,20 @@
   <data name="SignInSuccess" xml:space="preserve">
     <value>تم تسجيل الدخول بنجاح</value>
   </data>
+  <data name="SlotAlreadyBooked" xml:space="preserve">
+    <value>هذا الميعاد تم حجزه من قبل شخص اخر </value>
+  </data>
   <data name="Success" xml:space="preserve">
     <value>تمت العمليه بنجاح</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>الاحد</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>الثلاثاء</value>
   </data>
   <data name="UnAuthorized" xml:space="preserve">
     <value>غير مسموح </value>
@@ -248,5 +275,8 @@
   </data>
   <data name="ValidToken" xml:space="preserve">
     <value>التوكن صالح</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>الاربعاء</value>
   </data>
 </root>

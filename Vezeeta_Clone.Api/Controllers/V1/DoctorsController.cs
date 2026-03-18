@@ -38,11 +38,24 @@ namespace Vezeeta_Clone.Api.Controllers.V1
             return NewResult(response);
         }
 
+        [HttpGet(Router.DoctorRouting.GetSlots)]
+        public async Task<IActionResult> GetDoctorAvailableSlots([FromRoute] GetDoctorAvailableSlotsQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
+
         [HttpPost(Router.DoctorRouting.CompleteInfo)]
         public async Task<IActionResult> CompleteDoctorInfo([FromBody] CompleteDoctorInfoCommand command)
         {
             var response = await _mediator.Send(command);
             return NewResult(response);
         }
+
+        //GET /doctors/{id}/available-slots
+
+        //GetDoctorAvailableSlotsQuery,
+
     }
 }
