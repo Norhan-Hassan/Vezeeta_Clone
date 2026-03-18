@@ -8,6 +8,7 @@ namespace Vezeeta_Clone.Core.Mapping.ScheduleMapping
         public void SetDoctorScheduleMapping()
         {
             CreateMap<SetDoctorScheduleCommand, DoctorAvailability>();
+            //.ForMember(dest => dest.frequency, opt => opt.MapFrom(src => src.DayOfWeek != null ? ScheduleFrequency.Weekly : ScheduleFrequency.OneTime));
 
         }
     }

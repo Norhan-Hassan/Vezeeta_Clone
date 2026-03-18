@@ -19,6 +19,7 @@ namespace Vezeeta_Clone.Data.Entities
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
 
+        public ScheduleFrequency frequency { get; set; } = ScheduleFrequency.Weekly;
         public int Duration { get; set; }
         public AvailabilityMethod type { get; set; }
 

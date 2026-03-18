@@ -73,7 +73,16 @@ namespace Vezeeta_Clone.Service.Implementation
                 {
                     return "overlapping";
                 }
+
                 schedule.DoctorId = doctorId;
+                if (schedule.DayOfWeek != null)
+                {
+                    schedule.frequency = ScheduleFrequency.Weekly;
+                }
+                else
+                {
+                    schedule.frequency = ScheduleFrequency.OneTime;
+                }
                 await _doctorAvailabilityRepo.AddAsync(schedule);
                 await _doctorAvailabilityRepo.SaveChangesAsync();
 

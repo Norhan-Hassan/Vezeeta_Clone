@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
+using Vezeeta_Clone.Data.Entities.Enums;
 using Vezeeta_Clone.Infrastructure.Abstract;
 using Vezeeta_Clone.Service.Abstract;
 
@@ -41,9 +42,9 @@ namespace Vezeeta_Clone.Service.Implementation
 
                 if (availability.DayOfWeek.HasValue)
                 {
-
                     var lastSlotDateForAvailability = await _slotRepo.GetTableNoTracking()
                         .Where(s => s.DoctorAvailabilityId == availability.ID)
+                        .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
                         .MaxAsync(s => (DateOnly?)s.Date);
 
                     if (lastSlotDateForAvailability != null)
@@ -56,21 +57,27 @@ namespace Vezeeta_Clone.Service.Implementation
                         startDate = today.AddDays(daysToAdd);
                     }
 
-                    slotsToAdd.AddRange(GenerateWeeklySlots(availability, startDate, endDate));
+                    var existingSlots = await _slotRepo.GetTableNoTracking()
+                        .Where(s => s.DoctorAvailabilityId == availability.ID && s.Date <= endDate)
+                       .ToListAsync();
+
+                    slotsToAdd.AddRange(GenerateWeeklySlots(availability, startDate, endDate, existingSlots));
                 }
                 else if (availability.Date.HasValue)
                 {
-                    var lastSlotDateForAvailability = await _slotRepo.GetTableNoTracking()
+                    var existingSlots = await _slotRepo.GetTableNoTracking()
                         .Where(s => s.DoctorAvailabilityId == availability.ID)
-                        .MaxAsync(s => (DateOnly?)s.Date);
+                        .AnyAsync();
 
-                    startDate = lastSlotDateForAvailability?.AddDays(1) ?? availability.Date.Value;
-                    slotsToAdd.AddRange(GenerateDateSlots(availability, startDate));
+                    // Only generate if no slots exist yet for this one-time availability
+                    if (!existingSlots)
+                    {
+                        slotsToAdd.AddRange(GenerateDateSlots(availability, availability.Date.Value));
+                    }
                 }
             }
 
             if (!slotsToAdd.Any()) return;
-
 
             var existingSlotKeys = new HashSet<(int, DateOnly, TimeOnly)>(
                 await _slotRepo.GetTableNoTracking()
@@ -89,17 +96,22 @@ namespace Vezeeta_Clone.Service.Implementation
             await _slotRepo.SaveChangesAsync();
         }
 
-        private List<DoctorAvailabilitySlot> GenerateWeeklySlots(DoctorAvailability availability, DateOnly startDate, DateOnly endDate)
+        private List<DoctorAvailabilitySlot> GenerateWeeklySlots(DoctorAvailability availability, DateOnly startDate, DateOnly endDate, List<DoctorAvailabilitySlot> existingSlots)
         {
             var slots = new List<DoctorAvailabilitySlot>();
 
-            int daysToAdd =
-                ((int)availability.DayOfWeek!.Value - (int)startDate.DayOfWeek + 7) % 7;
+            var lastWeeklyDate = existingSlots
+                               .Where(s => !s.IsDeleted)
+                               .OrderBy(s => s.Date)
+                               .Select(s => s.Date)
+                               .LastOrDefault();
 
-            if (daysToAdd == 0)
-                daysToAdd = 7;
+            // Start from the day after the last weekly slot, or from startDate if none exist
+            var baseDate = lastWeeklyDate != default ? lastWeeklyDate.AddDays(7) : startDate;
 
-            var firstDay = startDate.AddDays(daysToAdd);
+            // Find the first day matching the DayOfWeek
+            int daysToAdd = ((int)availability.DayOfWeek!.Value - (int)baseDate.DayOfWeek + 7) % 7;
+            var firstDay = baseDate.AddDays(daysToAdd);
 
             var current = firstDay;
 
@@ -163,15 +175,24 @@ namespace Vezeeta_Clone.Service.Implementation
 
             foreach (var doctorId in doctors)
             {
+                var availabilities = await _availabilityService.GetDoctorAvailability(doctorId);
+
+                // Only maintain slots for doctors with weekly availabilities
+                var hasWeeklyAvailability = availabilities.Any(a => a.frequency == ScheduleFrequency.Weekly);
+
+                if (!hasWeeklyAvailability)
+                    continue;
+
                 // get last slot date for doctor
                 var lastSlotDate = await _slotRepo.GetTableNoTracking()
                     .Include(s => s.Availability)
                     .Where(s => s.Availability.DoctorId == doctorId)
+                    .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
                     .MaxAsync(s => (DateOnly?)s.Date);
 
                 if (lastSlotDate == null)
                 {
-                    // doctor has availability but no slots generated yet
+                    // doctor has weekly availability but no slots generated yet
                     await GenerateSlotsAsync(doctorId, requiredWeeks);
                     continue;
                 }
@@ -186,5 +207,3 @@ namespace Vezeeta_Clone.Service.Implementation
         }
     }
 }
-
-
