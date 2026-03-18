@@ -56,6 +56,7 @@ Response<T> → Controller → HTTP Response
 | **CQRS & Mediator** | MediatR 14.1.0 |
 | **Object Mapping** | AutoMapper 16.1.0 |
 | **Validation** | FluentValidation 12.1.1 (via MediatR Pipeline Behavior) |
+| **Background Jobs** | Hangfire 1.8.13 (Async slot generation, recurring jobs) |
 | **Localization** | IStringLocalizer with .resx resources (English & Arabic) |
 | **API Documentation** | Swashbuckle.AspNetCore 9.0.6 with JWT support |
 
@@ -109,7 +110,9 @@ Vezeeta_Clone.Service/
 │ ├── IAuthenticationService.cs
 │   ├── IAutherizationService.cs
 │   ├── IDoctorService.cs
-│   └── ISpecializationService.cs
+│   ├── ISpecializationService.cs
+│   ├── IDoctorAvailabilityService.cs
+│   └── ISlotGenerationService.cs
 ├── AppUserAuthServices/
 │ ├── Abstract/
 │   │   └── ICurrentUserService.cs  # Get current authenticated user from JWT claims
@@ -119,7 +122,14 @@ Vezeeta_Clone.Service/
 │   ├── AuthenticationService.cs   # JWT generation, refresh tokens, registration
 │   ├── AutherizationService.cs          # Role CRUD operations
 │   ├── DoctorService.cs
-│   └── SpecializationService.cs
+│   ├── SpecializationService.cs
+│   ├── DoctorAvailabilityService.cs   # Availability management with validation
+│   └── SlotGenerationService.cs        # Intelligent slot generation engine
+├── BackgroundJobServices/
+│   ├── Abstract/
+│   │   └── IBackgroundJobService.cs   # Fire-and-forget, scheduled, recurring jobs
+│   └── Implementation/
+│       └── BackgroundJobService.cs    # Hangfire integration
 └── ModuleServiceDependecies.cs     # Service layer DI
 
 Vezeeta_Clone.Infrastructure/
@@ -386,18 +396,46 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 | `PUT` | `update` | Update a specialization | ✅ |
 | `GET` | `{SpecializationID:int}/sub-specializations` | Get sub-specializations by specialization ID | ❌ |
 
-### Centralized Routing
+### Scheduling (`api/v1/schedule/`)
 
-All routes are defined as constants in `Router.cs` — no magic strings in controllers:
+| Method | Route | Description | Auth |
+|---|---|---|---|
+| `POST` | `set-availability` | Create availability & trigger slot generation | ✅ |
+| `GET` | `{doctorId}` | Get doctor's availability patterns | ❌ |
 
-```csharp
-public static class AuthRouting
-{
- public const string Prefix = Rule + "auth/";
-    public const string DoctorRegister = Prefix + "doctor-register";
-    public const string SignIn = Prefix + "signIn";
-}
-```
+---
+
+## ✨ New Features (Latest Release)
+
+### 1. **Intelligent Slot Generation System**
+
+Automatically generates bookable appointment slots based on flexible doctor scheduling patterns.
+
+**Features:**
+- **Weekly Recurring**: Generate slots for specific days (e.g., every Monday, Wednesday, Friday)
+- **One-Time Special Dates**: Create availability for special open days
+- **Smart Duplicate Prevention**: O(1) deduplication using HashSet
+- **Configurable Duration**: Customize slot lengths (in minutes)
+
+### 2. **Background Job Processing with Hangfire**
+
+Asynchronous slot generation via fire-and-forget and recurring jobs.
+
+**Features:**
+- Automatic job enqueueing on availability creation
+- Hangfire Dashboard at `/Hangfire-Dashboard`
+- Persistent job storage in SQL Server
+- Automatic cleanup of orphaned jobs
+
+### 3. **Doctor Availability Management Service**
+
+Validation and slot generation triggering on availability creation.
+
+**Validations:**
+- Start time < End time
+- Offline availability requires clinic
+- Prevents overlapping schedules
+- Auto-triggers background slot generation
 
 ---
 
@@ -451,6 +489,8 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
 | `FluentValidation.DependencyInjectionExtensions` | 12.1.1 | FluentValidation DI integration |
 | `Swashbuckle.AspNetCore` | 9.0.6 | Swagger/OpenAPI documentation |
 | `Swashbuckle.AspNetCore.Annotations` | 9.0.6 | Swagger endpoint annotations |
+| `Hangfire.Core` | 1.8.13 | Background job processing |
+| `Hangfire.SqlServer` | 1.8.13 | SQL Server job storage for Hangfire |
 
 ---
 
@@ -482,14 +522,14 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
      },
      "JwtSettings": {
        "Secret": "YourSuperSecretKeyHere_MustBeAtLeast32Characters",
-"Issuer": "VezeetaCloneAPI",
+        "Issuer": "VezeetaCloneAPI",
        "Audience": "VezeetaCloneClient",
        "ValidateIssuer": true,
        "ValidateAudience": true,
        "ValidateLifeTime": true,
        "ValidateIssuerSigningKey": true,
-       "AccessTokenExpireDate": 1,
-       "RefreshTokenExpireDate": 6
+       "AccessTokenExpireDate": 7,
+       "RefreshTokenExpireDate": 2
      }
    }
    ```
@@ -536,23 +576,7 @@ dotnet ef database update --project Vezeeta_Clone.Infrastructure --startup-proje
 - **JWT Security** — access + refresh token pattern with database-backed revocation
 - **Current User Abstraction** — `ICurrentUserService` for clean auth context access
 - **Restrict Delete Behavior** — all foreign keys use `DeleteBehavior.Restrict`
-
----
-
-## 👥 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/new-feature`)
-3. Follow the existing architecture patterns (Commands/Queries in Features, Services, Repos)
-4. Ensure localization keys are added for both languages
-5. Submit a pull request
-
----
-
-## 📄 License
-
-This project is for educational purposes — a clone of the Vezeeta platform to demonstrate Clean Architecture with .NET 9.
-
----
-
-**Built with ❤️ using Clean Architecture, CQRS, and .NET 9**
+- **Background Jobs** — Hangfire for async slot generation without blocking API
+- **Slot Deduplication** — HashSet-based O(1) duplicate detection
+- **UTC Timezone Consistency** — all time operations use UTC for global compatibility
+- **Transaction Support** — generic repository provides transaction management (Begin, Commit, Rollback)
