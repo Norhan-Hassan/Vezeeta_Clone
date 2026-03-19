@@ -86,7 +86,7 @@ namespace Vezeeta_Clone.Service.Implementation
                         string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
                 await _unitOfWork._patientRepo.AddAsync(patient);
-                await _unitOfWork._patientRepo.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
                 transaction.Commit();
 
             }
