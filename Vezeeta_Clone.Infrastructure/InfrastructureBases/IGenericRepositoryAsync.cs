@@ -7,7 +7,6 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         Task DeleteRangeAsync(ICollection<T> entities);
         Task<T> GetByIntIdAsync(int id);
         Task<T> GetByStringIdAsync(string id);
-        Task SaveChangesAsync();
         IDbContextTransaction BeginTransaction();
         void Commit();
         void RollBack();

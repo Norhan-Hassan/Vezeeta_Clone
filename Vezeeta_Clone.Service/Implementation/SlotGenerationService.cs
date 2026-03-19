@@ -1,23 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Entities.Enums;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
 {
     public class SlotGenerationService : ISlotGenerationService
     {
-        private readonly IDoctorAvailabilitySlotRepo _slotRepo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IDoctorService _doctorService;
         private readonly IDoctorAvailabilityService _availabilityService;
 
-        public SlotGenerationService(IDoctorAvailabilitySlotRepo slotRepo,
-                                    IDoctorAvailabilityService scheduleService,
+        public SlotGenerationService(IDoctorAvailabilityService scheduleService,
+                                     IUnitOfWork unitOfWork,
                                     IDoctorService doctorService)
         {
-            _slotRepo = slotRepo;
             _availabilityService = scheduleService;
+            _unitOfWork = unitOfWork;
             _doctorService = doctorService;
         }
 
@@ -42,7 +42,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
                 if (availability.DayOfWeek.HasValue)
                 {
-                    var lastSlotDateForAvailability = await _slotRepo.GetTableNoTracking()
+                    var lastSlotDateForAvailability = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                         .Where(s => s.DoctorAvailabilityId == availability.ID)
                         .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
                         .MaxAsync(s => (DateOnly?)s.Date);
@@ -57,7 +57,7 @@ namespace Vezeeta_Clone.Service.Implementation
                         startDate = today.AddDays(daysToAdd);
                     }
 
-                    var existingSlots = await _slotRepo.GetTableNoTracking()
+                    var existingSlots = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                         .Where(s => s.DoctorAvailabilityId == availability.ID && s.Date <= endDate)
                        .ToListAsync();
 
@@ -65,7 +65,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
                 else if (availability.Date.HasValue)
                 {
-                    var existingSlots = await _slotRepo.GetTableNoTracking()
+                    var existingSlots = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                         .Where(s => s.DoctorAvailabilityId == availability.ID)
                         .AnyAsync();
 
@@ -80,7 +80,7 @@ namespace Vezeeta_Clone.Service.Implementation
             if (!slotsToAdd.Any()) return;
 
             var existingSlotKeys = new HashSet<(int, DateOnly, TimeOnly)>(
-                await _slotRepo.GetTableNoTracking()
+                await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                     .Where(s => s.Availability.DoctorId == doctorId && s.Date <= endDate)
                     .Select(s => new ValueTuple<int, DateOnly, TimeOnly>(s.DoctorAvailabilityId, s.Date, s.StartTime))
                     .ToListAsync()
@@ -92,8 +92,8 @@ namespace Vezeeta_Clone.Service.Implementation
 
             if (!filteredSlots.Any()) return;
 
-            await _slotRepo.AddRangeAsync(filteredSlots);
-            await _slotRepo.SaveChangesAsync();
+            await _unitOfWork._availabilitySlotRepo.AddRangeAsync(filteredSlots);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         private List<DoctorAvailabilitySlot> GenerateWeeklySlots(DoctorAvailability availability, DateOnly startDate, DateOnly endDate, List<DoctorAvailabilitySlot> existingSlots)
@@ -184,7 +184,7 @@ namespace Vezeeta_Clone.Service.Implementation
                     continue;
 
                 // get last slot date for doctor
-                var lastSlotDate = await _slotRepo.GetTableNoTracking()
+                var lastSlotDate = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                     .Include(s => s.Availability)
                     .Where(s => s.Availability.DoctorId == doctorId)
                     .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)

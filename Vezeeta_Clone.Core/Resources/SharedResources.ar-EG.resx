@@ -129,6 +129,12 @@
   <data name="BadRequest" xml:space="preserve">
     <value>حدث خطا ما اثناء معالجة الطلب</value>
   </data>
+  <data name="BookingCompleted" xml:space="preserve">
+    <value>تم تاكيد عملية الحجز</value>
+  </data>
+  <data name="BookingCompletionFailed" xml:space="preserve">
+    <value>فشلت عملية تاكيد الحجز</value>
+  </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>كلمة المرور الحاليه غير صحيحه</value>
   </data>

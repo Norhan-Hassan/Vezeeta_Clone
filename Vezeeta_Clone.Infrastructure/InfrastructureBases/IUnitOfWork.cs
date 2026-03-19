@@ -1,0 +1,18 @@
+﻿using Vezeeta_Clone.Infrastructure.Abstract;
+
+namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
+{
+    public interface IUnitOfWork : IAsyncDisposable
+    {
+        public IDoctorRepo _doctorRepo { get; }
+        public IAppointmentRepo _appointmentRepo { get; }
+        public IDoctorAvailabilityRepo _doctorAvailabilityRepo { get; }
+        public IPatientRepo _patientRepo { get; }
+        public IClinicRepo _clinicRepo { get; }
+        public IDoctorAvailabilitySlotRepo _availabilitySlotRepo { get; }
+        public ISpecializationRepo _specializationRepo { get; }
+        public ISubSpecializationRepo _subSpecializationRepo { get; }
+        public IRefreshTokenRepo _refreshTokenRepo { get; }
+        Task<int> SaveChangesAsync();
+    }
+}

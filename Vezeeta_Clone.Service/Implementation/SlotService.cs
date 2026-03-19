@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
 {
     public class SlotService : ISlotService
     {
-        private readonly IDoctorAvailabilitySlotRepo _availabilitySlotRepo;
-        public SlotService(IDoctorAvailabilitySlotRepo availabilitySlotRepo)
+        private readonly IUnitOfWork _unitOfWork;
+        public SlotService(IUnitOfWork unitOfWork)
         {
-            _availabilitySlotRepo = availabilitySlotRepo;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<DoctorAvailabilitySlot>> GetDoctorAvailableSlotsAsync(string doctorId)
@@ -18,7 +18,7 @@ namespace Vezeeta_Clone.Service.Implementation
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
             var nowTime = TimeOnly.FromDateTime(DateTime.UtcNow);
 
-            var slots = await _availabilitySlotRepo.GetTableNoTracking()
+            var slots = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                                 .Where(s => s.Availability.DoctorId == doctorId && !s.IsBooked &&
                                                         (s.Date > today ||
                                                         (s.Date == today && s.StartTime > nowTime)))

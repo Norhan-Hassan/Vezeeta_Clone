@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
 {
     public class SpecializationService : ISpecializationService
     {
-        private readonly ISpecializationRepo _specializationRepo;
-        public SpecializationService(ISpecializationRepo specializationRepo)
+        private readonly IUnitOfWork _unitOfWork;
+        public SpecializationService(IUnitOfWork unitOfWork)
         {
-            _specializationRepo = specializationRepo;
+            _unitOfWork = unitOfWork;
 
         }
 
@@ -19,28 +19,28 @@ namespace Vezeeta_Clone.Service.Implementation
             if (specialization == null)
                 throw new ArgumentNullException(nameof(specialization));
 
-            await _specializationRepo.AddAsync(specialization);
-            await _specializationRepo.SaveChangesAsync();
+            await _unitOfWork._specializationRepo.AddAsync(specialization);
+            await _unitOfWork.SaveChangesAsync();
             return "success";
         }
         public async Task<string> UpdateSpecialization(Specialization specialization)
         {
             if (specialization == null)
                 throw new ArgumentNullException(nameof(specialization));
-            await _specializationRepo.UpdateAsync(specialization);
-            await _specializationRepo.SaveChangesAsync();
+            await _unitOfWork._specializationRepo.UpdateAsync(specialization);
+            await _unitOfWork.SaveChangesAsync();
             return "success";
         }
         public async Task<bool> IsSpecializationExist(string specializationNameAr, string specializationNameEn, int? currentId = null)
         {
-            return await _specializationRepo.GetTableNoTracking()
+            return await _unitOfWork._specializationRepo.GetTableNoTracking()
                                             .AnyAsync(x => (x.NameEn == specializationNameEn ||
                                                       x.NameAr == specializationNameAr) && x.ID != currentId);
         }
 
         public async Task<Specialization> GetSpecializationById(int id)
         {
-            var specialization = await _specializationRepo.GetByIntIdAsync(id);
+            var specialization = await _unitOfWork._specializationRepo.GetByIntIdAsync(id);
             if (specialization == null)
                 throw new KeyNotFoundException($"Specialization with ID {id} not found");
             return specialization;
@@ -48,7 +48,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public async Task<List<SubSpecialization>> GetSubSpecializationBySpecIDAsync(int specializationId)
         {
-            var subSpecializations = await _specializationRepo.GetTableNoTracking()
+            var subSpecializations = await _unitOfWork._specializationRepo.GetTableNoTracking()
                                                         .Where(s => s.ID == specializationId)
                                                         .SelectMany(s => s.SubSpecializations)
                                                         .ToListAsync();
@@ -57,7 +57,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public Task<List<Specialization>> GetSpecializationsAsync()
         {
-            var specializations = _specializationRepo.GetTableNoTracking()
+            var specializations = _unitOfWork._specializationRepo.GetTableNoTracking()
                                                      //.OrderByDescending(s => s.Doctors!.Count) //later when i have doctors data to order by the number of doctors in each specialization
                                                      .Take(8).ToListAsync();
             return specializations;

@@ -1,41 +1,39 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
 {
     public class ClinicService : IClinicService
     {
-        private readonly IClinicRepo _clinicRepo;
-        private readonly IDoctorRepo _doctorRepo;
-        public ClinicService(IClinicRepo clinicRepo, IDoctorRepo doctorRepo)
+        private readonly IUnitOfWork _unitOfWork;
+        public ClinicService(IUnitOfWork unitOfWork)
         {
-            _clinicRepo = clinicRepo;
-            _doctorRepo = doctorRepo;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<bool> IsClinicExist(string doctorId)
         {
             //check if the doctor already has a clinic
-            return await _clinicRepo.GetTableNoTracking()
+            return await _unitOfWork._clinicRepo.GetTableNoTracking()
                                     .Include(c => c.Doctor)
                                      .AnyAsync(c => c.Doctor.AppUserID == doctorId);
         }
 
         public async Task RegisterClinicToDoctor(Clinic clinic, string doctorId)
         {
-            var doctor = await _doctorRepo.GetByStringIdAsync(doctorId);
+            var doctor = await _unitOfWork._doctorRepo.GetByStringIdAsync(doctorId);
 
-            var transaction = _clinicRepo.BeginTransaction();
+            var transaction = _unitOfWork._clinicRepo.BeginTransaction();
             try
             {
 
-                await _clinicRepo.AddAsync(clinic);
-                await _clinicRepo.SaveChangesAsync();
+                await _unitOfWork._clinicRepo.AddAsync(clinic);
                 clinic.DoctorId = doctor.AppUserID;
-                await _doctorRepo.UpdateAsync(doctor);
-                await _doctorRepo.SaveChangesAsync();
+                await _unitOfWork._doctorRepo.UpdateAsync(doctor);
+
+                await _unitOfWork.SaveChangesAsync();
                 transaction.Commit();
             }
             catch (Exception ex)

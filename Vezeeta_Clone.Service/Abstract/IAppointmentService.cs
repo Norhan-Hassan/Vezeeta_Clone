@@ -5,6 +5,8 @@ namespace Vezeeta_Clone.Service.Abstract
     public interface IAppointmentService
     {
         Task<bool> BookAppointmentAsync(Appointment appointment, string patientId);
+        Task<bool> CompleteAppointmentAsync(Appointment appointment);
+        Task<Appointment> GetAppointmentByIdAsync(int appointmentId);
 
     }
 

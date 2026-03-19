@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Entities.Enums;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
 {
     public class AppointmentService : IAppointmentService
     {
-        private readonly IAppointmentRepo _appointmentRepo;
-        private readonly IDoctorAvailabilitySlotRepo _availabilitySlotRepo;
-        public AppointmentService(IAppointmentRepo appointmentRepo, IDoctorAvailabilitySlotRepo availabilitySlotRepo)
+
+        private readonly IUnitOfWork _unitOfWork;
+        public AppointmentService(IUnitOfWork unitOfWork)
         {
-            _appointmentRepo = appointmentRepo;
-            _availabilitySlotRepo = availabilitySlotRepo;
+            _unitOfWork = unitOfWork;
         }
         public async Task<bool> BookAppointmentAsync(Appointment appointment, string patientId)
         {
@@ -25,9 +24,10 @@ namespace Vezeeta_Clone.Service.Implementation
 
             while (retryCount < maxRetries)
             {
+                using var transaction = _unitOfWork._appointmentRepo.BeginTransaction();
                 try
                 {
-                    var slot = await _availabilitySlotRepo.GetByIntIdAsync(appointment.SlotId);
+                    var slot = await _unitOfWork._availabilitySlotRepo.GetByIntIdAsync(appointment.SlotId);
 
                     if (slot == null)
                         throw new InvalidOperationException("Slot not found");
@@ -39,7 +39,7 @@ namespace Vezeeta_Clone.Service.Implementation
                     if (slot.Date < today)
                         throw new InvalidOperationException("Cannot book past slots");
 
-                    var existingAppointment = await _appointmentRepo.GetTableNoTracking().AnyAsync(
+                    var existingAppointment = await _unitOfWork._appointmentRepo.GetTableNoTracking().AnyAsync(
                                  a => a.SlotId == appointment.SlotId &&
                                  a.Status != AppointmentStatus.Cancelled);
 
@@ -56,17 +56,22 @@ namespace Vezeeta_Clone.Service.Implementation
                     // appointment.Status = AppointmentStatus.Pending;
                     // appointment.BookedAt = DateTime.UtcNow;
 
-                    await _appointmentRepo.AddAsync(appointment);
-                    await _availabilitySlotRepo.UpdateAsync(slot);
+                    await _unitOfWork._appointmentRepo.AddAsync(appointment);
+                    await _unitOfWork._availabilitySlotRepo.UpdateAsync(slot);
 
                     try
                     {
-                        await _appointmentRepo.SaveChangesAsync();
-                        await _availabilitySlotRepo.SaveChangesAsync();
+                        await _unitOfWork.SaveChangesAsync();
+                        transaction.Commit();
                     }
                     catch (DbUpdateConcurrencyException ex)
                     {
-                        throw new InvalidOperationException("This slot was just booked by another user, try another slot");
+                        retryCount++;
+                        if (retryCount >= maxRetries)
+                            throw new InvalidOperationException("This slot was just booked by another user, try another slot");
+
+                        await Task.Delay(50);
+                        transaction.Rollback();
                     }
                     return true;
                 }
@@ -82,6 +87,23 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
             }
             return false;
+        }
+
+        public async Task<bool> CompleteAppointmentAsync(Appointment appointment)
+        {
+            //appointment.Status = AppointmentStatus.Completed;
+
+            await _unitOfWork._appointmentRepo.UpdateAsync(appointment);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<Appointment> GetAppointmentByIdAsync(int appointmentId)
+        {
+            var appointment = await _unitOfWork._appointmentRepo.GetByIntIdAsync(appointmentId);
+            if (appointment == null)
+                throw new InvalidOperationException("Appointment not found");
+            return appointment;
         }
     }
 }

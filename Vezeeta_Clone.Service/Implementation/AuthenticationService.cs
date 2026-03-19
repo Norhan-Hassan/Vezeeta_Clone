@@ -8,7 +8,7 @@ using Vezeeta_Clone.Data.Commons;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Helper;
 using Vezeeta_Clone.Data.Results;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
@@ -16,24 +16,16 @@ namespace Vezeeta_Clone.Service.Implementation
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IDoctorRepo _doctorRepo;
-        private readonly IPatientRepo _patientRepo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly JwtSettings _jwtSettings;
-        private readonly IRefreshTokenRepo _refreshTokenRepo;
-        private readonly ISubSpecializationRepo _subSpecializationRepo;
+
         public AuthenticationService(UserManager<ApplicationUser> userManager,
-                                      IDoctorRepo doctorRepo,
-                                      IPatientRepo patientRepo,
-                                      JwtSettings jwtSettings,
-                                      IRefreshTokenRepo refreshTokenRepo,
-                                      ISubSpecializationRepo subSpecializationRepo)
+                                       JwtSettings jwtSettings,
+                                       IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
-            _patientRepo = patientRepo;
-            _doctorRepo = doctorRepo;
             _jwtSettings = jwtSettings;
-            _refreshTokenRepo = refreshTokenRepo;
-            _subSpecializationRepo = subSpecializationRepo;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -42,7 +34,7 @@ namespace Vezeeta_Clone.Service.Implementation
         public async Task RegisterDoctorAsync(Doctor doctor, ApplicationUser user, string password)
         {
 
-            await using var transaction = _doctorRepo.BeginTransaction();
+            await using var transaction = _unitOfWork._doctorRepo.BeginTransaction();
 
             try
             {
@@ -61,8 +53,8 @@ namespace Vezeeta_Clone.Service.Implementation
                         string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
                 doctor.IsProfileComplete = false; // to next step of choosing speialization and sub specialization
-                await _doctorRepo.AddAsync(doctor);
-                await _doctorRepo.SaveChangesAsync();
+                await _unitOfWork._doctorRepo.AddAsync(doctor);
+                await _unitOfWork.SaveChangesAsync();
                 transaction.Commit();
 
             }
@@ -78,7 +70,7 @@ namespace Vezeeta_Clone.Service.Implementation
         public async Task RegisterPatientAsync(Patient patient, ApplicationUser user, string password)
         {
 
-            await using var transaction = _patientRepo.BeginTransaction();
+            await using var transaction = _unitOfWork._patientRepo.BeginTransaction();
             try
             {
                 var result = await _userManager.CreateAsync(user, password);
@@ -93,8 +85,8 @@ namespace Vezeeta_Clone.Service.Implementation
                     throw new InvalidOperationException("Failed to assign role (Patient): " +
                         string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
-                await _patientRepo.AddAsync(patient);
-                await _patientRepo.SaveChangesAsync();
+                await _unitOfWork._patientRepo.AddAsync(patient);
+                await _unitOfWork._patientRepo.SaveChangesAsync();
                 transaction.Commit();
 
             }
@@ -141,12 +133,12 @@ namespace Vezeeta_Clone.Service.Implementation
                 IsUsed = true,
                 IsRevoked = false,
             };
-            var createTokenResult = await _refreshTokenRepo.AddAsync(userTokens);
+            var createTokenResult = await _unitOfWork._refreshTokenRepo.AddAsync(userTokens);
 
             if (createTokenResult == null)
                 throw new InvalidOperationException("Failed to save refresh token for user: " + user.Id);
 
-            await _refreshTokenRepo.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             // return both types of tokens 
             var jwtAuthResult = new JwtAuthResult
@@ -209,7 +201,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 throw new SecurityTokenException("Access Token has not expired yet");
 
             var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == nameof(AppUserClaimModel.Id))?.Value;
-            var userTokens = _refreshTokenRepo.GetTableNoTracking().FirstOrDefault(t => t.UserId == userId &&
+            var userTokens = _unitOfWork._refreshTokenRepo.GetTableNoTracking().FirstOrDefault(t => t.UserId == userId &&
                                                                                 t.AccessToken == accessToken &&
                                                                                 t.RefreshToken == refreshToken);
             if (userTokens == null)
@@ -219,8 +211,8 @@ namespace Vezeeta_Clone.Service.Implementation
             if (userTokens.ExpiredAt < DateTime.UtcNow) // i mean refresh token expiry data
             {
                 userTokens.IsRevoked = true; // stop using this refresh token
-                await _refreshTokenRepo.UpdateAsync(userTokens);
-                await _refreshTokenRepo.SaveChangesAsync();
+                await _unitOfWork._refreshTokenRepo.UpdateAsync(userTokens);
+                await _unitOfWork.SaveChangesAsync();
                 throw new SecurityTokenException("Refresh Token is expired");
             }
 

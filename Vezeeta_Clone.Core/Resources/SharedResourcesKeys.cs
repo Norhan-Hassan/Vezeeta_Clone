@@ -59,5 +59,8 @@
         public const string AppointmentBookFailed = "AppointmentBookFailed";
 
         public const string SlotAlreadyBooked = "SlotAlreadyBooked";
+
+        public const string BookingCompleted = "BookingCompleted";
+        public const string BookingCompletionFailed = "BookingCompletionFailed";
     }
 }

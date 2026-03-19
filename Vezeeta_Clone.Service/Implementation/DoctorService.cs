@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Helper;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Service.Implementation
@@ -9,16 +9,14 @@ namespace Vezeeta_Clone.Service.Implementation
     public class DoctorService : IDoctorService
     {
         #region Fields
-        private readonly IDoctorRepo _doctorRepo;
-        private readonly ISubSpecializationRepo _subSpecializationRepo;
+        private readonly IUnitOfWork _unitOfWork;
         #endregion
 
 
         #region Constructors
-        public DoctorService(IDoctorRepo doctorRepo, ISubSpecializationRepo subSpecializationRepo)
+        public DoctorService(IUnitOfWork unitOfWork)
         {
-            _doctorRepo = doctorRepo;
-            _subSpecializationRepo = subSpecializationRepo;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -27,7 +25,7 @@ namespace Vezeeta_Clone.Service.Implementation
         #region Methods
         public async Task<Doctor?> GetDoctorByIDAsync(string id)
         {
-            var doctor = await _doctorRepo.GetTableNoTracking()
+            var doctor = await _unitOfWork._doctorRepo.GetTableNoTracking()
                                      .Include(d => d.Specialization)
                                      .Include(s => s!.SubSpecializations)
                                      .Include(d => d.ApplicationUser)
@@ -38,14 +36,14 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public async Task<Doctor?> GetDoctorByIdWithoutIncludesAsync(string id)
         {
-            var doctor = await _doctorRepo.GetTableNoTracking()
+            var doctor = await _unitOfWork._doctorRepo.GetTableNoTracking()
                                     .Include(d => d.ApplicationUser)
                                      .FirstOrDefaultAsync(d => d.AppUserID == id);
             return doctor;
         }
         public async Task<Doctor?> GetDoctorWithClinicByIDAsync(string id)
         {
-            var doctor = await _doctorRepo.GetTableNoTracking()
+            var doctor = await _unitOfWork._doctorRepo.GetTableNoTracking()
                                      .Include(d => d.ApplicationUser)
                                      .Include(d => d.Clinic).ThenInclude(c => c.Region).ThenInclude(r => r.City)
                                      .FirstOrDefaultAsync(d => d.AppUserID == id);
@@ -55,7 +53,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId, OrderingCriteria? orderBy)
         {
-            var doctors = _doctorRepo.GetAllDoctorsWithIncludesAsQuerable().Where(d => d.Clinic != null && d.Clinic.DoctorId != null);
+            var doctors = _unitOfWork._doctorRepo.GetAllDoctorsWithIncludesAsQuerable().Where(d => d.Clinic != null && d.Clinic.DoctorId != null);
 
             var filteredDoctors = doctors;
 
@@ -95,7 +93,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public async Task<(double Average, int Count)> GetDoctorRatingInfo(string id)
         {
-            var result = await _doctorRepo.GetTableNoTracking().Include(d => d.Reviews)
+            var result = await _unitOfWork._doctorRepo.GetTableNoTracking().Include(d => d.Reviews)
                 .Where(d => d.AppUserID == id)
                 .Select(d => new
                 {
@@ -108,7 +106,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public IQueryable<Review> GetDoctorReviews(string id)
         {
-            var reviews = _doctorRepo.GetTableNoTracking()
+            var reviews = _unitOfWork._doctorRepo.GetTableNoTracking()
                                             .Include(d => d.Reviews)
                                             .Where(d => d.AppUserID == id)
                                             .SelectMany(d => d.Reviews!)
@@ -120,8 +118,8 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             try
             {
-                await _doctorRepo.UpdateAsync(doctor);
-                await _doctorRepo.SaveChangesAsync();
+                await _unitOfWork._doctorRepo.UpdateAsync(doctor);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -138,15 +136,15 @@ namespace Vezeeta_Clone.Service.Implementation
 
                 if (subSpecIds != null && subSpecIds.Any())
                 {
-                    var subspecs = await _subSpecializationRepo.GetTableNoTracking()
+                    var subspecs = await _unitOfWork._subSpecializationRepo.GetTableNoTracking()
                                             .Where(s => subSpecIds.Contains(s.ID))
                                             .ToListAsync();
                     doctor.SubSpecializations = subspecs;
                 }
                 doctor.Description = description;
                 doctor.IsProfileComplete = true;
-                await _doctorRepo.UpdateAsync(doctor);
-                await _doctorRepo.SaveChangesAsync();
+                await _unitOfWork._doctorRepo.UpdateAsync(doctor);
+                await _unitOfWork.SaveChangesAsync();
                 return true;
             }
             return false;

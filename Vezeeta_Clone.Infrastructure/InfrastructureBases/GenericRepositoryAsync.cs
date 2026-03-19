@@ -73,13 +73,6 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
             }
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
-
-
         public IDbContextTransaction BeginTransaction()
         {
             return _dbContext.Database.BeginTransaction();

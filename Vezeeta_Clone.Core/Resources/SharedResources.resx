@@ -129,6 +129,12 @@
   <data name="BadRequest" xml:space="preserve">
     <value>Bad Request In Processing this request</value>
   </data>
+  <data name="BookingCompleted" xml:space="preserve">
+    <value>Your Booking Is completed Successfully</value>
+  </data>
+  <data name="BookingCompletionFailed" xml:space="preserve">
+    <value>Your Booking completion failed , try again later</value>
+  </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>Current Password Is Incorrect</value>
   </data>

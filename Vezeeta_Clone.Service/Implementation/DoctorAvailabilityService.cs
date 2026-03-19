@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Entities.Enums;
-using Vezeeta_Clone.Infrastructure.Abstract;
+using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
 using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
 
@@ -11,20 +11,21 @@ namespace Vezeeta_Clone.Service.Implementation
     {
         private readonly IDoctorService _doctorService;
         private readonly IBackgroundJobService _backgroundJobService;
-        private readonly IDoctorAvailabilityRepo _doctorAvailabilityRepo;
+        private readonly IUnitOfWork _unitOfWork;
+
         public DoctorAvailabilityService(IDoctorService doctorService,
-                                    IDoctorAvailabilityRepo doctorAvailabilityRepo,
+                                        IUnitOfWork unitOfWork,
                                     IBackgroundJobService backgroundJobService)
         {
             _doctorService = doctorService;
             _backgroundJobService = backgroundJobService;
-            _doctorAvailabilityRepo = doctorAvailabilityRepo;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<DoctorAvailability>> GetDoctorAvailability(string doctorId)
         {
 
-            var availabilities = await _doctorAvailabilityRepo.GetTableNoTracking()
+            var availabilities = await _unitOfWork._doctorAvailabilityRepo.GetTableNoTracking()
                                                        .Where(a => a.DoctorId == doctorId)
                                                        .ToListAsync();
             return availabilities;
@@ -32,7 +33,7 @@ namespace Vezeeta_Clone.Service.Implementation
         }
         public async Task<List<string>> GetDoctorsWithAvailability()
         {
-            var doctorIds = await _doctorAvailabilityRepo
+            var doctorIds = await _unitOfWork._doctorAvailabilityRepo
                                         .GetTableNoTracking()
                                         .Select(a => a.DoctorId)
                                         .Distinct()
@@ -42,7 +43,7 @@ namespace Vezeeta_Clone.Service.Implementation
         }
         private async Task<bool> CheckAvailabilityOverlap(string doctorId, DoctorAvailability schedule)
         {
-            var exist = await _doctorAvailabilityRepo.GetTableNoTracking()
+            var exist = await _unitOfWork._doctorAvailabilityRepo.GetTableNoTracking()
                                                        .Where(a => a.DoctorId == doctorId)
                                                        .Where(a =>
                                                              (a.Date == schedule.Date && schedule.Date != null) ||
@@ -83,8 +84,8 @@ namespace Vezeeta_Clone.Service.Implementation
                 {
                     schedule.frequency = ScheduleFrequency.OneTime;
                 }
-                await _doctorAvailabilityRepo.AddAsync(schedule);
-                await _doctorAvailabilityRepo.SaveChangesAsync();
+                await _unitOfWork._doctorAvailabilityRepo.AddAsync(schedule);
+                await _unitOfWork.SaveChangesAsync();
 
                 //background job to generate slots
                 var jobId = await _backgroundJobService.EnqueueAsync<ISlotGenerationService>(
