@@ -15,7 +15,7 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         public IDoctorAvailabilitySlotRepo _availabilitySlotRepo { get; private set; }
         public ISpecializationRepo _specializationRepo { get; private set; }
         public ISubSpecializationRepo _subSpecializationRepo { get; private set; }
-
+        public IReviewRepo _reviewRepo { get; private set; }
         public IRefreshTokenRepo _refreshTokenRepo { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
@@ -30,6 +30,7 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
             _specializationRepo = new SpecializationRepo(_context);
             _subSpecializationRepo = new SubSpecializationRepo(_context);
             _refreshTokenRepo = new RefreshTokenRepo(_context);
+            _reviewRepo = new ReviewRepo(_context);
         }
 
 

@@ -25,7 +25,13 @@
             public const string Prefix = Rule + "schedules/";
             public const string AddSchedule = Prefix + "add";
         }
+        //ReviewRouting
 
+        public static class ReviewRouting
+        {
+            public const string Prefix = Rule + "reviews/";
+            public const string MakeReview = Prefix;
+        }
         public static class AppointmentRouting
         {
             public const string Prefix = Rule + "appointments/";

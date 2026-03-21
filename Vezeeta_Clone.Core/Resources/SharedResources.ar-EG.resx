@@ -231,6 +231,12 @@
   <data name="RequireToHaveClinic" xml:space="preserve">
     <value>يجب ان تسجل عيادتك قبل هذه الخطوه او تختار خيار الاونلاين</value>
   </data>
+  <data name="ReviewAlreadyExists" xml:space="preserve">
+    <value>لقد قمت بتقييم هذا الدكتور من قبل</value>
+  </data>
+  <data name="ReviewWithoutAppointment" xml:space="preserve">
+    <value>يجب ان يكون هناك موعد سابق مع هذا الدكتور لكي تتمكن من تقييمه</value>
+  </data>
   <data name="RoleExist" xml:space="preserve">
     <value>هذا الاسم موجود بالفعل اختر اسم اخر</value>
   </data>

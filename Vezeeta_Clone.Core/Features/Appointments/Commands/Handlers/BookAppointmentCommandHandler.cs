@@ -34,7 +34,8 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
             try
             {
                 var roles = await _currentUserService.GetCurrentUserRolesAsync();
-                string patientId;
+                string patientId = string.Empty;
+
                 if (roles.Contains(Roles.Patient))
                 {
                     patientId = _currentUserService.GetCurrentUserId();
@@ -45,8 +46,9 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
                 }
 
                 var mappedBooking = _mapper.Map<Appointment>(request);
-                await _appointmentService.BookAppointmentAsync(mappedBooking, patientId);
-                return Success<string>(null, null, _localizer[SharedResourcesKeys.AppointmentBooked]);
+                var appointmentId = await _appointmentService.BookAppointmentAsync(mappedBooking, patientId);
+
+                return Success<string>(appointmentId.ToString(), null, _localizer[SharedResourcesKeys.AppointmentBooked]);
             }
             catch (InvalidOperationException ex)
             {

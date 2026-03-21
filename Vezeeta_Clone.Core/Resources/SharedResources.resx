@@ -231,6 +231,12 @@
   <data name="RequireToHaveClinic" xml:space="preserve">
     <value>You must have clinic to make your schedule or choose online option</value>
   </data>
+  <data name="ReviewAlreadyExists" xml:space="preserve">
+    <value>You already reviewed This doctor</value>
+  </data>
+  <data name="ReviewWithoutAppointment" xml:space="preserve">
+    <value>You must have an appointment with this doctor to be able to review </value>
+  </data>
   <data name="RoleExist" xml:space="preserve">
     <value>Thia role name already exist</value>
   </data>

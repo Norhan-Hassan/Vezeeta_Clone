@@ -5,6 +5,8 @@ namespace Vezeeta_Clone.Data.Entities
 {
     public class Appointment : BaseEntity
     {
+        public string? ActualPatientName { get; set; }
+        public string? ActualPatientPhone { get; set; }
         public AppointmentStatus Status { get; set; } = AppointmentStatus.Upcoming;
         public DateTime BookedAt { get; set; } = DateTime.UtcNow;
         public DateTime? ConfirmedAt { get; set; }

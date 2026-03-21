@@ -25,6 +25,7 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<ISlotGenerationService, SlotGenerationService>();
             services.AddTransient<ISlotService, SlotService>();
             services.AddTransient<IAppointmentService, AppointmentService>();
+            services.AddTransient<IReviewService, ReviewService>();
             return services;
         }
     }

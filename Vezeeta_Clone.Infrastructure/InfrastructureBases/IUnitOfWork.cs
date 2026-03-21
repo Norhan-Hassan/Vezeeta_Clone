@@ -13,6 +13,7 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         public ISpecializationRepo _specializationRepo { get; }
         public ISubSpecializationRepo _subSpecializationRepo { get; }
         public IRefreshTokenRepo _refreshTokenRepo { get; }
+        public IReviewRepo _reviewRepo { get; }
         Task<int> SaveChangesAsync();
     }
 }

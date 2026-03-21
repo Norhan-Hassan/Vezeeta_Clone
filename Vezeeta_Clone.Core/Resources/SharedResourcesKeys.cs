@@ -62,5 +62,9 @@
 
         public const string BookingCompleted = "BookingCompleted";
         public const string BookingCompletionFailed = "BookingCompletionFailed";
+
+        public const string ReviewAlreadyExists = "ReviewAlreadyExists";
+        public const string ReviewWithoutAppointment = "ReviewWithoutAppointment";
+
     }
 }

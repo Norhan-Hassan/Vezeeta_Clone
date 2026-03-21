@@ -14,7 +14,7 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<bool> BookAppointmentAsync(Appointment appointment, string patientId)
+        public async Task<int> BookAppointmentAsync(Appointment appointment, string patientId)
         {
             if (appointment == null)
                 throw new ArgumentNullException(nameof(appointment));
@@ -76,7 +76,7 @@ namespace Vezeeta_Clone.Service.Implementation
                         await Task.Delay(50);
                         transaction.Rollback();
                     }
-                    return true;
+                    return appointment.ID;
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -89,7 +89,7 @@ namespace Vezeeta_Clone.Service.Implementation
                     throw;
                 }
             }
-            return false;
+            return -1;
         }
 
         public async Task<bool> CompleteAppointmentAsync(Appointment appointment)
