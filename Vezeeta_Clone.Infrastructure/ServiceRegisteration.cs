@@ -108,7 +108,7 @@ namespace Vezeeta_Clone.Infrastructure
                     BearerFormat = "JWT"
                 });
 
-
+                //   options.SchemaFilter<EnumSchemaFilter>();
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -151,4 +151,23 @@ namespace Vezeeta_Clone.Infrastructure
             return services;
         }
     }
+
+    //public class EnumSchemaFilter : ISchemaFilter
+    //{
+    //    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    //    {
+    //        if (context.Type.IsEnum)
+    //        {
+    //            schema.Enum.Clear();
+    //            schema.Type = "string";
+
+    //            foreach (var enumValue in Enum.GetNames(context.Type))
+    //            {
+    //                schema.Enum.Add(new OpenApiString(enumValue));
+    //            }
+    //        }
+    //    }
+    //}
+
+
 }

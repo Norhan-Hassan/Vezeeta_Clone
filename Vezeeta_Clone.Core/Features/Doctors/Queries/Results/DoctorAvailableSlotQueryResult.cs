@@ -4,6 +4,11 @@
     {
         public string Date { get; set; }
         public string DayName { get; set; }
-        public List<string> StartTimes { get; set; }
+        public List<SlotInfo> StartTimes { get; set; }
+    }
+    public class SlotInfo
+    {
+        public string StartTime { get; set; }
+        public int Id { get; set; }
     }
 }

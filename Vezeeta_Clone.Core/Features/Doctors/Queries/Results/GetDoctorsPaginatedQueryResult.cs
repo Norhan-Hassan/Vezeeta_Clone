@@ -2,6 +2,7 @@
 {
     public class GetDoctorsPaginatedQueryResult
     {
+        public string Id { get; set; }
         public string FullName { get; set; }
         public string? Picture { get; set; }
         public string? Specialization { get; set; }
@@ -9,8 +10,9 @@
         public string? ClinicRegion { get; set; }
 
 
-        public GetDoctorsPaginatedQueryResult(string fullName, int experienceInYears, string specialization, string? clinicRegion, string? picture)
+        public GetDoctorsPaginatedQueryResult(string id, string fullName, int experienceInYears, string specialization, string? clinicRegion, string? picture)
         {
+            Id = id;
             FullName = fullName;
             Picture = picture;
             ExperienceInYears = experienceInYears;

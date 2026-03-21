@@ -18,11 +18,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
         public void ApplyValidationRules()
         {
 
-
-            RuleFor(x => x.DoctorId)
-               .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
-               .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);
-
             RuleFor(x => x.SlotId)
                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
                .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);

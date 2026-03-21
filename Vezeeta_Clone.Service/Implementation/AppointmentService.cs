@@ -27,7 +27,11 @@ namespace Vezeeta_Clone.Service.Implementation
                 using var transaction = _unitOfWork._appointmentRepo.BeginTransaction();
                 try
                 {
-                    var slot = await _unitOfWork._availabilitySlotRepo.GetByIntIdAsync(appointment.SlotId);
+                    // var slot = await _unitOfWork._availabilitySlotRepo
+                    //     .GetByIntIdAsync(appointment.SlotId);
+
+                    var slot = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking().Include(s => s.Availability)
+                        .FirstOrDefaultAsync(s => s.ID == appointment.SlotId);
 
                     if (slot == null)
                         throw new InvalidOperationException("Slot not found");
@@ -52,9 +56,8 @@ namespace Vezeeta_Clone.Service.Implementation
                     slot.IsBooked = true;
                     slot.Status = SlotStatus.Booked;
                     appointment.PatientId = patientId;
+                    appointment.DoctorId = slot.Availability.DoctorId;
 
-                    // appointment.Status = AppointmentStatus.Pending;
-                    // appointment.BookedAt = DateTime.UtcNow;
 
                     await _unitOfWork._appointmentRepo.AddAsync(appointment);
                     await _unitOfWork._availabilitySlotRepo.UpdateAsync(slot);

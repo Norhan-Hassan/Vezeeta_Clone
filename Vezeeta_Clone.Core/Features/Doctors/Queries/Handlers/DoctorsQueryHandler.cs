@@ -37,6 +37,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 
             Expression<Func<Doctor, GetDoctorsPaginatedQueryResult>> expression =
                 ex => new GetDoctorsPaginatedQueryResult(
+                    ex.AppUserID,
                     string.Concat(ex.ApplicationUser.FirstName, " ", ex.ApplicationUser.LastName),
                     ex.ExperienceInYears,
                     ex.Specialization!.LocalizedName,
