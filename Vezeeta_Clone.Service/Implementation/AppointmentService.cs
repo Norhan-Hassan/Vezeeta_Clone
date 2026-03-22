@@ -94,8 +94,6 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public async Task<bool> CompleteAppointmentAsync(Appointment appointment)
         {
-            //appointment.Status = AppointmentStatus.Completed;
-
             await _unitOfWork._appointmentRepo.UpdateAsync(appointment);
             await _unitOfWork.SaveChangesAsync();
             return true;
@@ -105,8 +103,40 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var appointment = await _unitOfWork._appointmentRepo.GetByIntIdAsync(appointmentId);
             if (appointment == null)
-                throw new InvalidOperationException("Appointment not found");
+                throw new InvalidOperationException("notFound");
             return appointment;
+        }
+
+        public IQueryable<Appointment> GetDoctorAppointmentsAsync(string doctorId, AppointmentStatus? appointmentStatus)
+        {
+            var appointments = _unitOfWork._appointmentRepo.GetTableNoTracking()
+                                                                .Include(a => a.AvailableSlot)
+                                                                .Where(a => a.DoctorId == doctorId)
+                                                                .AsQueryable();
+
+            if (appointmentStatus.HasValue)
+            {
+                appointments = appointments.Where(a => a.Status == appointmentStatus);
+            }
+
+            return appointments;
+        }
+
+        public IQueryable<Appointment> GetPatientAppointmentsAsync(string patientId, AppointmentStatus? appointmentStatus)
+        {
+            var appointments = _unitOfWork._appointmentRepo.GetTableNoTracking()
+                                                                .Include(a => a.Doctor)
+                                                                .ThenInclude(d => d.ApplicationUser)
+                                                                .Include(a => a.AvailableSlot)
+                                                                .Where(a => a.PatientId == patientId)
+                                                                .AsQueryable();
+
+            if (appointmentStatus.HasValue)
+            {
+                appointments = appointments.Where(a => a.Status == appointmentStatus);
+            }
+
+            return appointments;
         }
     }
 }

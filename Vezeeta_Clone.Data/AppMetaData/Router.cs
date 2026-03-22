@@ -18,8 +18,13 @@
             public const string GetExamination = Prefix + SingleUser + "/examination-details";
             public const string CompleteInfo = Prefix + "complete-info";
             public const string GetSlots = Prefix + SingleUser + "/available-slots";
+            public const string AppointmentsList = Prefix + "appointments/";
         }
-
+        public static class PatientRouting
+        {
+            public const string Prefix = Rule + "patients/";
+            public const string AppointmentsList = Prefix + "appointments/";
+        }
         public static class ScheduleRouting
         {
             public const string Prefix = Rule + "schedules/";
@@ -31,6 +36,8 @@
         {
             public const string Prefix = Rule + "reviews/";
             public const string MakeReview = Prefix;
+            public const string UpdateReview = Prefix + SingleEntity;
+            public const string DeleteReview = Prefix + SingleEntity;
         }
         public static class AppointmentRouting
         {

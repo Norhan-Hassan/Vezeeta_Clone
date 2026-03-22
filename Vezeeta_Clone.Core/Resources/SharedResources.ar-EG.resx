@@ -120,6 +120,9 @@
   <data name="AddSuccess" xml:space="preserve">
     <value>تمت الاضافه بنجاح</value>
   </data>
+  <data name="AlreadyDeleted" xml:space="preserve">
+    <value>تم حذفها بالفعل من قبل</value>
+  </data>
   <data name="AppointmentBooked" xml:space="preserve">
     <value>تم تسجيل الحجز في هذا الموعد بنجاح</value>
   </data>
@@ -171,6 +174,9 @@
   <data name="FailedToCompleteDoctorInfo" xml:space="preserve">
     <value>فشل استكمال بيناتك</value>
   </data>
+  <data name="FailedToDelete" xml:space="preserve">
+    <value>فشلت عملية الحذف</value>
+  </data>
   <data name="FailedToRegister" xml:space="preserve">
     <value>فشلت عملية تسجيل المستخدم</value>
   </data>
@@ -221,6 +227,9 @@
   </data>
   <data name="PasswordMinLength" xml:space="preserve">
     <value>يجب ألا تقل كلمة المرور عن ٨ احرف على الاقل </value>
+  </data>
+  <data name="RatingRange" xml:space="preserve">
+    <value>يجب ان تكون القيمه بين ١ الي ٥</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>هذا الحقل مطلوب</value>

@@ -5,7 +5,6 @@
         Upcoming = 1,
         Pending = 2,
         Completed = 3,
-        Cancelled = 4,
-        Rescheduled = 5
+        Cancelled = 4
     }
 }

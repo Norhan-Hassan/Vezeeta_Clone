@@ -14,6 +14,24 @@ namespace Vezeeta_Clone.Service.Implementation
             _unitOfWork = unitOfWork;
         }
 
+        public async Task DeleteReviewAsync(Review review, string patientId)
+        {
+            if (review.PatientId != patientId)
+                throw new UnauthorizedAccessException();
+
+            if (review.IsDeleted)
+                throw new InvalidOperationException("AlreadyDeleted");
+
+            review.IsDeleted = true;
+            await _unitOfWork._reviewRepo.UpdateAsync(review);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<Review> GetReviewById(int reviewId)
+        {
+            return await _unitOfWork._reviewRepo.GetByIntIdAsync(reviewId);
+        }
+
         public async Task<bool> MakeReviewAsync(Review review, string patientId)
         {
             var doctor = await _unitOfWork._doctorRepo.GetByStringIdAsync(review.DoctorId);
@@ -22,31 +40,32 @@ namespace Vezeeta_Clone.Service.Implementation
                 throw new NullReferenceException("Doctor not found");
             }
 
-
-
             var patientReview = await _unitOfWork._reviewRepo.GetTableNoTracking()
                                                               .AnyAsync(r => r.PatientId == patientId && r.DoctorId == review.DoctorId);
 
             var patientDoctorAppointment = await _unitOfWork._appointmentRepo.GetTableNoTracking()
                                                                     .AnyAsync(a => a.DoctorId == review.DoctorId && a.PatientId == patientId && a.Status == AppointmentStatus.Completed);
             if (patientReview)
-            {
                 throw new InvalidOperationException("AlreadyReviewed");
-            }
 
             if (!patientDoctorAppointment)
-            {
                 throw new InvalidOperationException("DoesnotHaveAppointment");
-            }
+
             review.PatientId = patientId;
             await _unitOfWork._reviewRepo.AddAsync(review);
-
             var result = await _unitOfWork.SaveChangesAsync();
-            if (result >= 0)
-            {
-                return true;
-            }
-            return false;
+            return result > 0;
+        }
+
+        public async Task<bool> UpdateReviewAsync(Review review, string patientId)
+        {
+            if (review.PatientId != patientId)
+                throw new UnauthorizedAccessException();
+
+            await _unitOfWork._reviewRepo.UpdateAsync(review);
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            return result > 0;
         }
     }
 }

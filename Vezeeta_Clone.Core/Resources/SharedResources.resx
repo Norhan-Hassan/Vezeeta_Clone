@@ -120,6 +120,9 @@
   <data name="AddSuccess" xml:space="preserve">
     <value>Added Successfully</value>
   </data>
+  <data name="AlreadyDeleted" xml:space="preserve">
+    <value>This is already deleted resource</value>
+  </data>
   <data name="AppointmentBooked" xml:space="preserve">
     <value>Appointment at this slot time is booked successfully</value>
   </data>
@@ -171,6 +174,9 @@
   <data name="FailedToCompleteDoctorInfo" xml:space="preserve">
     <value>Failed To Complete Your Profile</value>
   </data>
+  <data name="FailedToDelete" xml:space="preserve">
+    <value>Failed To delete this resource</value>
+  </data>
   <data name="FailedToRegister" xml:space="preserve">
     <value>Failed To Register</value>
   </data>
@@ -221,6 +227,9 @@
   </data>
   <data name="PasswordMinLength" xml:space="preserve">
     <value>The password must be at least 8 characters long</value>
+  </data>
+  <data name="RatingRange" xml:space="preserve">
+    <value>Rating must be between 1 and 5</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>This Field is required</value>

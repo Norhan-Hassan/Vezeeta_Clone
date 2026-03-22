@@ -7,7 +7,8 @@ namespace Vezeeta_Clone.Core.Mapping.ReviewMapping
     {
         public void MakeReviewMapping()
         {
-            CreateMap<MakeReviewCommand, Review>();
+            CreateMap<MakeReviewCommand, Review>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
         }
     }
 }

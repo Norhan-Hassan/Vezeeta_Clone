@@ -7,6 +7,7 @@ namespace Vezeeta_Clone.Core.Mapping.ReviewMapping
         public ReviewProfile()
         {
             MakeReviewMapping();
+            UpdateReviewMapping();
         }
     }
 }

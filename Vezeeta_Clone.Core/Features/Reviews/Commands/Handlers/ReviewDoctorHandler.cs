@@ -11,6 +11,8 @@ using Vezeeta_Clone.Service.AppUserAuthServices.Abstract;
 namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
 {
     public class ReviewDoctorHandler : ResponseHandler, IRequestHandler<MakeReviewCommand, Response<string>>
+                                                      , IRequestHandler<UpdateReviewCommand, Response<string>>
+                                                       , IRequestHandler<DeleteReviewCommand, Response<string>>
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
@@ -49,5 +51,55 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
             }
             return BadRequest<string>(_localizer[SharedResourcesKeys.FailToAdd]);
         }
+
+        public async Task<Response<string>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
+        {
+            var reviewInDb = await _reviewService.GetReviewById(request.Id);
+            if (reviewInDb == null)
+                return NotFound<string>(_localizer[SharedResourcesKeys.NotFound]);
+            try
+            {
+                var patientId = _currentUserService.GetCurrentUserId();
+                var mappedReview = _mapper.Map(request, reviewInDb);
+                var result = await _reviewService.UpdateReviewAsync(mappedReview, patientId);
+                if (result == true)
+                    return Success<string>(null, null, _localizer[SharedResourcesKeys.Updated]);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized<string>(_localizer[SharedResourcesKeys.UnAuthorized]);
+            }
+
+            return BadRequest<string>(_localizer[SharedResourcesKeys.FailToUpdate]);
+
+        }
+
+        public async Task<Response<string>> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
+        {
+            var reviewInDb = await _reviewService.GetReviewById(request.Id);
+            if (reviewInDb == null)
+                return NotFound<string>(_localizer[SharedResourcesKeys.NotFound]);
+            try
+            {
+
+                var patientId = _currentUserService.GetCurrentUserId();
+                await _reviewService.DeleteReviewAsync(reviewInDb, patientId);
+                return Success<string>(null, null, _localizer[SharedResourcesKeys.Deleted]);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized<string>(_localizer[SharedResourcesKeys.UnAuthorized]);
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("AlreadyDeleted"))
+                {
+                    return BadRequest<string>(_localizer[SharedResourcesKeys.AlreadyDeleted]);
+                }
+            }
+            return BadRequest<string>(_localizer[SharedResourcesKeys.FailedToDelete]);
+        }
     }
 }
+
+

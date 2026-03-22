@@ -5,10 +5,10 @@ using Vezeeta_Clone.Core.Resources;
 
 namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
 {
-    public class MakeReviewCommandValidator : AbstractValidator<MakeReviewCommand>
+    public class DeleteReviewCommandValidator : AbstractValidator<DeleteReviewCommand>
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
-        public MakeReviewCommandValidator(IStringLocalizer<SharedResources> localizer)
+        public DeleteReviewCommandValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
@@ -17,18 +17,11 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
 
         public void ApplyValidationRules()
         {
-            RuleFor(x => x.DoctorId)
+            RuleFor(x => x.Id)
                 .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
                 .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);
 
-            RuleFor(x => x.Rating)
-                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
-                .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required])
-                .InclusiveBetween(0, 5).WithMessage(_localizer[SharedResourcesKeys.RatingRange]);
 
-            RuleFor(x => x.IsAnonymous)
-                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
-                .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);
 
         }
         public void ApplyCustomValidationRules()

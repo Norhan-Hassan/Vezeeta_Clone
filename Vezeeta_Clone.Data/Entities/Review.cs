@@ -10,7 +10,8 @@ namespace Vezeeta_Clone.Data.Entities
 
         [MaxLength(250)]
         public string? Comment { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
         public bool IsAnonymous { get; set; }
 

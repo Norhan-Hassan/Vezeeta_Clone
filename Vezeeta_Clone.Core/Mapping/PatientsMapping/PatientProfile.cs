@@ -7,7 +7,6 @@ namespace Vezeeta_Clone.Core.Mapping.PatientsMapping
         public PatientProfile()
         {
             PatientAuthMapping();
-
         }
     }
 }

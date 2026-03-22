@@ -65,6 +65,12 @@
 
         public const string ReviewAlreadyExists = "ReviewAlreadyExists";
         public const string ReviewWithoutAppointment = "ReviewWithoutAppointment";
+        public const string RatingRange = "RatingRange";
+        public const string AlreadyDeleted = "AlreadyDeleted";
+        public const string FailedToDelete = "FailedToDelete";
+
+        // public const string MaxLength = "MaxLength";
+
 
     }
 }

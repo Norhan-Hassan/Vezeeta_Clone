@@ -52,7 +52,15 @@ namespace Vezeeta_Clone.Api.Controllers.V1
             var response = await _mediator.Send(query);
             return NewResult(response);
         }
-        //GetMyAppointments
+
+        [HttpGet(Router.DoctorRouting.AppointmentsList)]
+        [SwaggerOperation(Summary = "Appoinments of Doctor ", Description = "Get paginated list of appointments of the current Doctor")]
+
+        public async Task<IActionResult> GetDoctorsPaginated([FromQuery] GetDoctorAppointmentsQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
 
         [HttpPost(Router.DoctorRouting.CompleteInfo)]
         [SwaggerOperation(Summary = "Complete doctor information", Description = "Complete the registration process for a doctor by providing additional required information to be able to register a clinic")]
