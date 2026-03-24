@@ -36,7 +36,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
             try
             {
                 await _reviewService.MakeReviewAsync(mappedReview, patientId);
-                return Success<string>(null, null, _localizer[SharedResourcesKeys.AddSuccess]);
+                return Success<string>(null, _localizer[SharedResourcesKeys.AddSuccess]);
             }
             catch (InvalidOperationException ex)
             {
@@ -63,7 +63,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
                 var mappedReview = _mapper.Map(request, reviewInDb);
                 var result = await _reviewService.UpdateReviewAsync(mappedReview, patientId);
                 if (result == true)
-                    return Success<string>(null, null, _localizer[SharedResourcesKeys.Updated]);
+                    return Success<string>(null, _localizer[SharedResourcesKeys.Updated]);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -84,7 +84,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
 
                 var patientId = _currentUserService.GetCurrentUserId();
                 await _reviewService.DeleteReviewAsync(reviewInDb, patientId);
-                return Success<string>(null, null, _localizer[SharedResourcesKeys.Deleted]);
+                return Success<string>(null, _localizer[SharedResourcesKeys.Deleted]);
             }
             catch (UnauthorizedAccessException ex)
             {

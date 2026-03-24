@@ -27,21 +27,19 @@ namespace Vezeeta_Clone.Service.Implementation
                 using var transaction = _unitOfWork._appointmentRepo.BeginTransaction();
                 try
                 {
-                    // var slot = await _unitOfWork._availabilitySlotRepo
-                    //     .GetByIntIdAsync(appointment.SlotId);
-
-                    var slot = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking().Include(s => s.Availability)
-                        .FirstOrDefaultAsync(s => s.ID == appointment.SlotId);
+                    var slot = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
+                                                                    .Include(s => s.Availability)
+                                                                    .FirstOrDefaultAsync(s => s.ID == appointment.SlotId);
 
                     if (slot == null)
-                        throw new InvalidOperationException("Slot not found");
+                        throw new InvalidOperationException("notfound");
 
                     if (!string.IsNullOrEmpty(slot.LockedReason))
-                        throw new InvalidOperationException("Slot is locked Due to  " + slot.LockedReason);
+                        throw new InvalidOperationException("Slotislocked");
 
                     var today = DateOnly.FromDateTime(DateTime.UtcNow);
                     if (slot.Date < today)
-                        throw new InvalidOperationException("Cannot book past slots");
+                        throw new InvalidOperationException("pastslots");
 
                     var existingAppointment = await _unitOfWork._appointmentRepo.GetTableNoTracking().AnyAsync(
                                  a => a.SlotId == appointment.SlotId &&
@@ -49,7 +47,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
                     if (existingAppointment || slot.IsBooked == true)
                     {
-                        throw new InvalidOperationException("This slot is already booked");
+                        throw new InvalidOperationException("alreadybooked");
                     }
 
 

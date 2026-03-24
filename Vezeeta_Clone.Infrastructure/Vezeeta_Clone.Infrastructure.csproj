@@ -29,6 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Stripe.net" Version="50.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.6" />
@@ -37,6 +38,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vezeeta_Clone.Data\Vezeeta_Clone.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Payments\" />
   </ItemGroup>
 
 </Project>

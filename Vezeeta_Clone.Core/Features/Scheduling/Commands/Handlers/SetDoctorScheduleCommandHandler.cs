@@ -43,7 +43,7 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
                 case "overlapping":
                     return BadRequest<string>(_localizer[SharedResourcesKeys.ScheduleExist]);
                 case "success":
-                    return Success<string>(null, null, _localizer[SharedResourcesKeys.ScheduleAdded]);
+                    return Success<string>(null, _localizer[SharedResourcesKeys.ScheduleAdded]);
                 case "fail":
                     return BadRequest<string>(_localizer[SharedResourcesKeys.RequireToHaveClinic]);
                 default:

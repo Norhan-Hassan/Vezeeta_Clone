@@ -166,7 +166,7 @@ namespace Vezeeta_Clone.Service.Implementation
             return slots;
         }
 
-        public async Task MaintainFutureSlotsAsync(int requiredWeeks = 12)
+        public async Task MaintainFutureSlotsAsync(int requiredWeeks = 4)
         {
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -198,12 +198,29 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
 
                 var remainingDays = lastSlotDate.Value.DayNumber - today.DayNumber;
-
+                Console.WriteLine($"Doctor {doctorId} has last slot on {lastSlotDate.Value}, remaining days: {remainingDays}");
                 if (remainingDays < requiredWeeks * 7)
                 {
                     await GenerateSlotsAsync(doctorId, requiredWeeks);
                 }
             }
+        }
+        public async Task RemovePastSlotsAsync()
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+
+            var pastSlots = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
+                                            .Where(s => s.Date < today)
+                                            .ToListAsync();
+            if (pastSlots.Any())
+            {
+                foreach (var slot in pastSlots)
+                    slot.IsDeleted = true;
+
+                await _unitOfWork._availabilitySlotRepo.UpdateRangeAsync(pastSlots);
+                await _unitOfWork.SaveChangesAsync();
+            }
+
         }
     }
 }

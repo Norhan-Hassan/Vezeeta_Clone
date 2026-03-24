@@ -10,10 +10,5 @@ namespace Vezeeta_Clone.Data.Entities
         [ForeignKey("MedicalRecord")]
         public int MedicalRecordId { get; set; }
         public MedicalRecord MedicalRecord { get; set; }
-
-        [ForeignKey("Doctor")]
-        public string DoctorId { get; set; }
-        public Doctor Doctor { get; set; }
-
     }
 }

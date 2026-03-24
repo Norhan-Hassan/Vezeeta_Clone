@@ -35,7 +35,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Commands.Handlers
             var result = await _doctorService.CompleteDoctorInfoAsync(doctor, request.SubSpecializations, request.Description);
             if (result)
             {
-                return Success<string>(null, null, message: _localizer[SharedResourcesKeys.DoctorCompleteInfo]);
+                return Success<string>(null, message: _localizer[SharedResourcesKeys.DoctorCompleteInfo]);
             }
             else
             {

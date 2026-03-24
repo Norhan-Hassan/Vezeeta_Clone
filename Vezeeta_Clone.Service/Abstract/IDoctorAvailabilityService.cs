@@ -9,5 +9,6 @@ namespace Vezeeta_Clone.Service.Abstract
         Task<List<string>> GetDoctorsWithAvailability();
 
 
+
     }
 }

@@ -20,6 +20,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
             var slots = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                                 .Where(s => s.Availability.DoctorId == doctorId && !s.IsBooked &&
+
                                                         (s.Date > today ||
                                                         (s.Date == today && s.StartTime > nowTime)))
                                 .OrderBy(s => s.Date)
@@ -29,6 +30,26 @@ namespace Vezeeta_Clone.Service.Implementation
             return slots;
         }
 
+        public async Task<bool> LockSlotAsync(int slotId, string doctorId, string lockedReson)
+        {
+            var slot = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
+                                                        .Include(s => s.Availability)
+                                                        .Where(s => s.ID == slotId)
+                                                        .FirstOrDefaultAsync();
 
+            if (slot.Availability.DoctorId == doctorId && slot.IsBooked == false)
+            {
+                slot.LockedReason = lockedReson;
+                slot.IsDeleted = true;
+                await _unitOfWork._availabilitySlotRepo.UpdateAsync(slot);
+                var result = await _unitOfWork.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
+

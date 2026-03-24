@@ -138,6 +138,9 @@
   <data name="BookingCompletionFailed" xml:space="preserve">
     <value>فشلت عملية تاكيد الحجز</value>
   </data>
+  <data name="CompleteProfileToAddClinic" xml:space="preserve">
+    <value>يجب عليك اتمام ملفك الشخصي لكي تتمكن من تسجيل عيادتك</value>
+  </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>كلمة المرور الحاليه غير صحيحه</value>
   </data>
@@ -228,6 +231,9 @@
   <data name="PasswordMinLength" xml:space="preserve">
     <value>يجب ألا تقل كلمة المرور عن ٨ احرف على الاقل </value>
   </data>
+  <data name="PastSlot" xml:space="preserve">
+    <value>وقت هذا الموعد قد فات</value>
+  </data>
   <data name="RatingRange" xml:space="preserve">
     <value>يجب ان تكون القيمه بين ١ الي ٥</value>
   </data>
@@ -263,6 +269,9 @@
   </data>
   <data name="SlotAlreadyBooked" xml:space="preserve">
     <value>هذا الميعاد تم حجزه من قبل شخص اخر </value>
+  </data>
+  <data name="SlotIsLocked" xml:space="preserve">
+    <value>هذا الموعد مقفل من قبل الدكتور </value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>تمت العمليه بنجاح</value>

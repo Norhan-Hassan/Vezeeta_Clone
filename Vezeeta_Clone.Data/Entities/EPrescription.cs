@@ -4,8 +4,7 @@ namespace Vezeeta_Clone.Data.Entities
 {
     public class EPrescription : BaseEntity
     {
-        public string? Medication { get; set; }
-        public string? Dose { get; set; }
+        public ICollection<PrescriptionItem> prescriptions { get; set; }
         public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -9,5 +9,7 @@
         /// </summary>
         Task GenerateSlotsAsync(string doctorId, int weeks = 4);
         Task MaintainFutureSlotsAsync(int requiredWeeks = 4);
+
+        Task RemovePastSlotsAsync();
     }
 }

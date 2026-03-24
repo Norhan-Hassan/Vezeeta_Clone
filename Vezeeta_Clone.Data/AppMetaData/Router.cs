@@ -29,6 +29,7 @@
         {
             public const string Prefix = Rule + "schedules/";
             public const string AddSchedule = Prefix + "add";
+            public const string LockSlot = Prefix + SingleEntity + "/lock-slot";
         }
         //ReviewRouting
 

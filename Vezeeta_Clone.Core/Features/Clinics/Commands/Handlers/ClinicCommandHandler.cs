@@ -52,6 +52,10 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Handlers
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("CompleteProfile"))
+                {
+                    return BadRequest<string>(_localizer[SharedResourcesKeys.CompleteProfileToAddClinic]);
+                }
                 return BadRequest<string>(ex.Message);
             }
 

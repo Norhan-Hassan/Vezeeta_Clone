@@ -137,8 +137,9 @@ namespace Vezeeta_Clone.Service.Implementation
                 if (subSpecIds != null && subSpecIds.Any())
                 {
                     var subspecs = await _unitOfWork._subSpecializationRepo.GetTableNoTracking()
-                                            .Where(s => subSpecIds.Contains(s.ID))
+                                            .Where(s => subSpecIds.Contains(s.ID) && s.SpecializationId == doctor.SpecializationId)
                                             .ToListAsync();
+
                     doctor.SubSpecializations = subspecs;
                 }
                 doctor.Description = description;

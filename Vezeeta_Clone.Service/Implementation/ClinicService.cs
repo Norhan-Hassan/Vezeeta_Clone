@@ -28,7 +28,10 @@ namespace Vezeeta_Clone.Service.Implementation
             var transaction = _unitOfWork._clinicRepo.BeginTransaction();
             try
             {
-
+                if (doctor.IsProfileComplete == false)
+                {
+                    throw new Exception("CompleteProfile");
+                }
                 await _unitOfWork._clinicRepo.AddAsync(clinic);
                 clinic.DoctorId = doctor.AppUserID;
                 await _unitOfWork._doctorRepo.UpdateAsync(doctor);

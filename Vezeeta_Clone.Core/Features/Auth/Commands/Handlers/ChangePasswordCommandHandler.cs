@@ -36,7 +36,7 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 
                     if (result.Succeeded)
                     {
-                        return Success<string>(null, null, message: _localizer[SharedResourcesKeys.PasswordChangedSuccess]);
+                        return Success<string>(null, message: _localizer[SharedResourcesKeys.PasswordChangedSuccess]);
                     }
                     else
                     {

@@ -59,7 +59,7 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var specializations = _unitOfWork._specializationRepo.GetTableNoTracking()
                                                      //.OrderByDescending(s => s.Doctors!.Count) //later when i have doctors data to order by the number of doctors in each specialization
-                                                     .Take(8).ToListAsync();
+                                                     .ToListAsync();
             return specializations;
         }
     }

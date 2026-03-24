@@ -13,5 +13,14 @@ namespace Vezeeta_Clone.Api.Controllers.V1
             var response = await _mediator.Send(command);
             return NewResult(response);
         }
+
+
+        [HttpPut(Router.ScheduleRouting.LockSlot)]
+        public async Task<IActionResult> LockSlot([FromRoute] int Id, [FromBody] LockSlotCommand command)
+        {
+            command.SlotId = Id;
+            var response = await _mediator.Send(command);
+            return NewResult(response);
+        }
     }
 }

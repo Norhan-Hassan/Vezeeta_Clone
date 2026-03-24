@@ -138,6 +138,9 @@
   <data name="BookingCompletionFailed" xml:space="preserve">
     <value>Your Booking completion failed , try again later</value>
   </data>
+  <data name="CompleteProfileToAddClinic" xml:space="preserve">
+    <value>You Should complete Your profile first to be able to register a clinic</value>
+  </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>Current Password Is Incorrect</value>
   </data>
@@ -228,6 +231,9 @@
   <data name="PasswordMinLength" xml:space="preserve">
     <value>The password must be at least 8 characters long</value>
   </data>
+  <data name="PastSlot" xml:space="preserve">
+    <value>The Time of this slot has passed</value>
+  </data>
   <data name="RatingRange" xml:space="preserve">
     <value>Rating must be between 1 and 5</value>
   </data>
@@ -263,6 +269,9 @@
   </data>
   <data name="SlotAlreadyBooked" xml:space="preserve">
     <value>This slot has booked by someone else</value>
+  </data>
+  <data name="SlotIsLocked" xml:space="preserve">
+    <value>Slot is Locked Due To Break</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Operation is Done Successfully</value>

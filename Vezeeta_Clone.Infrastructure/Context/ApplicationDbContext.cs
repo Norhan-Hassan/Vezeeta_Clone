@@ -27,6 +27,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
         public DbSet<DoctorAvailabilitySlot> DoctorAvailabilitySlots { get; set; }
         public DbSet<MedicalRecord> MedicalRecords { get; set; }
         public DbSet<Diagnosis> Diagnoses { get; set; }
+        public DbSet<PrescriptionItem> PrescriptionItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<SubSpecialization> SubSpecializations { get; set; }

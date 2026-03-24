@@ -110,6 +110,11 @@ namespace Vezeeta_Clone.Api
                     service => service.MaintainFutureSlotsAsync(4),
                     Cron.Daily(2)
                 );
+                backgroundJobService.AddOrUpdateRecurring<ISlotGenerationService>(
+                    "maintain-past-slots",
+                    services => services.RemovePastSlotsAsync(),
+                    Cron.Daily(2)
+                );
             }
 
             #endregion

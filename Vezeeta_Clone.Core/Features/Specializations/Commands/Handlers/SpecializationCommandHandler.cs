@@ -58,7 +58,7 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Handlers
                 var result = await _specializationService.UpdateSpecialization(specialization);
                 if (result == "success")
                 {
-                    return Success<string>(null, null, _localizer[SharedResourcesKeys.Updated]);
+                    return Success<string>(null, _localizer[SharedResourcesKeys.Updated]);
                 }
                 else
                     return BadRequest<string>(_localizer[SharedResourcesKeys.FailToUpdate]);

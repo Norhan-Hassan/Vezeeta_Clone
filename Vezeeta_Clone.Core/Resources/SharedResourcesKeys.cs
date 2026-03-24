@@ -39,6 +39,7 @@
         public const string CurrentPasswordIsIncorrect = "CurrentPasswordIsIncorrect";
         public const string OneClinicOnly = "OneClinicOnly";
         public const string DoctorCompleteInfo = "DoctorCompleteInfo";
+        public const string CompleteProfileToAddClinic = "CompleteProfileToAddClinic";
         public const string FailedToCompleteDoctorInfo = "FailedToCompleteDoctorInfo";
         public const string ScheduleAdded = "ScheduleAdded";
         public const string EndTimeMustBeGreaterThanStartTime = "EndTimeMustBeGreaterThanStartTime";
@@ -59,6 +60,8 @@
         public const string AppointmentBookFailed = "AppointmentBookFailed";
 
         public const string SlotAlreadyBooked = "SlotAlreadyBooked";
+        public const string SlotIsLocked = "SlotIsLocked";
+        public const string PastSlot = "PastSlot";
 
         public const string BookingCompleted = "BookingCompleted";
         public const string BookingCompletionFailed = "BookingCompletionFailed";
