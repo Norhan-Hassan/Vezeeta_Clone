@@ -26,14 +26,15 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
                 .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required])
                 .InclusiveBetween(0, 5).WithMessage(_localizer[SharedResourcesKeys.RatingRange]);
 
-            RuleFor(x => x.IsAnonymous)
-                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
-                .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);
-
         }
         public void ApplyCustomValidationRules()
         {
-
+            //RuleFor(x => x.IsAnonymous)
+            //    .MustAsync(async (isAnonymous, cancellationToken) =>
+            //    {
+            //        isAnonymous = isAnonymous == null ? false : isAnonymous;
+            //        return isAnonymous;
+            //    });
         }
     }
 }

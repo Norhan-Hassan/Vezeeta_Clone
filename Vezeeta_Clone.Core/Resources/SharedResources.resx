@@ -129,6 +129,9 @@
   <data name="AppointmentBookFailed" xml:space="preserve">
     <value>Failed to book this appointment , try again later</value>
   </data>
+  <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
+    <value>The appointment is not confirmed or the payment has not been completed</value>
+  </data>
   <data name="BadRequest" xml:space="preserve">
     <value>Bad Request In Processing this request</value>
   </data>
@@ -204,8 +207,14 @@
   <data name="Monday" xml:space="preserve">
     <value>Monday</value>
   </data>
+  <data name="NoAppointmentBetween" xml:space="preserve">
+    <value>There is no appointment between this patient and you as a doctor</value>
+  </data>
   <data name="NoData" xml:space="preserve">
     <value>There is no data to be shown</value>
+  </data>
+  <data name="NoPatientVisit" xml:space="preserve">
+    <value>Patient doesn't visit this doctor yet</value>
   </data>
   <data name="NotEmpty" xml:space="preserve">
     <value>This Field shouldn't be empty value</value>
@@ -236,6 +245,9 @@
   </data>
   <data name="RatingRange" xml:space="preserve">
     <value>Rating must be between 1 and 5</value>
+  </data>
+  <data name="RecordAlreadyExists" xml:space="preserve">
+    <value>This medical record already exists</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>This Field is required</value>

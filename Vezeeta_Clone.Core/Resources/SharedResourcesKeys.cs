@@ -71,6 +71,11 @@
         public const string RatingRange = "RatingRange";
         public const string AlreadyDeleted = "AlreadyDeleted";
         public const string FailedToDelete = "FailedToDelete";
+        public const string NoPatientVisit = "NoPatientVisit";
+        public const string RecordAlreadyExists = "RecordAlreadyExists";
+        public const string AppointmentStatusPaymentStatus = "AppointmentStatusPaymentStatus";
+        public const string NoAppointmentBetween = "NoAppointmentBetween";
+
 
         // public const string MaxLength = "MaxLength";
 

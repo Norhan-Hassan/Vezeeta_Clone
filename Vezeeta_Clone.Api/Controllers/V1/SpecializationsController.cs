@@ -36,8 +36,9 @@ namespace Vezeeta_Clone.Api.Controllers.V1
 
 
         [HttpPut(Router.SpecializationRouting.Update)]
-        public async Task<IActionResult> CreateSpecialization([FromForm] UpdateSpecializationCommand request)
+        public async Task<IActionResult> UpdateSpecialization([FromRoute] int Id, [FromBody] UpdateSpecializationCommand request)
         {
+            request.Id = Id;
             var response = await _mediator.Send(request);
             return NewResult(response);
 

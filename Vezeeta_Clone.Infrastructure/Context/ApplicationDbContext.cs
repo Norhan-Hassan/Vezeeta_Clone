@@ -76,8 +76,11 @@ namespace Vezeeta_Clone.Infrastructure.Context
 
             builder.Entity<DoctorPatient>(entity =>
             {
-                entity.Ignore(e => e.ID);
-                entity.HasKey(dp => new { dp.DoctorId, dp.PatientId });
+
+                entity.HasKey(e => e.ID);
+
+                entity.HasIndex(e => new { e.DoctorId, e.PatientId })
+                      .IsUnique();
 
                 entity.HasOne(dp => dp.Doctor)
                      .WithMany(d => d.DoctorPatients)

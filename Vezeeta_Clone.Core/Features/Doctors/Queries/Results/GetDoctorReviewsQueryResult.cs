@@ -6,15 +6,17 @@
         public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? PatientName { get; set; }
+        public bool IsAnonymous { get; set; }
         public int PatientAge { get; set; }
 
-        public GetDoctorReviewsQueryResult(double rating, string? comment, DateTime createdAt, string? patientName, int patientAge)
+        public GetDoctorReviewsQueryResult(double rating, string? comment, DateTime createdAt, string? patientName, int patientAge, bool isAnonymous)
         {
             Rating = rating;
             Comment = comment;
             CreatedAt = createdAt;
             PatientName = patientName;
             PatientAge = patientAge;
+            IsAnonymous = isAnonymous;
         }
     }
 }

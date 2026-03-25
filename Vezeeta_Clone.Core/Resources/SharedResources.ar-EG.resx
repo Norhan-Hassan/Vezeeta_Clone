@@ -129,6 +129,9 @@
   <data name="AppointmentBookFailed" xml:space="preserve">
     <value>فشلت عملية الحجز الرجاء المحاوله لاحقا</value>
   </data>
+  <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
+    <value>الميعاد لم يؤكد او لم يتم اكمال عملية الدفع</value>
+  </data>
   <data name="BadRequest" xml:space="preserve">
     <value>حدث خطا ما اثناء معالجة الطلب</value>
   </data>
@@ -204,8 +207,14 @@
   <data name="Monday" xml:space="preserve">
     <value>الاثنين</value>
   </data>
+  <data name="NoAppointmentBetween" xml:space="preserve">
+    <value>لا يوجد موعد بين هذا المريض وانت كدكتور</value>
+  </data>
   <data name="NoData" xml:space="preserve">
     <value>لا يوجد بيانات لعرضها</value>
+  </data>
+  <data name="NoPatientVisit" xml:space="preserve">
+    <value>ليس هناك اي زياره بين الدكتور وهذا المريض</value>
   </data>
   <data name="NotEmpty" xml:space="preserve">
     <value>هذا الحقل لا يمكن ان يكون فارغا</value>
@@ -236,6 +245,9 @@
   </data>
   <data name="RatingRange" xml:space="preserve">
     <value>يجب ان تكون القيمه بين ١ الي ٥</value>
+  </data>
+  <data name="RecordAlreadyExists" xml:space="preserve">
+    <value>هذا السجل الطبي موجود بالفعل</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>هذا الحقل مطلوب</value>

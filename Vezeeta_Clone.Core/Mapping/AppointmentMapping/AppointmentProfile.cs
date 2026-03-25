@@ -8,6 +8,7 @@ namespace Vezeeta_Clone.Core.Mapping.AppointmentMapping
         {
             BookAppointmentMapping();
             CompleteAppointmentMapping();
+            GetAppointmentDetailesMapping();
         }
     }
 }

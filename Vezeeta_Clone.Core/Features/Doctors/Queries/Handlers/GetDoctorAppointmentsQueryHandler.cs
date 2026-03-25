@@ -35,10 +35,10 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
         {
             Expression<Func<Appointment, GetDoctorAppointmentsQueryResult>> expression =
                ex => new GetDoctorAppointmentsQueryResult(ex.ID,
-               ex.ActualPatientName ?? ex.Patient.ApplicationUser.FirstName + " " + ex.Patient.ApplicationUser.LastName,
+               string.Concat(ex.ActualPatientName ?? ex.Patient.ApplicationUser.FirstName, "", ex.Patient.ApplicationUser.LastName),
                ex.ActualPatientPhone ?? ex.Patient.ApplicationUser.PhoneNumber,
                ex.AvailableSlot.Date, ex.AvailableSlot.StartTime, ex.AvailableSlot.EndTime,
-               ex.Notes,
+
                ex.Status.ToString());
 
 
@@ -53,7 +53,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
                 return Unauthorized<PaginatedResult<GetDoctorAppointmentsQueryResult>>(_localizer[SharedResourcesKeys.UnAuthorized]);
             }
 
-            var filteredAppointments = _appointmentService.GetDoctorAppointmentsAsync(doctorId, request.status);
+            var filteredAppointments = _appointmentService.GetDoctorAppointmentsAsync(doctorId, request.status, request.availabilityMethod, request.FromDate, request.ToDate);
             var paginatedResult = await filteredAppointments.Select(expression).ToPaginatedListAsync(request.PageNumber, request.PageSize);
             if (paginatedResult.TotalCount == 0)
                 return NotFound<PaginatedResult<GetDoctorAppointmentsQueryResult>>(_localizer[SharedResourcesKeys.NoData]);

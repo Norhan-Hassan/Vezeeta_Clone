@@ -17,7 +17,10 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         public ISubSpecializationRepo _subSpecializationRepo { get; private set; }
         public IReviewRepo _reviewRepo { get; private set; }
         public IRefreshTokenRepo _refreshTokenRepo { get; private set; }
-
+        public IDoctorPatientRepo _doctorPatientRepo { get; private set; }
+        public IDiagnosisRepo _diagnosisRepo { get; private set; }
+        public IPrescriptionRepo _prescriptionRepo { get; private set; }
+        public IMedicalRecordRepo _medicalRecordRepo { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -31,6 +34,10 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
             _subSpecializationRepo = new SubSpecializationRepo(_context);
             _refreshTokenRepo = new RefreshTokenRepo(_context);
             _reviewRepo = new ReviewRepo(_context);
+            _doctorPatientRepo = new DoctorPatientRepo(_context);
+            _diagnosisRepo = new DiagnosisRepo(_context);
+            _prescriptionRepo = new PrescriptionRepo(_context);
+            _medicalRecordRepo = new MedicalRecordRepo(_context);
         }
 
 

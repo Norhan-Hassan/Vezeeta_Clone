@@ -7,6 +7,7 @@ namespace Vezeeta_Clone.Data.Entities
         public ICollection<PrescriptionItem> prescriptions { get; set; }
         public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey("MedicalRecord")]
         public int MedicalRecordId { get; set; }

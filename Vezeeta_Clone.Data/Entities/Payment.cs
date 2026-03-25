@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Vezeeta_Clone.Data.Entities.Enums;
 
 namespace Vezeeta_Clone.Data.Entities
@@ -43,10 +42,6 @@ namespace Vezeeta_Clone.Data.Entities
 
         // Relationships
         public ICollection<PaymentEvent> PaymentEvents { get; set; } = new List<PaymentEvent>();
-
-        [ForeignKey(nameof(Appointment))]
-        public int AppointmentId { get; set; }
-        public Appointment Appointment { get; set; }
 
     }
 }

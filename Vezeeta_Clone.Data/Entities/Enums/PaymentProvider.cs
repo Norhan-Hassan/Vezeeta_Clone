@@ -2,6 +2,7 @@
 {
     public enum PaymentProvider
     {
+        Cash,
         Stripe,
         PayPal
     }

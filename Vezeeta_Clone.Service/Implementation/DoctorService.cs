@@ -106,12 +106,10 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public IQueryable<Review> GetDoctorReviews(string id)
         {
-            var reviews = _unitOfWork._doctorRepo.GetTableNoTracking()
-                                            .Include(d => d.Reviews)
-                                            .Where(d => d.AppUserID == id)
-                                            .SelectMany(d => d.Reviews!)
-                                            .Include(r => r.Patient);
-
+            var reviews = _unitOfWork._reviewRepo.GetTableNoTracking()
+                                                .Where(r => r.DoctorId == id)
+                                                .Include(r => r.Patient)
+                                                .OrderByDescending(r => r.Rating);
             return reviews;
         }
         public async Task UpdateDoctorAsync(Doctor doctor)

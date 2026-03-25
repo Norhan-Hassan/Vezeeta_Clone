@@ -101,20 +101,34 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var appointment = await _unitOfWork._appointmentRepo.GetByIntIdAsync(appointmentId);
             if (appointment == null)
-                throw new InvalidOperationException("notFound");
+
+                return null;
             return appointment;
         }
 
-        public IQueryable<Appointment> GetDoctorAppointmentsAsync(string doctorId, AppointmentStatus? appointmentStatus)
+        public IQueryable<Appointment> GetDoctorAppointmentsAsync(string doctorId, AppointmentStatus? appointmentStatus, AvailabilityMethod availabilityMethod, DateOnly? fromDate, DateOnly? toDate)
         {
             var appointments = _unitOfWork._appointmentRepo.GetTableNoTracking()
                                                                 .Include(a => a.AvailableSlot)
+                                                                .ThenInclude(s => s.Availability)
                                                                 .Where(a => a.DoctorId == doctorId)
                                                                 .AsQueryable();
 
+            if (fromDate != null && toDate != null && fromDate <= toDate)
+            {
+                appointments = appointments.Where(a => a.AvailableSlot != null && a.AvailableSlot.Date >= fromDate && a.AvailableSlot.Date <= toDate);
+            }
             if (appointmentStatus.HasValue)
             {
                 appointments = appointments.Where(a => a.Status == appointmentStatus);
+            }
+            if (availabilityMethod.HasFlag(AvailabilityMethod.Offline))
+            {
+                appointments = appointments.Where(a => a.AvailableSlot != null && a.AvailableSlot.Availability.type == AvailabilityMethod.Offline);
+            }
+            else if (availabilityMethod.HasFlag(AvailabilityMethod.Online))
+            {
+                appointments = appointments.Where(a => a.AvailableSlot != null && a.AvailableSlot.Availability.type == AvailabilityMethod.Online);
             }
 
             return appointments;

@@ -11,8 +11,10 @@ namespace Vezeeta_Clone.Data.Entities
         [ForeignKey("Patient")]
         public string PatientId { get; set; }
         public Patient Patient { get; set; }
-        public DateTime FirstVisitAt { get; set; }
+        public int TotalVisits { get; set; }
+        public DateTime FirstVisitAt { get; set; } = DateTime.UtcNow;
         public DateTime LastVisitAt { get; set; }
+        public ICollection<MedicalRecord> MedicalRecords { get; set; }
 
     }
 }

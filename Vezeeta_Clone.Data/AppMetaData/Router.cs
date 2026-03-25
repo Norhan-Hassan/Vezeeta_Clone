@@ -12,7 +12,7 @@
         public static class DoctorRouting
         {
             public const string Prefix = Rule + "doctors/";
-            public const string List = Prefix + "list";
+            public const string List = Prefix;
             public const string GetById = Prefix + SingleUser;
             public const string GetReviews = Prefix + SingleUser + "/reviews";
             public const string GetExamination = Prefix + SingleUser + "/examination-details";
@@ -20,6 +20,7 @@
             public const string GetSlots = Prefix + SingleUser + "/available-slots";
             public const string AppointmentsList = Prefix + "appointments/";
         }
+
         public static class PatientRouting
         {
             public const string Prefix = Rule + "patients/";
@@ -28,7 +29,7 @@
         public static class ScheduleRouting
         {
             public const string Prefix = Rule + "schedules/";
-            public const string AddSchedule = Prefix + "add";
+            public const string AddSchedule = Prefix;
             public const string LockSlot = Prefix + SingleEntity + "/lock-slot";
         }
         //ReviewRouting
@@ -43,24 +44,32 @@
         public static class AppointmentRouting
         {
             public const string Prefix = Rule + "appointments/";
-            public const string BookAppointment = Prefix + "book";
+            public const string BookAppointment = Prefix;
             public const string CancelAppointment = Prefix + SingleEntity + "/cancel";
-            public const string CompleteAppointmentBooking = Prefix + "complete";
+            public const string CompleteAppointmentBooking = Prefix + SingleEntity;
+            public const string GetAppointmentDetails = Prefix + SingleEntity;
         }
+        public static class MedicalRecordRouting
+        {
+            public const string Prefix = Rule + "medical-records/";
+            public const string Create = Prefix;
+            public const string Diagnosis = Prefix + SingleEntity + "/diagnosis";
+            public const string EPrescription = Prefix + SingleEntity + "/e-prescription";
 
+        }
         public static class ClinicRouting
         {
             public const string Prefix = Rule + "clinics/";
-            public const string List = Prefix + "list";
-            public const string RegisterClinic = Prefix + "register-to-doctor";
+            public const string List = Prefix + "list/";
+            public const string RegisterClinic = Prefix + "register-to-doctor/";
         }
 
         public static class AuthRouting
         {
             public const string Prefix = Rule + "auth/";
-            public const string Add = Prefix + "role/create";
-            public const string Update = Prefix + "role/update";
-            public const string Delete = Prefix + "role/delete";
+            public const string Add = Prefix + "roles";
+            public const string Update = Prefix + "roles";
+            public const string Delete = Prefix + "roles";
             public const string DoctorRegister = Prefix + "doctor-register";
             public const string PatientRegister = Prefix + "patient-register";
             public const string SignIn = Prefix + "signIn";
@@ -71,8 +80,8 @@
         public static class SpecializationRouting
         {
             public const string Prefix = Rule + "specializations/";
-            public const string Create = Prefix + "create";
-            public const string Update = Prefix + "update";
+            public const string Create = Prefix;
+            public const string Update = Prefix + SingleEntity;
             public const string List = Prefix;
             public const string SubSpecializations = Prefix + "{SpecializationID:int}/sub-specializations";
         }

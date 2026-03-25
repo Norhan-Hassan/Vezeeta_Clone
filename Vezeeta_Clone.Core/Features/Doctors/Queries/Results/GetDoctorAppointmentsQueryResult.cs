@@ -9,9 +9,8 @@
         public TimeOnly StartTime { get; set; }// available slots include
         public TimeOnly EndTime { get; set; }// available slots include
         public string Status { get; set; }//
-        public string? Notes { get; set; }
         public GetDoctorAppointmentsQueryResult(int appointmentId, string patientName,
-            string patientPhone, DateOnly date, TimeOnly startTime, TimeOnly endTime, string? notes, string? status = null)
+            string patientPhone, DateOnly date, TimeOnly startTime, TimeOnly endTime, string? status = null)
         {
             AppointmentId = appointmentId;
             ActualPatientName = patientName;
@@ -19,7 +18,6 @@
             Date = date;
             StartTime = startTime;
             EndTime = endTime;
-            Notes = notes;
             Status = status;
         }
     }

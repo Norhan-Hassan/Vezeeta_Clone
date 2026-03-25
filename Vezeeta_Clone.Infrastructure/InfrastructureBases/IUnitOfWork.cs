@@ -14,6 +14,10 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         public ISubSpecializationRepo _subSpecializationRepo { get; }
         public IRefreshTokenRepo _refreshTokenRepo { get; }
         public IReviewRepo _reviewRepo { get; }
+        public IDoctorPatientRepo _doctorPatientRepo { get; }
+        public IDiagnosisRepo _diagnosisRepo { get; }
+        public IPrescriptionRepo _prescriptionRepo { get; }
+        public IMedicalRecordRepo _medicalRecordRepo { get; }
         Task<int> SaveChangesAsync();
     }
 }

@@ -25,7 +25,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpPost(Router.AuthRouting.SignIn)]
-        public async Task<IActionResult> SignIn([FromForm] SignInCommand command)
+        public async Task<IActionResult> SignIn([FromBody] SignInCommand command)
         {
             var response = await _mediator.Send(command);
             return NewResult(response);

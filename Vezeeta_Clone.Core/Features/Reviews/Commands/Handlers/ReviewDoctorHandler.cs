@@ -84,7 +84,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
 
                 var patientId = _currentUserService.GetCurrentUserId();
                 await _reviewService.DeleteReviewAsync(reviewInDb, patientId);
-                return Success<string>(null, _localizer[SharedResourcesKeys.Deleted]);
+                return Deleted<string>();
             }
             catch (UnauthorizedAccessException ex)
             {

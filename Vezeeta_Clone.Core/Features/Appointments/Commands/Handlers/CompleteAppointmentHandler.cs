@@ -8,7 +8,8 @@ using Vezeeta_Clone.Service.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
 {
-    public class CompleteAppointmentHandler : ResponseHandler, IRequestHandler<CompleteAppointmentCommand, Response<string>>
+    public class CompleteAppointmentHandler : ResponseHandler,
+        IRequestHandler<CompleteAppointmentCommand, Response<string>>
     {
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
@@ -25,6 +26,10 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
         public async Task<Response<string>> Handle(CompleteAppointmentCommand request, CancellationToken cancellationToken)
         {
             var appointment = await _appointmentService.GetAppointmentByIdAsync(request.AppointmentId);
+            if (appointment == null)
+            {
+                return NotFound<string>();
+            }
             var mappedAppointment = _mapper.Map(request, appointment);
             var result = await _appointmentService.CompleteAppointmentAsync(mappedAppointment);
             if (result)
@@ -33,5 +38,7 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
             }
             return BadRequest<string>(_localizer[SharedResourcesKeys.BookingCompletionFailed]);
         }
+
+
     }
 }

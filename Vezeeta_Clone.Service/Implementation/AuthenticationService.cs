@@ -228,6 +228,7 @@ namespace Vezeeta_Clone.Service.Implementation
             {
                 ExpiresAt = userTokens.ExpiredAt,
                 Token = refreshToken,
+                // Token = GenerateRefreshToken(), // generate new refresh token
                 Id = userId
             };
             var jwtAuthResult = new JwtAuthResult
@@ -275,7 +276,8 @@ namespace Vezeeta_Clone.Service.Implementation
             {
                 new Claim(nameof(AppUserClaimModel.Id), user.Id),
                 new Claim(nameof(AppUserClaimModel.Email), user.Email),
-                new Claim(nameof(AppUserClaimModel.UserName), user.UserName)
+                new Claim(nameof(AppUserClaimModel.UserName), user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 
             };
             foreach (var role in roles)

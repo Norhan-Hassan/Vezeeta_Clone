@@ -57,13 +57,17 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
         public async Task<Response<PaginatedResult<GetDoctorReviewsQueryResult>>> Handle(GetDoctorReviewsQuery request, CancellationToken cancellationToken)
         {
             Expression<Func<Review, GetDoctorReviewsQueryResult>> expression =
-                ex => new GetDoctorReviewsQueryResult(ex.Rating, ex.Comment, ex.CreatedAt, string.Concat(ex.Patient!.ApplicationUser.FirstName, " ", ex.Patient.ApplicationUser.LastName), ex.Patient.GetAge());
+                ex => new GetDoctorReviewsQueryResult(ex.Rating, ex.Comment, ex.CreatedAt, string.Concat(ex.Patient!.ApplicationUser.FirstName, " ", ex.Patient.ApplicationUser.LastName), ex.Patient.GetAge(), ex.IsAnonymous);
             var reviewsQuery = _doctorService.GetDoctorReviews(request.DoctorId);
             var paginatedResult = await reviewsQuery.Select(expression).ToPaginatedListAsync(request.PageNumber, request.PageSize);
             if (paginatedResult.TotalCount == 0)
                 return NotFound<PaginatedResult<GetDoctorReviewsQueryResult>>(_localizer[SharedResourcesKeys.NoData]);
             return Success(paginatedResult);
         }
+
+
+
+
         public async Task<Response<GetDoctorDetailsQueryResult>> Handle(GetDoctorDetailsQuery request, CancellationToken cancellationToken)
         {
             var doctor = await _doctorService.GetDoctorByIDAsync(request.Id);

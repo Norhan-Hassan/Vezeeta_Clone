@@ -13,7 +13,7 @@ namespace Vezeeta_Clone.Data.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-        public bool IsAnonymous { get; set; }
+        public bool IsAnonymous { get; set; } = false;
 
         [Required]
         [ForeignKey("Patient")]
