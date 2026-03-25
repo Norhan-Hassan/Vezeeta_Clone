@@ -593,7 +593,7 @@ ApplicationUser (IdentityUser)
  │    │         ├── N:1 → Region → City
  │    │         └── N:1 → Location (GPS)
  │    ├── 1:N → DoctorAvailability
- ││         └── 1:N → DoctorAvailabilitySlot
+ │          └── 1:N → DoctorAvailabilitySlot
  │    │     └── 1:N → Appointment
  │    │         └── 1:N → Payment
  │    ├── 1:N → DoctorPatient
@@ -704,10 +704,10 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
 
 ### Default Admin Credentials
 
-| Field         | Value               |
-| ------------- | ------------------- |
-| ** Email**    | `Admin@vezeeta.com` |
-| ** Password** | `Admin@123ADM567`   |
+| Field        | Value               |
+| ------------ | ------------------- |
+| **Email**    | `Admin@vezeeta.com` |
+| **Password** | `Admin@123ADM567`   |
 
 ---
 
