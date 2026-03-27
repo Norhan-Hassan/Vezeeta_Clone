@@ -2,8 +2,6 @@
 {
     public enum PaymentProvider
     {
-        Cash,
-        Stripe,
-        PayPal
+        Stripe = 1
     }
 }

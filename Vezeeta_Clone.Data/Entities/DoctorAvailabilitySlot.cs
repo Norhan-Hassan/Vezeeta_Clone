@@ -18,8 +18,8 @@ namespace Vezeeta_Clone.Data.Entities
         public DoctorAvailability? Availability { get; set; }
 
         //because there would be free solt without apointment(may =be)
-        public Appointment? Appointment { get; set; }
-
+        //public Appointment? Appointment { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         [Timestamp]
         public byte[] RowVersion { get; set; }  // Concurrency token
     }

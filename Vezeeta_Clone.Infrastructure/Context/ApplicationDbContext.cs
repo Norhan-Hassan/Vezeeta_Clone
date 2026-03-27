@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using EntityFrameworkCore.EncryptColumn.Extension;
+using EntityFrameworkCore.EncryptColumn.Interfaces;
+using EntityFrameworkCore.EncryptColumn.Util;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Vezeeta_Clone.Data.Entities;
@@ -6,9 +9,10 @@ namespace Vezeeta_Clone.Infrastructure.Context
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        private readonly IEncryptionProvider _encryptionProvider;
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
+            _encryptionProvider = new GenerateEncryptionProvider("1ec364573a27a4d8");
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserToken> Tokens { get; set; }
@@ -35,7 +39,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
+            builder.UseEncryption(_encryptionProvider);
             builder.Entity<Doctor>(entity =>
             {
 
@@ -119,12 +123,17 @@ namespace Vezeeta_Clone.Infrastructure.Context
             //one to one between Appointment and AvailableSlot
             builder.Entity<Appointment>(entity =>
             {
-                entity.HasKey(a => a.ID);
-                entity.HasOne(a => a.AvailableSlot)
-                       .WithOne(a => a.Appointment)
-                       .HasForeignKey<Appointment>(a => a.SlotId)
-                       .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasKey(a => a.ID);
+                //entity.HasOne(a => a.AvailableSlot)
+                //       .WithOne(a => a.Appointment)
+                //       .HasForeignKey<Appointment>(a => a.SlotId)
+                //       .OnDelete(DeleteBehavior.Restrict);
 
+
+                entity.HasOne(a => a.AvailableSlot)
+                     .WithMany(s => s.Appointments)
+                     .HasForeignKey(a => a.SlotId)
+                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(a => a.Patient)
                      .WithMany(p => p.Appointments)

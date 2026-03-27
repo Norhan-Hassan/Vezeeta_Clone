@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vezeeta_Clone.Data.Entities;
+using Vezeeta_Clone.Data.Entities.Enums;
 using Vezeeta_Clone.Data.Helper;
 using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
@@ -51,7 +52,7 @@ namespace Vezeeta_Clone.Service.Implementation
         }
 
 
-        public IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId, OrderingCriteria? orderBy)
+        public IQueryable<Doctor> FilteredDoctorsAsQuerable(int? specializationId, string? search, int? cityId, int? regionId, OrderingCriteria? orderBy, Title? title, Gender? gender)
         {
             var doctors = _unitOfWork._doctorRepo.GetAllDoctorsWithIncludesAsQuerable().Where(d => d.Clinic != null && d.Clinic.DoctorId != null);
 
@@ -76,17 +77,26 @@ namespace Vezeeta_Clone.Service.Implementation
                                                         d.ApplicationUser.LastName.Contains(search) ||
                                                         d.Clinic!.Name.Contains(search));
             }
+            if (title.HasValue)
+            {
+                filteredDoctors = filteredDoctors.Where(d => d.Title == title);
+            }
+            if (gender.HasValue)
+            {
+                filteredDoctors = filteredDoctors.Where(d => d.ApplicationUser.gender == gender);
+            }
             if (orderBy.HasValue)
             {
                 filteredDoctors = orderBy switch
                 {
-                    OrderingCriteria.topRated => filteredDoctors.OrderByDescending(d => d.Reviews!.Average(r => r.Rating)),
+                    OrderingCriteria.topRated => filteredDoctors.OrderByDescending(d => d.Reviews.Any() ? d.Reviews.Average(r => r.Rating) : 0),
                     OrderingCriteria.priceLowToHigh => filteredDoctors.OrderBy(d => d.Clinic!.Price),
                     OrderingCriteria.priceHighToLow => filteredDoctors.OrderByDescending(d => d.Clinic!.Price),
                     OrderingCriteria.lessWaitingTime => filteredDoctors.OrderBy(d => d.Clinic!.WaitingTimeInMinutes),
                     _ => filteredDoctors
                 };
             }
+
             return filteredDoctors;
         }
 

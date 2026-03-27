@@ -48,6 +48,12 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
               .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required])
               .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$").WithMessage(x => _localizer[SharedResourcesKeys.EmailFormat]);
 
+            RuleFor(x => x.UserName)
+              .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
+              .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required])
+              .Must((userName) => !userName.Any(char.IsWhiteSpace))
+              .WithMessage(x => _localizer[SharedResourcesKeys.NoWhiteSpace]);
+
             RuleFor(x => x.PhoneNumber)
                .NotEmpty().WithMessage(x => _localizer[SharedResourcesKeys.NotEmpty])
                .NotNull().WithMessage(x => _localizer[SharedResourcesKeys.Required])

@@ -1,10 +1,12 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Doctors.Commands.Models;
 using Vezeeta_Clone.Core.Features.Doctors.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
+using Vezeeta_Clone.Data.Commons;
 
 namespace Vezeeta_Clone.Api.Controllers.V1
 {
@@ -46,13 +48,14 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpGet(Router.DoctorRouting.GetSlots)]
-        [SwaggerOperation(Summary = "Get doctor available slots", Description = "Get a list of available appointment slots for current doctor grouped by date")]
+        [SwaggerOperation(Summary = "Get doctor available slots", Description = "Get a list of available appointment slots for doctor grouped by date")]
         public async Task<IActionResult> GetDoctorAvailableSlots([FromRoute] GetDoctorAvailableSlotsQuery query)
         {
             var response = await _mediator.Send(query);
             return NewResult(response);
         }
 
+        [Authorize(Roles = Roles.Doctor)]
         [HttpGet(Router.DoctorRouting.AppointmentsList)]
         [SwaggerOperation(Summary = "Appoinments of Doctor ", Description = "Get paginated list of appointments of the current Doctor")]
 

@@ -123,11 +123,23 @@
   <data name="AlreadyDeleted" xml:space="preserve">
     <value>This is already deleted resource</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Sehatek.com</value>
+  </data>
   <data name="AppointmentBooked" xml:space="preserve">
     <value>Appointment at this slot time is booked successfully</value>
   </data>
   <data name="AppointmentBookFailed" xml:space="preserve">
     <value>Failed to book this appointment , try again later</value>
+  </data>
+  <data name="AppointmentCancellation" xml:space="preserve">
+    <value>Appointment Cancellation</value>
+  </data>
+  <data name="AppointmentCancelled" xml:space="preserve">
+    <value>Appointment is cancelled Successfully</value>
+  </data>
+  <data name="AppointmentConfirmation" xml:space="preserve">
+    <value>Appointment Booking Confirmation</value>
   </data>
   <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
     <value>The appointment is not confirmed or the payment has not been completed</value>
@@ -143,6 +155,12 @@
   </data>
   <data name="CompleteProfileToAddClinic" xml:space="preserve">
     <value>You Should complete Your profile first to be able to register a clinic</value>
+  </data>
+  <data name="ConfirmEmailBody" xml:space="preserve">
+    <value>To confirm your email , click to this link</value>
+  </data>
+  <data name="ConfirmEmailButton" xml:space="preserve">
+    <value>Link</value>
   </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>Current Password Is Incorrect</value>
@@ -162,17 +180,32 @@
   <data name="EmailAlreadyExists" xml:space="preserve">
     <value>This Email Already Exists</value>
   </data>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>Email Confirmation</value>
+  </data>
+  <data name="EmailConfirmationFailed" xml:space="preserve">
+    <value>Email Confirmation is failed</value>
+  </data>
+  <data name="EmailConfirmed" xml:space="preserve">
+    <value>Email is confirmed Successfully</value>
+  </data>
   <data name="EmailFormat" xml:space="preserve">
     <value>Email must be in the format example@domain.com</value>
   </data>
   <data name="EmailIsNotExist" xml:space="preserve">
     <value>There is no user with this Email</value>
   </data>
+  <data name="EmailNotConfirmed" xml:space="preserve">
+    <value>Please , Confirm you email </value>
+  </data>
   <data name="EmailOrPassNotExist" xml:space="preserve">
     <value>Email or password is invalid</value>
   </data>
   <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
     <value>End-Time Must Be Greater Than Start-Time</value>
+  </data>
+  <data name="FailedToCancellAppointment" xml:space="preserve">
+    <value>Failed to cancel this appointment</value>
   </data>
   <data name="FailedToChangePassword" xml:space="preserve">
     <value>Failed To Change Password</value>
@@ -198,6 +231,9 @@
   <data name="InvalidPhoneNumber" xml:space="preserve">
     <value>This Phone Number is invalid</value>
   </data>
+  <data name="InvalidResetCode" xml:space="preserve">
+    <value>Your OTP is invalid</value>
+  </data>
   <data name="InValidToken" xml:space="preserve">
     <value>This token is invalid</value>
   </data>
@@ -210,6 +246,9 @@
   <data name="NoAppointmentBetween" xml:space="preserve">
     <value>There is no appointment between this patient and you as a doctor</value>
   </data>
+  <data name="NoCashMethod" xml:space="preserve">
+    <value>Sorry, this doctor does not accept cash payments</value>
+  </data>
   <data name="NoData" xml:space="preserve">
     <value>There is no data to be shown</value>
   </data>
@@ -221,6 +260,9 @@
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Resource is Not Found</value>
+  </data>
+  <data name="NoWhiteSpace" xml:space="preserve">
+    <value>Username must not contain any spaces</value>
   </data>
   <data name="OneClinicOnly" xml:space="preserve">
     <value>You have already registered a clinic. You cannot add another one</value>
@@ -243,6 +285,12 @@
   <data name="PastSlot" xml:space="preserve">
     <value>The Time of this slot has passed</value>
   </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>Payment process failed</value>
+  </data>
+  <data name="PaymentSuccess" xml:space="preserve">
+    <value>Payment process done successfully</value>
+  </data>
   <data name="RatingRange" xml:space="preserve">
     <value>Rating must be between 1 and 5</value>
   </data>
@@ -257,6 +305,17 @@
   </data>
   <data name="RequireToHaveClinic" xml:space="preserve">
     <value>You must have clinic to make your schedule or choose online option</value>
+  </data>
+  <data name="ResetPasswordCodeMessage" xml:space="preserve">
+    <value>Hello,
+
+We've received a request to reset your account password. Please use the one-time password (OTP) shown below to reset your password. The verification code is valid for 15 minutes only.</value>
+  </data>
+  <data name="ResetPasswordCodeSentSuccessfully" xml:space="preserve">
+    <value>Reset password code is sent to you email successfully</value>
+  </data>
+  <data name="ResetPaswword" xml:space="preserve">
+    <value>Reset Password</value>
   </data>
   <data name="ReviewAlreadyExists" xml:space="preserve">
     <value>You already reviewed This doctor</value>

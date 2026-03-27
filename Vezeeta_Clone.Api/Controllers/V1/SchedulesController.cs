@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Scheduling.Commands.Models;
 using Vezeeta_Clone.Data.AppMetaData;
+using Vezeeta_Clone.Data.Commons;
 
 namespace Vezeeta_Clone.Api.Controllers.V1
 {
+    [ApiVersion("1.0")]
+    [Authorize(Roles = Roles.Doctor)]
     public class SchedulesController : AppControllerBase
     {
         [HttpPost(Router.ScheduleRouting.AddSchedule)]

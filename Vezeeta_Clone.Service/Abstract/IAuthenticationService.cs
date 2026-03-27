@@ -12,6 +12,11 @@ namespace Vezeeta_Clone.Service.Abstract
         Task<bool> ValidateJwtToken(string accessToken);
         Task<bool> UserExistsByEmailAsync(string email);
         Task<bool> UserExistsByUserNameAsync(string userName);
+        Task<string> GetEmailConfirmationUrlAsync(ApplicationUser user);
+        Task<bool> ConfirmEmailAsync(string? email, string? code);
+        Task<string> GetResetPasswordCodeAsync(string email);
+        Task<string> CheckResetPasswordCodeAsync(string email, string code);
+        Task<bool> ResetPasswordAsync(string email, string password);
 
     }
 }

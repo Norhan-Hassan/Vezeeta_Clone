@@ -24,12 +24,16 @@ namespace Vezeeta_Clone.Infrastructure
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = false;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
+
+                options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
+                options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
@@ -37,8 +41,16 @@ namespace Vezeeta_Clone.Infrastructure
             //JWT Authentication
             var jwtSettings = new JwtSettings();
             configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
+            //Email Settings
+            var emailSettings = new EmailSettings();
+            configuration.GetSection(nameof(EmailSettings)).Bind(emailSettings);
+            //stripe payment
+            var stripeSettings = new StripeSettings();
+            configuration.GetSection(nameof(StripeSettings)).Bind(stripeSettings);
 
             services.AddSingleton(jwtSettings);
+            services.AddSingleton(emailSettings);
+            services.AddSingleton(stripeSettings);
 
             services.AddAuthentication(x =>
             {

@@ -17,30 +17,26 @@ namespace Vezeeta_Clone.Data.Entities
         public string ClientSecret { get; set; }
         public PaymentStatus Status { get; set; }
 
-        // Provider-specific IDs
         public string? ProviderPaymentId { get; set; }
         public string? ProviderTransactionId { get; set; }
 
-        // Payer information
         public string? PayerEmail { get; set; }
         public string? PayerName { get; set; }
 
-        // Timestamps
+
         public DateTime? PaidAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Error handling
+
         public string? FailureReason { get; set; }
         public string? FailureCode { get; set; }
 
         // Idempotency
         public string? IdempotencyKey { get; set; }
-
-        // Provider-specific data (JSON for flexibility)
         public string? ProviderMetadata { get; set; }
 
-        // Relationships
+
         public ICollection<PaymentEvent> PaymentEvents { get; set; } = new List<PaymentEvent>();
 
     }

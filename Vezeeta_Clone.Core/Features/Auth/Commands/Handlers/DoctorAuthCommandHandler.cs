@@ -6,6 +6,7 @@ using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Service.Abstract;
+using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 {
@@ -15,23 +16,29 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
         #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
-        private readonly IAuthenticationService _athenticationService;
+        private readonly IEmailService _emailService;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly IBackgroundJobService _backgroundJobService;
         #endregion
 
         #region Constructors
         public DoctorAuthCommandHandler(IStringLocalizer<SharedResources> localizer,
                                         IMapper mapper,
-                                        IAuthenticationService athenticationService) : base(localizer)
+                                        IEmailService emailService,
+                                 IAuthenticationService authenticationService,
+                                 IBackgroundJobService backgroundJobService) : base(localizer)
         {
             _mapper = mapper;
-            _athenticationService = athenticationService;
+            _authenticationService = authenticationService;
+            _backgroundJobService = backgroundJobService;
             _localizer = localizer;
+            _emailService = emailService;
         }
 
 
         #endregion
 
-        #region
+        #region Functions
         public async Task<Response<string>> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
         {
 
@@ -40,8 +47,68 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 
             try
             {
-                await _athenticationService.RegisterDoctorAsync(doctor, appUser, request.Password);
+                await _authenticationService.RegisterDoctorAsync(doctor, appUser, request.Password);
+
+                //email confirmation
+                var returnedUrl = await _authenticationService.GetEmailConfirmationUrlAsync(appUser);
+
+                var message = $@"
+                    <table style='width:100%; font-family:Arial, sans-serif; background-color:#f4f4f4; padding:40px 0;'>
+                      <tr>
+                        <td align='center'>
+                          <!-- Main Container -->
+                          <table style='width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); overflow:hidden; text-align:center;'>
+        
+                            <!-- Logo Section -->
+                            <tr>
+                              <td style='padding:30px 0;'>
+                                <!-- Logo -->
+                                <img src='https://res.cloudinary.com/ddtcswz77/image/upload/v1774491046/Logo_lotycd.png' alt='Logo' width='100' style='display:block; margin:0 auto;'/>
+                              </td>
+                            </tr>
+
+                            <!-- App Name -->
+                            <tr>
+                              <td style='padding-bottom:20px;'>
+                                <h2 style='margin:0; font-size:24px; color:#333333;'>{_localizer["AppName"] ?? "Manisik"}</h2>
+                              </td>
+                            </tr>
+
+                            <!-- Body Section -->
+                            <tr>
+                              <td style='padding:0 30px 30px 30px; color:#333333; font-size:16px; line-height:1.6;'>
+                                <p style='font-size:18px; font-weight:500; margin-bottom:20px;'>{_localizer[SharedResourcesKeys.ConfirmEmailBody]}</p>
+
+                                <!-- Confirm Button -->
+                                <a href='{returnedUrl}' 
+                                   style='display:inline-block; background-color:#007bff; color:#ffffff; 
+                                          padding:14px 28px; text-decoration:none; border-radius:8px; font-weight:bold;
+                                          font-size:16px; box-shadow:0 4px 12px rgba(0,0,0,0.15);'>
+                                   {_localizer[SharedResourcesKeys.ConfirmEmailButton]}
+                                </a>
+                              </td>
+                            </tr>
+
+                            <!-- Footer Section -->
+                            <tr>
+                              <td style='padding:20px; text-align:center; font-size:12px; color:#888888; background-color:#f9f9f9;'>
+                                If you did not request this email, you can safely ignore it.
+                              </td>
+                            </tr>
+
+                          </table>
+                        </td>
+                      </tr>
+                    </table>";
+                await _backgroundJobService.EnqueueAsync<IEmailService>(
+                        x => x.SendEmail(
+                            appUser.Email,
+                            message,
+                            _localizer[SharedResourcesKeys.EmailConfirmation]
+                        )
+                    );
                 return Created("");
+
             }
             catch (Exception ex)
             {

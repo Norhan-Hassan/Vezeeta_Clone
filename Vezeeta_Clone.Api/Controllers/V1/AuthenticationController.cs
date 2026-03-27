@@ -38,6 +38,34 @@ namespace Vezeeta_Clone.Api.Controllers.V1
             return NewResult(response);
         }
 
+        [HttpPost(Router.AuthRouting.ResetPassword)]
+        public async Task<IActionResult> ResetPassword([FromQuery] ResetPasswordCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return NewResult(response);
+        }
+
+        [HttpGet(Router.AuthRouting.CheckResetPassword)]
+        public async Task<IActionResult> CheckResetPassword([FromQuery] ResetPasswordQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
+        [HttpPost(Router.AuthRouting.ResetPasswordInAction)]
+        public async Task<IActionResult> ResetPasswordInAction([FromBody] ResetPasswordInActionCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return NewResult(response);
+        }
+
+        [HttpGet(Router.AuthRouting.ConfirmEmail)]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
         [HttpPost(Router.AuthRouting.RefreshToken)]
         public async Task<IActionResult> RefreshToken([FromForm] RefreshTokenCommand command)
         {

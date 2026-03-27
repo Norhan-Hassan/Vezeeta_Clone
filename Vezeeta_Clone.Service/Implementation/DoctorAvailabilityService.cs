@@ -90,6 +90,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 //background job to generate slots
                 var jobId = await _backgroundJobService.EnqueueAsync<ISlotGenerationService>(
                                         x => x.GenerateSlotsAsync(schedule.DoctorId, 4));
+                //log the jobId if needed for tracking
                 return "success";
             }
             return "fail";

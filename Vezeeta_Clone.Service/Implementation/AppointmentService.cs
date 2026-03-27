@@ -99,7 +99,26 @@ namespace Vezeeta_Clone.Service.Implementation
 
         public async Task<Appointment> GetAppointmentByIdAsync(int appointmentId)
         {
-            var appointment = await _unitOfWork._appointmentRepo.GetByIntIdAsync(appointmentId);
+            var appointment = await _unitOfWork._appointmentRepo.GetTableNoTracking()
+                                                                .Include(a => a.Payment).FirstOrDefaultAsync(a => a.ID == appointmentId);
+            if (appointment == null)
+
+                return null;
+            return appointment;
+        }
+
+        public async Task<Appointment> GetAppointmentByIdWithIncludesAsync(int appointmentId)
+        {
+            var appointment = await _unitOfWork._appointmentRepo.GetTableNoTracking()
+                                                                .Include(a => a.Patient)
+                                                                    .ThenInclude(p => p.ApplicationUser)
+                                                                .Include(a => a.Doctor)
+                                                                    .ThenInclude(d => d.ApplicationUser)
+                                                                .Include(a => a.Doctor)
+                                                                    .ThenInclude(d => d.Clinic)
+                                                                .Include(a => a.AvailableSlot)
+
+                                                                .FirstOrDefaultAsync(a => a.ID == appointmentId);
             if (appointment == null)
 
                 return null;
@@ -150,5 +169,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
             return appointments;
         }
+
+
     }
 }

@@ -28,6 +28,8 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IMedicalRecordService, MedicalRecordService>();
+            services.AddTransient<IPatientService, PatientService>();
+            services.AddHttpContextAccessor();
             return services;
         }
     }

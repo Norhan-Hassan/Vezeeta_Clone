@@ -33,6 +33,10 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             var signInresult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (user.EmailConfirmed == false)
+            {
+                return BadRequest<JwtAuthResult>(_localizer[SharedResourcesKeys.EmailNotConfirmed]);
+            }
             if (!signInresult.Succeeded)
             {
                 return BadRequest<JwtAuthResult>(_localizer[SharedResourcesKeys.EmailOrPassNotExist]);

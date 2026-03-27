@@ -8,6 +8,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Models
         public string DoctorId { get; set; }
         public double Rating { get; set; } = 0;
         public string? Comment { get; set; }
-        public bool IsAnonymous { get; set; } = false;
+
+        public bool? IsAnonymous { get; set; } = false;
     }
 }

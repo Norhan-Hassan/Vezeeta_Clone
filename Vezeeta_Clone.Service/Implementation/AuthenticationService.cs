@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EntityFrameworkCore.EncryptColumn.Interfaces;
+using EntityFrameworkCore.EncryptColumn.Util;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,14 +22,22 @@ namespace Vezeeta_Clone.Service.Implementation
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly JwtSettings _jwtSettings;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IEncryptionProvider _encryptionProvider;
         public AuthenticationService(UserManager<ApplicationUser> userManager,
                                        JwtSettings jwtSettings,
+                                       IHttpContextAccessor httpContextAccessor,
+                                        LinkGenerator linkGenerator,
+
                                        IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
+            _linkGenerator = linkGenerator;
+            _encryptionProvider = new GenerateEncryptionProvider("1ec364573a27a4d8");
         }
 
 
@@ -48,13 +60,18 @@ namespace Vezeeta_Clone.Service.Implementation
 
                 var roleResult = await _userManager.AddToRoleAsync(user, Roles.Doctor);
 
+
                 if (!roleResult.Succeeded)
                     throw new InvalidOperationException("Failed to assign role (Doctor): " +
                         string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
+
+
+
                 doctor.IsProfileComplete = false; // to next step of choosing speialization and sub specialization
                 await _unitOfWork._doctorRepo.AddAsync(doctor);
                 await _unitOfWork.SaveChangesAsync();
+
                 transaction.Commit();
 
             }
@@ -299,7 +316,87 @@ namespace Vezeeta_Clone.Service.Implementation
             var jwtToken = tokenHandler.ReadJwtToken(accessToken);
             return jwtToken;
         }
+        public async Task<string> GetEmailConfirmationUrlAsync(ApplicationUser user)
+        {
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
+            var url = _linkGenerator.GetUriByAction(
+                    httpContext: _httpContextAccessor.HttpContext,
+                    action: "ConfirmEmail",
+                    controller: "Authentication",
+                    values: new
+                    {
+                        userEmail = user.Email,
+                        code = code,
+                        version = "1"
+                    }
+                );
+            return url;
+        }
+        public async Task<bool> ConfirmEmailAsync(string? email, string? code)
+        {
+            if (email == null || code == null)
+                return false;
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return false;
+            var confirmEmailResult = await _userManager.ConfirmEmailAsync(user, code);
+            return confirmEmailResult.Succeeded;
+        }
 
+        public async Task<string> GetResetPasswordCodeAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user != null)
+            {
+                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                Random random = new Random();
+                string code = random.Next(100000, 999999).ToString();
+                user.Code = code;
+                user.CodeCreatedAt = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+                return code;
+            }
+
+            return null;
+        }
+
+        public async Task<string> CheckResetPasswordCodeAsync(string email, string code)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user != null)
+            {
+                if (user.Code == code && user.CodeCreatedAt != null && user.CodeCreatedAt.Value.AddMinutes(15) > DateTime.UtcNow)
+                {
+                    return "validcode";
+                }
+                return "codeExpired";
+            }
+            return "emailnotexist";
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user != null)
+            {
+                await _userManager.RemovePasswordAsync(user);
+                var addPasswordResult = await _userManager.AddPasswordAsync(user, password);
+                if (addPasswordResult.Succeeded)
+                {
+                    user.Code = null;
+                    user.CodeCreatedAt = null;
+                    await _userManager.UpdateAsync(user);
+                    return true;
+                }
+                return false;
+            }
+            else
+                return false;
+        }
     }
 }

@@ -123,11 +123,23 @@
   <data name="AlreadyDeleted" xml:space="preserve">
     <value>تم حذفها بالفعل من قبل</value>
   </data>
+  <data name="AppName" xml:space="preserve">
+    <value>صحتك.كوم</value>
+  </data>
   <data name="AppointmentBooked" xml:space="preserve">
     <value>تم تسجيل الحجز في هذا الموعد بنجاح</value>
   </data>
   <data name="AppointmentBookFailed" xml:space="preserve">
     <value>فشلت عملية الحجز الرجاء المحاوله لاحقا</value>
+  </data>
+  <data name="AppointmentCancellation" xml:space="preserve">
+    <value>الغاء حجز الموعد</value>
+  </data>
+  <data name="AppointmentCancelled" xml:space="preserve">
+    <value>تم الغاء الحجز بنجاح</value>
+  </data>
+  <data name="AppointmentConfirmation" xml:space="preserve">
+    <value>تأكيد عملية حجز الموعد</value>
   </data>
   <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
     <value>الميعاد لم يؤكد او لم يتم اكمال عملية الدفع</value>
@@ -143,6 +155,12 @@
   </data>
   <data name="CompleteProfileToAddClinic" xml:space="preserve">
     <value>يجب عليك اتمام ملفك الشخصي لكي تتمكن من تسجيل عيادتك</value>
+  </data>
+  <data name="ConfirmEmailBody" xml:space="preserve">
+    <value>لتأكيد بريدك الالكتروني انقر هذا الرابط</value>
+  </data>
+  <data name="ConfirmEmailButton" xml:space="preserve">
+    <value>رابط</value>
   </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>كلمة المرور الحاليه غير صحيحه</value>
@@ -162,17 +180,32 @@
   <data name="EmailAlreadyExists" xml:space="preserve">
     <value>هذا الايميل موجود بالفعل </value>
   </data>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>تأكيد البريد الالكتروني</value>
+  </data>
+  <data name="EmailConfirmationFailed" xml:space="preserve">
+    <value>فشلت عملية تأكيد البريد الالكتروني</value>
+  </data>
+  <data name="EmailConfirmed" xml:space="preserve">
+    <value>تمت عملية تأكيد البريد الالكتروني بنجاح</value>
+  </data>
   <data name="EmailFormat" xml:space="preserve">
     <value>يرجى إدخال إيميل صالح</value>
   </data>
   <data name="EmailIsNotExist" xml:space="preserve">
     <value>لا يوجد مستخدم بهذا الايميل</value>
   </data>
+  <data name="EmailNotConfirmed" xml:space="preserve">
+    <value>من فضلك قم بتأكيد البريد الالكتروني اولا</value>
+  </data>
   <data name="EmailOrPassNotExist" xml:space="preserve">
     <value>هناك خطأ في الايميل او الباسوورد </value>
   </data>
   <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
     <value>وقت الانتهاء يجب ان يكون اكبر من وقت البدايه</value>
+  </data>
+  <data name="FailedToCancellAppointment" xml:space="preserve">
+    <value>فشل عملية الغاء الحجز</value>
   </data>
   <data name="FailedToChangePassword" xml:space="preserve">
     <value>فشلت عملية تغيير كلمة المرور</value>
@@ -198,6 +231,9 @@
   <data name="InvalidPhoneNumber" xml:space="preserve">
     <value>يرجى إدخال رقم صالح</value>
   </data>
+  <data name="InvalidResetCode" xml:space="preserve">
+    <value>رمز التحقق غير صحيح</value>
+  </data>
   <data name="InValidToken" xml:space="preserve">
     <value>التوكن غير صالح</value>
   </data>
@@ -210,6 +246,9 @@
   <data name="NoAppointmentBetween" xml:space="preserve">
     <value>لا يوجد موعد بين هذا المريض وانت كدكتور</value>
   </data>
+  <data name="NoCashMethod" xml:space="preserve">
+    <value>عذرًا، هذا الطبيب لا يقبل الدفع النقدي</value>
+  </data>
   <data name="NoData" xml:space="preserve">
     <value>لا يوجد بيانات لعرضها</value>
   </data>
@@ -221,6 +260,9 @@
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>غير موجود</value>
+  </data>
+  <data name="NoWhiteSpace" xml:space="preserve">
+    <value>اسم المستخدم لا يجب أن يحتوي على أي مسافات</value>
   </data>
   <data name="OneClinicOnly" xml:space="preserve">
     <value>لقد قمت بتسجيل عيادة مسبقًا. لا يمكن إضافة عيادة جديدة</value>
@@ -243,6 +285,12 @@
   <data name="PastSlot" xml:space="preserve">
     <value>وقت هذا الموعد قد فات</value>
   </data>
+  <data name="PaymentFailed" xml:space="preserve">
+    <value>فشلت عملية الدفع</value>
+  </data>
+  <data name="PaymentSuccess" xml:space="preserve">
+    <value>تم الدفع بنجاح</value>
+  </data>
   <data name="RatingRange" xml:space="preserve">
     <value>يجب ان تكون القيمه بين ١ الي ٥</value>
   </data>
@@ -257,6 +305,16 @@
   </data>
   <data name="RequireToHaveClinic" xml:space="preserve">
     <value>يجب ان تسجل عيادتك قبل هذه الخطوه او تختار خيار الاونلاين</value>
+  </data>
+  <data name="ResetPasswordCodeMessage" xml:space="preserve">
+    <value>مرحباً،
+تلقينا طلباً لإعادة تعيين كلمة مرور حسابك. يُرجى استخدام رمز التحقق لمرة واحدة (OTP) الموضح أدناه لإعادة تعيين كلمة مرورك. مدة صلاحية رمز التحقق 15 دقيقه فقط</value>
+  </data>
+  <data name="ResetPasswordCodeSentSuccessfully" xml:space="preserve">
+    <value>تم ارسال كود اعادة التعيين بنجاح الى بريدك الالكتروني</value>
+  </data>
+  <data name="ResetPaswword" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
   </data>
   <data name="ReviewAlreadyExists" xml:space="preserve">
     <value>لقد قمت بتقييم هذا الدكتور من قبل</value>
@@ -292,7 +350,7 @@
     <value>الاحد</value>
   </data>
   <data name="Thursday" xml:space="preserve">
-    <value />
+    <value>الخميس</value>
   </data>
   <data name="Tuesday" xml:space="preserve">
     <value>الثلاثاء</value>

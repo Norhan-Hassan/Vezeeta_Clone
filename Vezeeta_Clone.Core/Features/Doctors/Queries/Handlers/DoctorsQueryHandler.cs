@@ -44,7 +44,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
                     ex.Clinic!.Region.LocalizedName,
                     ex.Picture);
 
-            var filteredQuery = _doctorService.FilteredDoctorsAsQuerable(request.specializationId, request.Search, request.cityId, request.regionId, request.OrderBy);
+            var filteredQuery = _doctorService.FilteredDoctorsAsQuerable(request.specializationId, request.Search, request.cityId, request.regionId, request.OrderBy, request.Title, request.gender);
 
             var paginatedResult = await filteredQuery.Select(expression).ToPaginatedListAsync(request.PageNumber, request.PageSize);
             if (paginatedResult.TotalCount == 0)

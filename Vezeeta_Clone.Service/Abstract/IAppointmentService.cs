@@ -8,6 +8,7 @@ namespace Vezeeta_Clone.Service.Abstract
         Task<int> BookAppointmentAsync(Appointment appointment, string patientId);
         Task<bool> CompleteAppointmentAsync(Appointment appointment);
         Task<Appointment> GetAppointmentByIdAsync(int appointmentId);
+        Task<Appointment> GetAppointmentByIdWithIncludesAsync(int appointmentId);
         IQueryable<Appointment> GetPatientAppointmentsAsync(string patientId, AppointmentStatus? appointmentStatus);
         IQueryable<Appointment> GetDoctorAppointmentsAsync(string doctorId, AppointmentStatus? appointmentStatus, AvailabilityMethod availabilityMethod, DateOnly? fromDate, DateOnly? toDate);
     }

@@ -18,6 +18,8 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         public IDiagnosisRepo _diagnosisRepo { get; }
         public IPrescriptionRepo _prescriptionRepo { get; }
         public IMedicalRecordRepo _medicalRecordRepo { get; }
+        public IPaymentRepo _paymentRepo { get; }
+        public IPaymentEventRepo _paymentEventRepo { get; }
         Task<int> SaveChangesAsync();
     }
 }

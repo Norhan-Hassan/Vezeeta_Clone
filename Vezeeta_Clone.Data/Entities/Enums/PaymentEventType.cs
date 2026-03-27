@@ -2,16 +2,8 @@
 {
     public enum PaymentEventType
     {
-        PaymentInitiated,
-        PaymentAuthenticated,
-        PaymentAuthorized,
-        PaymentCaptured,
-        PaymentFailed,
-        PaymentCancelled,
-        RefundInitiated,
-        RefundCompleted,
-        RefundFailed,
-        DisputeOpened,
-        DisputeClosed
+        PaymentIntentCreated,
+        PaymentIntentSucceeded,
+        PaymentIntentFailed
     }
 }

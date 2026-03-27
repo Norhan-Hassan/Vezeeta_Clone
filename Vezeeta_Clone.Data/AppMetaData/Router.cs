@@ -76,6 +76,10 @@
             public const string RefreshToken = Prefix + "refresh-token";
             public const string ValidateToken = Prefix + "check-token-validation";
             public const string ChangePassword = Prefix + "change-password";
+            public const string ConfirmEmail = Prefix + "confirm-email";
+            public const string ResetPassword = Prefix + "request-reset-password";
+            public const string CheckResetPassword = Prefix + "check-reset-password";
+            public const string ResetPasswordInAction = Prefix + "reset-password";
         }
         public static class SpecializationRouting
         {
@@ -84,6 +88,16 @@
             public const string Update = Prefix + SingleEntity;
             public const string List = Prefix;
             public const string SubSpecializations = Prefix + "{SpecializationID:int}/sub-specializations";
+        }
+        public static class PaymentRouting
+        {
+            public const string Prefix = Rule + "payments/";
+            public const string CreatePaymentIntent = Prefix + "create-payment-intent";
+            public const string ConfirmPayment = Prefix + "confirm-payment";
+            public const string UpdateAppointmentAfterPayment = Prefix + "update-appointment-after-payment";
+            public const string GetPaymentByAppointmentId = Prefix + SingleEntity;
+            public const string ProcessCashPayment = Prefix + "process-cash-payment";
+            public const string CancellWithRefund = Prefix + SingleEntity + "/cancel-with-refund";
         }
     }
 }

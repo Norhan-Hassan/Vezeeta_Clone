@@ -178,6 +178,12 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CodeCreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -312,8 +318,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.HasIndex("PaymentId");
 
-                    b.HasIndex("SlotId")
-                        .IsUnique();
+                    b.HasIndex("SlotId");
 
                     b.ToTable("Appointments");
                 });
@@ -1123,8 +1128,8 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Vezeeta_Clone.Data.Entities.DoctorAvailabilitySlot", "AvailableSlot")
-                        .WithOne("Appointment")
-                        .HasForeignKey("Vezeeta_Clone.Data.Entities.Appointment", "SlotId")
+                        .WithMany("Appointments")
+                        .HasForeignKey("SlotId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1396,7 +1401,7 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorAvailabilitySlot", b =>
                 {
-                    b.Navigation("Appointment");
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.DoctorPatient", b =>
