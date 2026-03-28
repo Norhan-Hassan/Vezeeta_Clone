@@ -47,6 +47,9 @@ namespace Vezeeta_Clone.Infrastructure
             //stripe payment
             var stripeSettings = new StripeSettings();
             configuration.GetSection(nameof(StripeSettings)).Bind(stripeSettings);
+            //file storage settings
+
+
 
             services.AddSingleton(jwtSettings);
             services.AddSingleton(emailSettings);

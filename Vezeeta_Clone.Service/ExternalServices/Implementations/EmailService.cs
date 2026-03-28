@@ -1,9 +1,9 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
 using Vezeeta_Clone.Data.Helper;
-using Vezeeta_Clone.Service.Abstract;
+using Vezeeta_Clone.Service.ExternalServices.Abstract;
 
-namespace Vezeeta_Clone.Service.Implementation
+namespace Vezeeta_Clone.Service.ExternalServices.Implementations
 {
     public class EmailService : IEmailService
     {

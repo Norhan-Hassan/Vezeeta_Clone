@@ -4,6 +4,8 @@ using Vezeeta_Clone.Service.AppUserAuthServices.Abstract;
 using Vezeeta_Clone.Service.AppUserAuthServices.Implementation;
 using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
 using Vezeeta_Clone.Service.BackgroundJobServices.Implementation;
+using Vezeeta_Clone.Service.ExternalServices.Abstract;
+using Vezeeta_Clone.Service.ExternalServices.Implementations;
 using Vezeeta_Clone.Service.Implementation;
 
 namespace Vezeeta_Clone.Service
@@ -19,7 +21,6 @@ namespace Vezeeta_Clone.Service
             services.AddTransient<IClinicService, ClinicService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<IDoctorAvailabilityService, DoctorAvailabilityService>();
-            services.AddTransient<INotificationJobService, NotificationJobService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IBackgroundJobService, BackgroundJobService>();
             services.AddTransient<ISlotGenerationService, SlotGenerationService>();

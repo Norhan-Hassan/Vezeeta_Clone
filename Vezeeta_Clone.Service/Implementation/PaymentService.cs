@@ -23,22 +23,31 @@ namespace Vezeeta_Clone.Service.Implementation
         {
             var status = await _unitOfWork._appointmentRepo.GetTableNoTracking()
                                   .Include(a => a.Payment)
-                                 .Where(a => a.ID == appointmentId && a.Status == AppointmentStatus.Completed &&
+                                 .Where(a => a.ID == appointmentId && a.Status == AppointmentStatus.Confirmed &&
                                                                          a.Payment != null &&
-                                                                         a.Payment.Status == PaymentStatus.Paid ||
-                                                                          a.Payment.Status == PaymentStatus.Pending)
+                                                                         a.Payment.Status == PaymentStatus.Paid)
                                  .AnyAsync();
             return status;
         }
 
         public async Task<Payment> CreatePaymentIntentAsync(int appointmentId, PaymentProvider provider)
         {
+
+
             var appointment = await _unitOfWork._appointmentRepo.GetTableNoTracking()
                                                              .Include(a => a.Patient)
                                                              .ThenInclude(p => p.ApplicationUser)
                                                              .Include(a => a.Doctor)
                                                              .ThenInclude(d => d.Clinic)
+                                                             .Include(a => a.Payment)
                                                              .FirstOrDefaultAsync(a => a.ID == appointmentId);
+            if (appointment?.Payment != null &&
+                (appointment.Payment.Status == PaymentStatus.Paid ||
+                 appointment.Payment.Status == PaymentStatus.Pending))
+            {
+                throw new InvalidOperationException("alreadyInPaymentProcess");
+            }
+
 
             if (appointment?.Doctor?.Clinic == null)
                 return null;
@@ -53,7 +62,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 Provider = provider,
                 Amount = amount,
                 Currency = "EGP",
-                Status = PaymentStatus.Pending,
+                Status = PaymentStatus.Pending, // Initial status set to Pending
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 PayerEmail = appointment.Patient?.ApplicationUser.Email,
@@ -199,8 +208,8 @@ namespace Vezeeta_Clone.Service.Implementation
 
             var appointmentRepo = _unitOfWork._appointmentRepo;
             var appointment = await appointmentRepo.GetTableNoTracking()
-                .Include(a => a.AvailableSlot)  // ENHANCEMENT: Include slot to update it
-                .FirstOrDefaultAsync(a => a.PaymentId == paymentId);
+                                                    .Include(a => a.AvailableSlot)
+                                                    .FirstOrDefaultAsync(a => a.PaymentId == paymentId);
 
             if (appointment == null)
                 return null;
@@ -239,19 +248,22 @@ namespace Vezeeta_Clone.Service.Implementation
             }
         }
 
-        /// <summary>
-        /// ENHANCEMENT: Handle successful payment scenario
-        /// </summary>
         private async Task HandleSuccessfulPaymentAsync(Appointment appointment, Payment payment)
         {
 
-            if (appointment.Status == AppointmentStatus.Completed ||
-                appointment.Status == AppointmentStatus.Pending)
+            if (appointment.Status == AppointmentStatus.Completed)
             {
                 appointment.Status = AppointmentStatus.Confirmed;
                 appointment.ConfirmedAt = DateTime.UtcNow;
             }
-
+            else if (appointment.Status == AppointmentStatus.Pending)
+            {
+                throw new InvalidOperationException("PendingAppointment");
+            }
+            else if (appointment.Status == AppointmentStatus.Confirmed && appointment.Payment.Status == PaymentStatus.Paid)
+            {
+                throw new InvalidOperationException("alreadyconfirmedandpaid");
+            }
             payment.Status = PaymentStatus.Paid;
             payment.PaidAt = DateTime.UtcNow;
             payment.UpdatedAt = DateTime.UtcNow;
@@ -267,7 +279,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         private async Task HandleFailedPaymentAsync(Appointment appointment, Payment payment)
         {
-            // Only cancel if not already confirmed or cancelled
+
             if (appointment.Status != AppointmentStatus.Confirmed &&
                 appointment.Status != AppointmentStatus.Cancelled)
             {
@@ -414,7 +426,7 @@ namespace Vezeeta_Clone.Service.Implementation
 
         private string GenerateIdempotencyKey(int appointmentId, PaymentProvider provider)
         {
-            return $"{provider}_{appointmentId}_{DateTime.UtcNow:yyyyMMddHHmm}";
+            return $"{provider}_{appointmentId}_{DateTime.UtcNow:yyyyMMddHHmmssfff}";
         }
 
         private string GenerateProviderMetadata(int appointmentId)

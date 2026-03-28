@@ -38,6 +38,14 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
                     ProviderPaymentId = payment.ProviderPaymentId
                 });
             }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("alreadyInPaymentProcess"))
+                {
+                    return BadRequest<PaymentIntentResponseResult>(_localizer[SharedResourcesKeys.AlreadyInitiated]);
+                }
+                return BadRequest<PaymentIntentResponseResult>(ex.Message);
+            }
             catch (Exception ex)
             {
                 return BadRequest<PaymentIntentResponseResult>(ex.Message);

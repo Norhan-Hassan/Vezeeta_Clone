@@ -40,8 +40,4 @@
     <ProjectReference Include="..\Vezeeta_Clone.Data\Vezeeta_Clone.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Payments\" />
-  </ItemGroup>
-
 </Project>

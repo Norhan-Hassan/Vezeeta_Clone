@@ -123,6 +123,12 @@
   <data name="AlreadyDeleted" xml:space="preserve">
     <value>تم حذفها بالفعل من قبل</value>
   </data>
+  <data name="AlreadyInitiated" xml:space="preserve">
+    <value>لقد بدأت عملية الدفع بالفعل، يرجى تأكيدها الآن</value>
+  </data>
+  <data name="AlreadyPaid" xml:space="preserve">
+    <value>تم حجز الموعد والدفع بالفعل من قبل</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>صحتك.كوم</value>
   </data>
@@ -141,6 +147,9 @@
   <data name="AppointmentConfirmation" xml:space="preserve">
     <value>تأكيد عملية حجز الموعد</value>
   </data>
+  <data name="AppointmentDetails" xml:space="preserve">
+    <value>تفاصيل الحجز</value>
+  </data>
   <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
     <value>الميعاد لم يؤكد او لم يتم اكمال عملية الدفع</value>
   </data>
@@ -153,6 +162,18 @@
   <data name="BookingCompletionFailed" xml:space="preserve">
     <value>فشلت عملية تاكيد الحجز</value>
   </data>
+  <data name="BookingConfirmation" xml:space="preserve">
+    <value>تم تأكيد موعدك بنجاح</value>
+  </data>
+  <data name="CancellationMessage" xml:space="preserve">
+    <value>تم إلغاء موعدك بنجاح. إذا كانت لديك أي أسئلة أو ترغب في إعادة جدولة الموعد، يُرجى التواصل معنا أو زيارة موقعنا الإلكتروني.</value>
+  </data>
+  <data name="Clinic" xml:space="preserve">
+    <value>عيادة</value>
+  </data>
+  <data name="CompleteAppointment" xml:space="preserve">
+    <value>حجز الميعاد لم يتم تاكيده من قبل المريض</value>
+  </data>
   <data name="CompleteProfileToAddClinic" xml:space="preserve">
     <value>يجب عليك اتمام ملفك الشخصي لكي تتمكن من تسجيل عيادتك</value>
   </data>
@@ -160,13 +181,22 @@
     <value>لتأكيد بريدك الالكتروني انقر هذا الرابط</value>
   </data>
   <data name="ConfirmEmailButton" xml:space="preserve">
-    <value>رابط</value>
+    <value>اضغط هنا</value>
   </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>كلمة المرور الحاليه غير صحيحه</value>
   </data>
+  <data name="Date" xml:space="preserve">
+    <value>اليوم</value>
+  </data>
+  <data name="Dear" xml:space="preserve">
+    <value>عزيزي/عزيزتي</value>
+  </data>
   <data name="Deleted" xml:space="preserve">
     <value>تم الحذف بنجاح</value>
+  </data>
+  <data name="Doctor" xml:space="preserve">
+    <value>دكتور</value>
   </data>
   <data name="DoctorCompleteInfo" xml:space="preserve">
     <value>تم استكمال بيناتك بنجاح</value>
@@ -188,6 +218,9 @@
   </data>
   <data name="EmailConfirmed" xml:space="preserve">
     <value>تمت عملية تأكيد البريد الالكتروني بنجاح</value>
+  </data>
+  <data name="EmailFooter" xml:space="preserve">
+    <value>إذا لم تطلب هذه الرسالة الإلكترونية، فيمكنك تجاهلها بأمان</value>
   </data>
   <data name="EmailFormat" xml:space="preserve">
     <value>يرجى إدخال إيميل صالح</value>
@@ -349,8 +382,14 @@
   <data name="Sunday" xml:space="preserve">
     <value>الاحد</value>
   </data>
+  <data name="ThanksMessage" xml:space="preserve">
+    <value>نشكرك لاختيارك خدمتنا</value>
+  </data>
   <data name="Thursday" xml:space="preserve">
     <value>الخميس</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>الوقت</value>
   </data>
   <data name="Tuesday" xml:space="preserve">
     <value>الثلاثاء</value>

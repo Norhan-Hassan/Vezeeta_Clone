@@ -4,7 +4,6 @@
     {
         Available = 1,
         Booked = 2,
-        Locked = 3,
-        Cancelled = 4
+        Locked = 3
     }
 }

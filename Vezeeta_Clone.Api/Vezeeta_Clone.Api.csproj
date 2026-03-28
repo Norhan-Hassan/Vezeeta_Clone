@@ -16,11 +16,15 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup>	  
     <ProjectReference Include="..\Vezeeta_Clone.Core\Vezeeta_Clone.Core.csproj" />
     <ProjectReference Include="..\Vezeeta_Clone.Infrastructure\Vezeeta_Clone.Infrastructure.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<None Update="Templates\*.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\V2\" />
   </ItemGroup>

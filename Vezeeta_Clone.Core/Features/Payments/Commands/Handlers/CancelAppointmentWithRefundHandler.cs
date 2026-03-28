@@ -5,6 +5,7 @@ using Vezeeta_Clone.Core.Features.Payments.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
 using Vezeeta_Clone.Service.Abstract;
 using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
+using Vezeeta_Clone.Service.ExternalServices.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 {
@@ -55,64 +56,35 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
             if (string.IsNullOrEmpty(email))
                 return BadRequest<string>(_localizer[SharedResourcesKeys.EmailIsNotExist]);
 
-            var body = $@"
-                        <h2>Appointment Cancelled </h2>
 
-                        <p>Dear {patientName},</p>
 
-                        <p>Your appointment has been successfully cancelled.</p>
+            var variables = new Dictionary<string, string>
+                        {
+                            { "BodyText", _localizer[SharedResourcesKeys.ConfirmEmailBody] },
+                            { "EmailFooter", _localizer[SharedResourcesKeys.EmailFooter] },
+                            { "AppointmentCancelled", _localizer[SharedResourcesKeys.AppointmentCancelled] },
+                            { "CancellationMessage", _localizer[SharedResourcesKeys.CancellationMessage] },
+                            { "AppointmentDetails", _localizer[SharedResourcesKeys.AppointmentDetails] },
+                            { "Dear", _localizer[SharedResourcesKeys.Dear] },
+                            { "Doctor", _localizer[SharedResourcesKeys.Doctor] },
+                            { "Date", _localizer[SharedResourcesKeys.Date] },
+                            { "Time", _localizer[SharedResourcesKeys.Time] },
+                            { "Clinic", _localizer[SharedResourcesKeys.Clinic] },
+                            { "ThanksMessage", _localizer[SharedResourcesKeys.ThanksMessage] },
+                        };
+            var template = await _emailService.LoadEmailTemplateAsync("AppointmentBookingCancellation.html", variables);
 
-                        <hr/>
+            if (string.IsNullOrEmpty(template))
+            {
+                return BadRequest<string>("Email template is empty");
+            }
 
-                        <h3>Appointment Details:</h3>
-                        <ul>
-                            <li><strong>Doctor:</strong> Dr. {doctorName}</li>
-                            <li><strong>Date:</strong> {appointmentDetails.AvailableSlot?.Date:dddd, MMMM dd, yyyy}</li>
-                            <li><strong>Time:</strong> {appointmentDetails.AvailableSlot?.StartTime}</li>
-                            <li><strong>Clinic:</strong> {appointmentDetails.Doctor?.Clinic?.Name}</li>
-                        </ul>
-
-                        <p><strong>Reason:</strong> {request.CancellationReason}</p>
-
-                        <hr/>
-
-                        <p>If a payment was made, your refund will be processed shortly.</p>
-                    ";
-
-            var message = $@"
-                    <table style='width:100%; font-family:Arial; background-color:#f4f4f4; padding:40px 0;'>
-                      <tr>
-                        <td align='center'>
-                          <table style='width:600px; background-color:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center;'>
-
-                            <tr>
-                              <td style='padding:30px 0;'>
-                                <img src='https://res.cloudinary.com/ddtcswz77/image/upload/v1774491046/Logo_lotycd.png' width='100'/>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td>
-                                <h2>{_localizer[SharedResourcesKeys.AppName]}</h2>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td style='padding:20px;'>
-                                {body}
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td style='font-size:12px; color:#888; padding:20px;'>
-                                If you did not request this, ignore this email.
-                              </td>
-                            </tr>
-
-                          </table>
-                        </td>
-                      </tr>
-                    </table>";
+            var message = template
+                .Replace("{PatientFirstName}", appointmentDetails.Patient?.ApplicationUser?.FirstName ?? "")
+                .Replace("{DoctorFullName}", $"{appointmentDetails.Doctor?.ApplicationUser?.FirstName ?? ""} {appointmentDetails.Doctor?.ApplicationUser?.LastName ?? ""}".Trim())
+                .Replace("{AppointmentDate}", appointmentDetails.AvailableSlot?.Date.ToString("dddd, MMMM dd, yyyy") ?? "")
+                .Replace("{AppointmentTime}", appointmentDetails.AvailableSlot?.StartTime.ToShortTimeString() ?? "")
+                .Replace("{ClinicName}", appointmentDetails.Doctor?.Clinic?.Name ?? "");
 
 
             await _backgroundJobService.EnqueueAsync<IEmailService>(x =>

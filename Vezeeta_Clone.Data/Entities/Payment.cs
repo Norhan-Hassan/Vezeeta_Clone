@@ -22,8 +22,6 @@ namespace Vezeeta_Clone.Data.Entities
 
         public string? PayerEmail { get; set; }
         public string? PayerName { get; set; }
-
-
         public DateTime? PaidAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
@@ -32,9 +30,8 @@ namespace Vezeeta_Clone.Data.Entities
         public string? FailureReason { get; set; }
         public string? FailureCode { get; set; }
 
-        // Idempotency
         public string? IdempotencyKey { get; set; }
-        public string? ProviderMetadata { get; set; }
+        public string? ProviderMetadata { get; set; }// JSON 
 
 
         public ICollection<PaymentEvent> PaymentEvents { get; set; } = new List<PaymentEvent>();

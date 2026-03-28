@@ -14,9 +14,8 @@ namespace Vezeeta_Clone.Api.Controllers.V1
     public class PatientsController : AppControllerBase
     {
         [HttpGet(Router.PatientRouting.AppointmentsList)]
-        [SwaggerOperation(Summary = "Appoinments of Patient ", Description = "Get paginated list of appointments of the current patient")]
-
-        public async Task<IActionResult> GetDoctorsPaginated([FromQuery] GetPatientAppointmentsQuery query)
+        [SwaggerOperation(Summary = "Get patient appointments", Description = "Get paginated list of appointments for the current patient with filtering options")]
+        public async Task<IActionResult> GetPatientAppointments([FromQuery] GetPatientAppointmentsQuery query)
         {
             var response = await _mediator.Send(query);
             return NewResult(response);

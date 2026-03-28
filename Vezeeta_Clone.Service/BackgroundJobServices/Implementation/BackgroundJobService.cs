@@ -19,7 +19,7 @@ namespace Vezeeta_Clone.Service.BackgroundJobServices.Implementation
 
         public async Task<string> EnqueueAsync<T>(Expression<Func<T, Task>> methodCall)
         {
-            var jobId = BackgroundJob.Enqueue(methodCall);
+            var jobId = _backgroundJobClient.Enqueue(methodCall);
             return await Task.FromResult(jobId);
         }
 

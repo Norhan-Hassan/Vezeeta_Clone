@@ -26,6 +26,7 @@ namespace Vezeeta_Clone.Data.Entities
         public int? SpecializationId { get; set; }
         public Specialization? Specialization { get; set; }
         public Clinic? Clinic { get; set; }
+
         public ICollection<SubSpecialization>? SubSpecializations { get; set; } = new HashSet<SubSpecialization>();
         public ICollection<Review>? Reviews { get; set; } = new HashSet<Review>();
 

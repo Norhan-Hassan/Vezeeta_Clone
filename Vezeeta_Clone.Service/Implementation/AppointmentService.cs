@@ -117,6 +117,7 @@ namespace Vezeeta_Clone.Service.Implementation
                                                                 .Include(a => a.Doctor)
                                                                     .ThenInclude(d => d.Clinic)
                                                                 .Include(a => a.AvailableSlot)
+                                                                .Include(a => a.Payment)
 
                                                                 .FirstOrDefaultAsync(a => a.ID == appointmentId);
             if (appointment == null)

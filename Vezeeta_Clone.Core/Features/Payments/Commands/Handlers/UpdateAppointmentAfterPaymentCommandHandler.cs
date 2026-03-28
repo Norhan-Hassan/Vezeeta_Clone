@@ -6,6 +6,7 @@ using Vezeeta_Clone.Core.Resources;
 using Vezeeta_Clone.Data.Entities.Enums;
 using Vezeeta_Clone.Service.Abstract;
 using Vezeeta_Clone.Service.BackgroundJobServices.Abstract;
+using Vezeeta_Clone.Service.ExternalServices.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 {
@@ -17,6 +18,7 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IEmailService _emailService;
         private readonly IBackgroundJobService _backgroundJobService;
+
 
         public UpdateAppointmentAfterPaymentCommandHandler(IPaymentService paymentService,
             IAppointmentService appointmentService,
@@ -31,89 +33,86 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
             _localizer = localizer;
         }
 
-        public async Task<Response<string>> Handle(UpdateAppointmentAfterPaymentCommand request,
-            CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(UpdateAppointmentAfterPaymentCommand request, CancellationToken cancellationToken)
         {
-            var appointment = await _paymentService.UpdateAppointmentStatusAfterPaymentAsync(request.PaymentId, request.IsPaid);
-            if (appointment == null)
-                return NotFound<string>();
-
-            var appointmentDetails = await _appointmentService.GetAppointmentByIdWithIncludesAsync(appointment.ID);
-            var body = string.Empty;
-            if (appointment.Status == AppointmentStatus.Confirmed && appointment.Payment.Status == PaymentStatus.Completed)
+            try
             {
-                body = $@"
-                        <h2>Appointment Confirmed </h2>
+                var appointment = await _paymentService.UpdateAppointmentStatusAfterPaymentAsync(request.PaymentId, request.IsPaid);
+                if (appointment == null)
+                    return NotFound<string>();
 
-                        <p>Dear {appointmentDetails.Patient.ApplicationUser.FirstName},</p>
+                var appointmentDetails = await _appointmentService.GetAppointmentByIdWithIncludesAsync(appointment.ID);
 
-                        <p>Your appointment has been successfully confirmed.</p>
+                if (appointmentDetails.Status == AppointmentStatus.Confirmed && appointmentDetails.Payment.Status == PaymentStatus.Paid)
+                {
+                    try
+                    {
+                        var variables = new Dictionary<string, string>
+                        {
+                            { "BodyText", _localizer[SharedResourcesKeys.ConfirmEmailBody] },
+                            { "EmailFooter", _localizer[SharedResourcesKeys.EmailFooter] },
+                            { "AppointmentConfirmation", _localizer[SharedResourcesKeys.AppointmentConfirmation] },
+                            { "BookingConfirmation", _localizer[SharedResourcesKeys.BookingConfirmation] },
+                            { "AppointmentDetails", _localizer[SharedResourcesKeys.AppointmentDetails] },
+                            { "Dear", _localizer[SharedResourcesKeys.Dear] },
+                            { "Doctor", _localizer[SharedResourcesKeys.Doctor] },
+                            { "Date", _localizer[SharedResourcesKeys.Date] },
+                            { "Time", _localizer[SharedResourcesKeys.Time] },
+                            { "Clinic", _localizer[SharedResourcesKeys.Clinic] },
+                            { "ThanksMessage", _localizer[SharedResourcesKeys.ThanksMessage] },
+                        };
 
-                        <hr/>
+                        var template = await _emailService.LoadEmailTemplateAsync("AppointmentBookingConfirmation.html", variables);
 
-                        <h3>Appointment Details:</h3>
-                        <ul>
-                            <li><strong>Doctor:</strong> Dr. {string.Concat(appointmentDetails.Doctor?.ApplicationUser?.FirstName, ' ', appointmentDetails?.Doctor?.ApplicationUser?.LastName)}</li>
-                            <li><strong>Date:</strong> {appointmentDetails.AvailableSlot?.Date.ToString("dddd, MMMM dd, yyyy")}</li>
-                            <li><strong>Time:</strong> {appointmentDetails.AvailableSlot?.StartTime}</li>
-                            <li><strong>Clinic:</strong> {appointmentDetails.Doctor?.Clinic?.Name}</li>
-                        </ul>
-                        <hr/>
+                        if (string.IsNullOrEmpty(template))
+                        {
+                            return BadRequest<string>("Email template is empty");
+                        }
 
-                        <p>Thank you for choosing our service </p>
-                        ";
-                var message = $@"
-                    <table style='width:100%; font-family:Arial, sans-serif; background-color:#f4f4f4; padding:40px 0;'>
-                      <tr>
-                        <td align='center'>
-                          <!-- Main Container -->
-                          <table style='width:600px; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); overflow:hidden; text-align:center;'>
-        
-                            <!-- Logo Section -->
-                            <tr>
-                              <td style='padding:30px 0;'>
-                                <!-- Logo -->
-                                <img src='https://res.cloudinary.com/ddtcswz77/image/upload/v1774491046/Logo_lotycd.png' alt='Logo' width='100' style='display:block; margin:0 auto;'/>
-                              </td>
-                            </tr>
+                        var message = template
+                            .Replace("{PatientFirstName}", appointmentDetails.Patient?.ApplicationUser?.FirstName ?? "")
+                            .Replace("{DoctorFullName}", $"{appointmentDetails.Doctor?.ApplicationUser?.FirstName ?? ""} {appointmentDetails.Doctor?.ApplicationUser?.LastName ?? ""}".Trim())
+                            .Replace("{AppointmentDate}", appointmentDetails.AvailableSlot?.Date.ToString("dddd, MMMM dd, yyyy") ?? "")
+                            .Replace("{AppointmentTime}", appointmentDetails.AvailableSlot?.StartTime.ToShortTimeString() ?? "")
+                            .Replace("{ClinicName}", appointmentDetails.Doctor?.Clinic?.Name ?? "");
 
-                            <!-- App Name -->
-                            <tr>
-                              <td style='padding-bottom:20px;'>
-                                <h2 style='margin:0; font-size:24px; color:#333333;'>{_localizer[SharedResourcesKeys.AppName]}</h2>
-                              </td>
-                            </tr>
 
-                            <!-- Body Section -->
-                            <tr>
-                              <td style='padding:0 30px 30px 30px; color:#333333; font-size:16px; line-height:1.6;'>
-                                <p style='font-size:18px; font-weight:500; margin-bottom:20px;'>{body}</p>                                          
-                              </td>
-                            </tr>
-
-                            <!-- Footer Section -->
-                            <tr>
-                              <td style='padding:20px; text-align:center; font-size:12px; color:#888888; background-color:#f9f9f9;'>
-                                If you did not request this email, you can safely ignore it.
-                              </td>
-                            </tr>
-
-                          </table>
-                        </td>
-                      </tr>
-                    </table>";
-                await _backgroundJobService.EnqueueAsync<IEmailService>(
-                           x => x.SendEmail(
-                               appointmentDetails.Patient.ApplicationUser.Email,
-                               message,
-                               _localizer[SharedResourcesKeys.AppointmentConfirmation]
-                           )
-                       );
-                return Success<string>("");
-
+                        await _backgroundJobService.EnqueueAsync<IEmailService>(
+                            x => x.SendEmail(
+                                appointmentDetails.Patient.ApplicationUser.Email,
+                                message,
+                                _localizer[SharedResourcesKeys.AppointmentConfirmation]
+                            )
+                        );
+                        return Success<string>("");
+                    }
+                    catch (FileNotFoundException fileEx)
+                    {
+                        return BadRequest<string>($"Email template not found: {fileEx.Message}");
+                    }
+                }
+                return BadRequest<string>(_localizer[SharedResourcesKeys.PaymentFailed]);
             }
-
-            return BadRequest<string>(_localizer[SharedResourcesKeys.PaymentFailed]);
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("PendingAppointment"))
+                {
+                    return NotFound<string>(_localizer[SharedResourcesKeys.CompleteAppointment]);
+                }
+                if (ex.Message.Contains("alreadyconfirmedandpaid"))
+                {
+                    return BadRequest<string>(_localizer[SharedResourcesKeys.AlreadyPaid]);
+                }
+                else
+                {
+                    return BadRequest<string>(ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<string>(ex.Message);
+            }
         }
     }
 }
+

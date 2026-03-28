@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+</head>
+<body style="margin:0; padding:40px 0; font-family: Arial, sans-serif; background-color: #C7F9CC;">
+    <div style="width:600px; margin:0 auto; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; overflow:hidden;">
+
+        <!-- Logo -->
+        <div style="padding:30px 0;">
+            <img src="https://res.cloudinary.com/ddtcswz77/image/upload/v1774491046/Logo_lotycd.png" alt="Logo" width="100" style="display:block; margin:0 auto;" />
+        </div>
+
+        <!-- App Name -->
+        <div style="padding-bottom:20px; font-size:24px; font-weight:bold;">
+            <span style="color:#22577A;">Sehatek.</span><span style="color:#57CC99;">com</span>
+        </div>
+ 
+        <div style="padding-bottom:20px;">
+            <span style="display:inline-block; font-size:50px; color:#28A745;">&#10004;</span> 
+        </div>
+
+        <!-- Email Content -->
+        <div style="padding: 0 30px 30px 30px; color: #333333; font-size: 16px; line-height: 1.6; text-align: center">
+
+            <h2 style="margin-top:0; font-size:22px; font-weight:bold;">{AppointmentConfirmation}</h2>
+
+            <p>{Dear} <strong>{PatientFirstName}</strong>,</p>
+
+            <p>{BookingConfirmation}</p>
+
+            <hr style="border:none; border-top:1px solid #ddd; margin:20px 0;" />
+
+            <h3 style="margin-bottom:10px;">{AppointmentDetails}:</h3>
+            <ul style="padding-left: 20px; margin-top: 0; text-align: center">
+                <li><strong>{Doctor}:</strong> Dr. {DoctorFullName}</li>
+                <li><strong>{Date}:</strong> {AppointmentDate}</li>
+                <li><strong>{Time}:</strong> {AppointmentTime}</li>
+                <li><strong>{Clinic}:</strong> {ClinicName}</li>
+            </ul>
+
+            <hr style="border:none; border-top:1px solid #ddd; margin:20px 0;" />
+
+            <p>{ThanksMessage}.</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding:20px; text-align:center; font-size:12px; color:#22577A; background-color:#F9F9F9;">
+            {EmailFooter}
+        </div>
+
+    </div>
+</body>
+</html>

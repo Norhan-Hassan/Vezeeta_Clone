@@ -123,6 +123,12 @@
   <data name="AlreadyDeleted" xml:space="preserve">
     <value>This is already deleted resource</value>
   </data>
+  <data name="AlreadyInitiated" xml:space="preserve">
+    <value>Your Payment is already Initiated , confirm it instead</value>
+  </data>
+  <data name="AlreadyPaid" xml:space="preserve">
+    <value>Your Appointment is already confirmed and paid</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>Sehatek.com</value>
   </data>
@@ -141,6 +147,9 @@
   <data name="AppointmentConfirmation" xml:space="preserve">
     <value>Appointment Booking Confirmation</value>
   </data>
+  <data name="AppointmentDetails" xml:space="preserve">
+    <value>Appointment Details</value>
+  </data>
   <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
     <value>The appointment is not confirmed or the payment has not been completed</value>
   </data>
@@ -153,6 +162,18 @@
   <data name="BookingCompletionFailed" xml:space="preserve">
     <value>Your Booking completion failed , try again later</value>
   </data>
+  <data name="BookingConfirmation" xml:space="preserve">
+    <value>Your appointment has been successfully confirmed</value>
+  </data>
+  <data name="CancellationMessage" xml:space="preserve">
+    <value>Your appointment has been successfully cancelled. If you have any questions or wish to reschedule, please contact us or visit our website.</value>
+  </data>
+  <data name="Clinic" xml:space="preserve">
+    <value>Clinic</value>
+  </data>
+  <data name="CompleteAppointment" xml:space="preserve">
+    <value>The appointment booking has not been confirmed by the patient.</value>
+  </data>
   <data name="CompleteProfileToAddClinic" xml:space="preserve">
     <value>You Should complete Your profile first to be able to register a clinic</value>
   </data>
@@ -160,13 +181,22 @@
     <value>To confirm your email , click to this link</value>
   </data>
   <data name="ConfirmEmailButton" xml:space="preserve">
-    <value>Link</value>
+    <value>Click here</value>
   </data>
   <data name="CurrentPasswordIsIncorrect" xml:space="preserve">
     <value>Current Password Is Incorrect</value>
   </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Dear" xml:space="preserve">
+    <value>Dear</value>
+  </data>
   <data name="Deleted" xml:space="preserve">
     <value>Deleted Successfully</value>
+  </data>
+  <data name="Doctor" xml:space="preserve">
+    <value>Doctor</value>
   </data>
   <data name="DoctorCompleteInfo" xml:space="preserve">
     <value>Your Profile Is Complete Now</value>
@@ -188,6 +218,9 @@
   </data>
   <data name="EmailConfirmed" xml:space="preserve">
     <value>Email is confirmed Successfully</value>
+  </data>
+  <data name="EmailFooter" xml:space="preserve">
+    <value>If you did not request this email, you can safely ignore it</value>
   </data>
   <data name="EmailFormat" xml:space="preserve">
     <value>Email must be in the format example@domain.com</value>
@@ -350,8 +383,14 @@ We've received a request to reset your account password. Please use the one-time
   <data name="Sunday" xml:space="preserve">
     <value>Sunday</value>
   </data>
+  <data name="ThanksMessage" xml:space="preserve">
+    <value>Thank you for choosing our service</value>
+  </data>
   <data name="Thursday" xml:space="preserve">
     <value>Thursday</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
   </data>
   <data name="Tuesday" xml:space="preserve">
     <value>Tuesday</value>

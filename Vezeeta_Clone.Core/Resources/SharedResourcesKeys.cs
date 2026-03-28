@@ -37,6 +37,10 @@
         public const string EmailConfirmationFailed = "EmailConfirmationFailed";
         public const string ConfirmEmailBody = "ConfirmEmailBody";
         public const string ConfirmEmailButton = "ConfirmEmailButton";
+        public const string EmailFooter = "EmailFooter";
+        public const string AlreadyInitiated = "AlreadyInitiated";
+        public const string CompleteAppointment = "CompleteAppointment";
+
         //
         public const string ResetPasswordCodeMessage = "ResetPasswordCodeMessage";
         public const string ResetPaswword = "ResetPaswword";
@@ -47,8 +51,7 @@
         //
         public const string AppointmentCancelled = "AppointmentCancelled";
         public const string AppointmentCancellation = "AppointmentCancellation";
-
-
+        public const string CancellationMessage = "CancellationMessage";
 
         public const string SignInSuccess = "SignInSuccess";
         public const string ValidToken = "ValidToken";
@@ -98,9 +101,18 @@
         public const string RecordAlreadyExists = "RecordAlreadyExists";
         public const string AppointmentStatusPaymentStatus = "AppointmentStatusPaymentStatus";
         public const string NoAppointmentBetween = "NoAppointmentBetween";
+        public const string BookingConfirmation = "BookingConfirmation";
+        public const string AppointmentDetails = "AppointmentDetails";
+        public const string Doctor = "Doctor";
+        public const string Date = "Date";
+        public const string Time = "Time";
+        public const string Dear = "Dear";
+        public const string Clinic = "Clinic";
+        public const string ThanksMessage = "ThanksMessage";
 
         public const string PaymentFailed = "PaymentFailed";
         public const string PaymentSuccess = "PaymentSuccess";
+        public const string AlreadyPaid = "AlreadyPaid";
 
 
         // public const string MaxLength = "MaxLength";
