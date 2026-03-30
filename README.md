@@ -274,92 +274,105 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 
 ### Authentication (`api/v1/auth/`)
 
-| Method   | Route                    | Description                            | Auth |
-| -------- | ------------------------ | -------------------------------------- | ---- |
-| `POST`   | `doctor-register`        | Register a new doctor                  | ❌   |
-| `POST`   | `patient-register`       | Register a new patient                 | ❌   |
-| `POST`   | `signIn`                 | Sign in and get JWT tokens             | ❌   |
-| `POST`   | `refresh-token`          | Get new access token via refresh token | ❌   |
-| `GET`    | `check-token-validation` | Validate a JWT token                   | ❌   |
-| `POST`   | `change-password`        | Change current user password           | ✅   |
-
+| Method   | Route            | Description        | Auth |
+| -------- | ------------------------ | -------------------------------------------------------------- | ---- |
+| `POST`   | `doctor-register`        | Register a new doctor account with email and password          | ❌   |
+| `POST`   | `patient-register` | Register a new patient account with personal information       | ❌   |
+| `POST`   | `signIn`       | Authenticate user and retrieve JWT access and refresh tokens   | ❌   |
+| `POST`   | `change-password`        | Update current user password for authenticated users           | ✅   |
+| `POST`   | `reset-password`       | Request password reset code sent to email     | ❌   |
+| `GET`    | `check-reset-password`   | Verify and validate password reset code | ❌   |
+| `POST`   | `reset-password-in-action` | Complete password reset using verification code     | ❌   |
+| `GET`    | `confirm-email`     | Confirm email address and activate user account     | ❌   |
+| `POST`   | `refresh-token`       | Generate new access token using refresh token          | ❌   |
+| `GET`    | `validate-token`         | Validate JWT token expiration and validity| ❌   |
 
 ### Authorization (`api/v1/authorization/`)
 
-| Method   | Route    | Description          | Auth |
-| -------- | -------- | ------------------------ | ---- |
-| `POST`   | `add`    | Create a new role | ✅   |
-| `PUT`    | `update` | Update an existing role  | ✅   |
-| `DELETE` | `delete` | Delete a role         | ✅   |
+| Method   | Route    | Description         | Auth |
+| -------- | -------- | ---------------------------------------- | ---- |
+| `POST`   | `add`    | Create a new role for authorization      | ✅ |
+| `PUT`    | `update` | Update existing role details        | ✅   |
+| `DELETE` | `delete` | Delete a role from system            | ✅   |
 
 ### Doctors (`api/v1/doctors/`)
 
-| Method | Route                      | Description                     | Auth |
-| ------ | -------------------------- | ------------------------------- | ---- |
-| `GET`  | `list`                     | List all doctors                | ❌   |
-| `GET`  | `{Id:Guid}`                | Get doctor by ID                | ❌   |
-| `GET`  | `{Id}/reviews`             | Get doctor's reviews            | ❌   |
-| `GET`  | `{Id}/examination-details` | Get examination info            | ❌   |
-| `GET`  | `{Id}/available-slots`     | Get available appointment slots | ❌   |
-| `POST` | `complete-info`            | Complete doctor profile         | ✅   |
-| `GET`  | `appointments/`            | List doctor's appointments      | ✅   |
+| Method | Route        | Description       | Auth |
+| ------ | -------------------------- | ------------------------------------------------------ | ---- |
+| `GET`  | `list`            | Get paginated list of all doctors with filtering      | ❌   |
+| `GET`  | `{Id:Guid}`       | Get complete detailed information for a doctor        | ❌   |
+| `GET`  | `{Id}/reviews`     | Get paginated reviews and ratings for a doctor        | ❌   |
+| `GET`  | `{Id}/examination-details` | Get examination details and services offered          | ❌   |
+| `GET`  | `{Id}/available-slots`     | Get available appointment slots grouped by date | ❌   |
+| `GET`  | `appointments`             | Get paginated list of doctor's appointments           | ✅   |
+| `POST` | `complete-info`            | Complete doctor profile for clinic registration     | ✅   |
+| `POST` | `add-picture`        | Upload doctor's profile picture to storage          | ✅   |
 
 ### Specializations (`api/v1/specializations/`)
 
-| Method | Route                      | Description                   | Auth |
-| ------ | -------------------------- | ----------------------------- | ---- |
-| `POST` | `create`                   | Create a specialization       | ✅   |
-| `PUT`  | `{Id}`                     | Update a specialization       | ✅   |
-| `GET`  | `list`                     | List all specializations      | ❌   |
-| `GET`  | `{Id}/sub-specializations` | Get sub-specializations by ID | ❌   |
+| Method | Route       | Description  | Auth |
+| ------ | -------------------------- | ---------------------------------------------------------------- | ---- |
+| `GET`  | `list`   | Get list of all medical specializations with bilingual names     | ❌   |
+| `GET`  | `{Id}/sub-specializations` | Get all sub-specializations for a specialization         | ❌   |
+| `POST` | `create`  | Create new medical specialization (Admin only)  | ✅   |
+| `PUT`  | `{Id}`     | Update specialization details and information (Admin only)       | ✅   |
 
 ### Appointments (`api/v1/appointments/`)
 
-| Method | Route         | Description                  | Auth |
-| ------ | ------------- | ---------------------------- | ---- |
-| `POST` | `/`           | Book appointment             | ✅   |
-| `GET`  | `{Id}`        | Get appointment details      | ✅   |
-| `POST` | `{Id}`        | Complete appointment booking | ✅   |
-| `POST` | `{Id}/cancel` | Cancel appointment           | ✅   |
+| Method | Route      | Description       | Auth |
+| ------ | ------------- | ------------------------------------------------------ | ---- |
+| `POST` | `/`      | Create new appointment booking by selecting doctor and slot | ✅   |
+| `PUT`  | `{Id}`        | Complete appointment booking confirmation process      | ✅   |
+| `GET`  | `{Id}`        | Get detailed information for specific appointment      | ✅   |
 
 ### Schedules (`api/v1/schedules/`)
 
-| Method | Route            | Description                   | Auth |
-| ------ | ---------------- | ---------------------------------- | ---- |
-| `POST` | `/`          | Set doctor availability schedule   | ✅   |
-| `PUT`  | `{Id}/lock-slot` | Lock specific appointment slot     | ✅   |
+| Method | Route  | Description     | Auth |
+| ------ | ------------------ | -------------------------------------------------------------- | ---- |
+| `POST` | `/`     | Set doctor availability with weekly recurring or one-time slots | ✅   |
+| `PUT`  | `{Id}/lock-slot`   | Lock specific appointment slot to prevent bookings         | ✅   |
+| `GET`  | `{doctorId}`       | Get doctor's availability patterns and schedules          | ❌   |
 
 ### Medical Records (`api/v1/medical-records/`)
 
-| Method | Route       | Description        | Auth |
-| ------ | ---------------------- | ------------------------ | ---- |
-| `POST` | `/`     | Create medical record    | ✅   |
-| `POST` | `{Id}/diagnosis`       | Create diagnosis in medical record | ✅   |
-| `POST` | `{Id}/e-prescription`  | Create E-prescription in medical record | ✅   |
-| `GET`  | `generate-report`| Generate medical report PDF | ✅   |
+| Method | Route            | Description  | Auth |
+| ------ | ------------------ | --------------------------------------------------------- | ---- |
+| `POST` | `/`| Create medical record for patient after appointment  | ✅   |
+| `POST` | `{Id}/diagnosis`   | Add diagnosis findings to medical record          | ✅   |
+| `POST` | `{Id}/e-prescription` | Create electronic prescription with medications          | ✅   |
+| `GET`  | `generate-report`  | Generate PDF medical report for patient            | ✅   |
 
 ### Reviews (`api/v1/reviews/`)
 
-| Method   | Route  | Description              | Auth |
-| -------- | ------ | ------------------------ | ---- |
-| `POST`   | `/`    | Create review for doctor | ✅   |
-| `PUT`    | `{Id}` | Update review            | ✅   |
-| `DELETE` | `{Id}` | Delete review            | ✅   |
+| Method   | Route  | Description    | Auth |
+| -------- | ------ | --------------------------------------------------------- | ---- |
+| `POST`   | `/`    | Create review and rating for doctor with optional comment | ✅   |
+| `PUT`    | `{Id}` | Update existing review rating and comment      | ✅   |
+| `DELETE` | `{Id}` | Delete an existing review     | ✅   |
 
 ### Clinics (`api/v1/clinics/`)
 
-| Method | Route                 | Description                | Auth |
-| ------ | --------------------- | -------------------------- | ---- |
-| `GET`  | `list/`               | List all clinics           | ❌   |
-| `POST` | `register-to-doctor/` | Register clinic for doctor | ✅   |
-| `POST` | `/`                   | Add images for clinic      | ✅   |
-| `GET`  | `{Id}/images/`        | Get images of clinic       | ❌  |
+| Method | Route         | Description       | Auth |
+| ------ | ------------- | -------------------------------------------------------------- | ---- |
+| `POST` | `/`           | Register clinic for doctor with location and contact details   | ✅   |
+| `POST` | `add-images`  | Upload multiple clinic images to Azure Blob Storage        | ✅   |
+| `GET`  | `{Id}/images` | Get list of clinic images by clinic ID       | ❌   |
+
+### Payments (`api/v1/payments/`)
+
+| Method | Route    | Description       | Auth |
+| ------ | ------------------------------ | ----------------------------------------------------- | ---- |
+| `POST` | `create-payment-intent`        | Create payment intent for appointment booking         | ✅   |
+| `POST` | `confirm-payment`       | Confirm Stripe payment and validate transaction       | ✅   |
+| `POST` | `update-appointment-after-payment` | Finalize appointment after successful payment   | ✅   |
+| `GET`  | `{Id}`    | Get payment details and status by appointment ID      | ✅   |
+| `POST` | `{Id}/cancel-with-refund`      | Cancel appointment and process refund         | ✅   |
 
 ### Patients (`api/v1/patients/`)
 
-| Method | Route           | Description                                 | Auth |
-| ------ | --------------- | ------------------------------------------- | ---- |
-| `GET`  | `appointments/` | List patient's appointments with pagination | ✅   |
+| Method | Route     | Description      | Auth |
+| ------ | --------------- | ------------------------------------------------------------ | ---- |
+| `GET`  | `appointments`  | Get paginated list of patient's appointments with filtering  | ✅   |
 
 ---
 
@@ -591,20 +604,13 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
     Hangfire: https://localhost:{port}/Hangfire-Dashboard
    ```
 
-### Default Admin Credentials
-
-| Field        | Value               |
-| ------------ | ------------------- |
-| **Email**    | `Admin@vezeeta.com` |
-| **Password** | `Admin@123ADM567`   |
-
 ---
 
 ## ✅ Best Practices Implemented
 
 - **Clean Architecture** — strict layer separation with dependency inversion
 - **CQRS Pattern** — Commands and Queries are separate classes with dedicated handlers
-- **Strategy Pattern** — Payment processors (Stripe, PayPal, Cash) implement swappable strategies
+- **Strategy Pattern** — Payment processors (Stripe) implement swappable strategies
 - **Generic Repository** — reusable data access with full transaction support
 - **Centralized Routing** — all API routes defined as constants in `Router.cs`
 - **Standardized Responses** — consistent `Response<T>` wrapper for all endpoints
