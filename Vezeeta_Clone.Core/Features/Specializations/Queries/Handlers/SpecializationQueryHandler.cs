@@ -15,9 +15,13 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Queries.Handlers
 
 
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
         private readonly ISpecializationService _specializationService;
+        #endregion
+
+        #region Constructor
         public SpecializationQueryHandler(IStringLocalizer<SharedResources> localizer,
                                           IMapper mapper,
                                           ISpecializationService specializationService) : base(localizer)
@@ -26,7 +30,9 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Queries.Handlers
             _mapper = mapper;
             _specializationService = specializationService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<List<GetSpecializationsQueryResult>>> Handle(GetSpecializationsQuery request, CancellationToken cancellationToken)
         {
             var specializations = await _specializationService.GetSpecializationsAsync();
@@ -53,5 +59,6 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Queries.Handlers
                 return NotFound<List<GetSubSpecializationBySpecIDQueryResult>>(_localizer[SharedResourcesKeys.NotFound]);
             }
         }
+        #endregion
     }
 }

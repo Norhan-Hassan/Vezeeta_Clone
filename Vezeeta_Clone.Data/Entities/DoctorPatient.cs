@@ -12,8 +12,8 @@ namespace Vezeeta_Clone.Data.Entities
         public string PatientId { get; set; }
         public Patient Patient { get; set; }
         public int TotalVisits { get; set; }
-        public DateTime FirstVisitAt { get; set; } = DateTime.UtcNow;
-        public DateTime LastVisitAt { get; set; }
+        public DateTime FirstVisitAt { get; set; }
+        public DateTime LastVisitAt { get; set; } = DateTime.UtcNow;
         public ICollection<MedicalRecord> MedicalRecords { get; set; }
 
     }

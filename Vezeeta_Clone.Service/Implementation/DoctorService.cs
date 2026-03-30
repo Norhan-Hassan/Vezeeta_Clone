@@ -42,6 +42,13 @@ namespace Vezeeta_Clone.Service.Implementation
                                      .FirstOrDefaultAsync(d => d.AppUserID == id);
             return doctor;
         }
+        public async Task<Doctor?> GetDoctorByIdAsTrackingAsync(string id)
+        {
+            var doctor = await _unitOfWork._doctorRepo.GetTableAsTracking()
+                                    .Include(d => d.ApplicationUser)
+                                     .FirstOrDefaultAsync(d => d.AppUserID == id);
+            return doctor;
+        }
         public async Task<Doctor?> GetDoctorWithClinicByIDAsync(string id)
         {
             var doctor = await _unitOfWork._doctorRepo.GetTableNoTracking()
@@ -113,7 +120,17 @@ namespace Vezeeta_Clone.Service.Implementation
 
             return (result!.Average, result!.Count);
         }
-
+        public async Task<bool> SaveDoctorPicture(Doctor doctor, string pictureUrl)
+        {
+            if (!string.IsNullOrEmpty(pictureUrl))
+            {
+                doctor.Picture = pictureUrl;
+                await _unitOfWork._doctorRepo.UpdateAsync(doctor);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0;
+            }
+            return false;
+        }
         public IQueryable<Review> GetDoctorReviews(string id)
         {
             var reviews = _unitOfWork._reviewRepo.GetTableNoTracking()

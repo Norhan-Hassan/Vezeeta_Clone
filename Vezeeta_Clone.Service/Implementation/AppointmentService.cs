@@ -27,7 +27,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 using var transaction = _unitOfWork._appointmentRepo.BeginTransaction();
                 try
                 {
-                    var slot = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
+                    var slot = await _unitOfWork._availabilitySlotRepo.GetTableAsTracking()
                                                                     .Include(s => s.Availability)
                                                                     .FirstOrDefaultAsync(s => s.ID == appointment.SlotId);
 

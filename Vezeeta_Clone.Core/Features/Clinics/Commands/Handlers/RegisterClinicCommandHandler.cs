@@ -11,14 +11,18 @@ using Vezeeta_Clone.Service.AppUserAuthServices.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Handlers
 {
-    public class ClinicCommandHandler : ResponseHandler, IRequestHandler<RegisterClinicForDoctorCommand, Response<string>>
+    public class RegisterClinicCommandHandler : ResponseHandler, IRequestHandler<RegisterClinicForDoctorCommand, Response<string>>
     {
+        #region Fields
         private readonly IClinicService _clinicService;
         private readonly IDoctorService _doctorService;
         private readonly ICurrentUserService _currentUserService;
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
-        public ClinicCommandHandler(IClinicService clinicService, ICurrentUserService currentUserService, IDoctorService doctorService, IStringLocalizer<SharedResources> localizer, IMapper mapper) : base(localizer)
+        #endregion
+
+        #region Constructor
+        public RegisterClinicCommandHandler(IClinicService clinicService, ICurrentUserService currentUserService, IDoctorService doctorService, IStringLocalizer<SharedResources> localizer, IMapper mapper) : base(localizer)
         {
             _localizer = localizer;
             _clinicService = clinicService;
@@ -27,6 +31,9 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Handlers
             _mapper = mapper;
 
         }
+        #endregion
+
+        #region Functions
         public async Task<Response<string>> Handle(RegisterClinicForDoctorCommand request, CancellationToken cancellationToken)
         {
             //mapping
@@ -61,5 +68,6 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Handlers
 
 
         }
+        #endregion
     }
 }

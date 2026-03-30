@@ -7,14 +7,19 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
 {
     public class ResetPasswordInActionValidator : AbstractValidator<ResetPasswordInActionCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public ResetPasswordInActionValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
             RuleFor(x => x.Email)
@@ -37,6 +42,7 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
                .WithMessage(x => _localizer[SharedResourcesKeys.PassMatchConfirm]);
 
         }
+        #endregion
 
     }
 }

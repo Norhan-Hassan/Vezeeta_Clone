@@ -14,10 +14,14 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
 {
     public class BookAppointmentCommandHandler : ResponseHandler, IRequestHandler<BookAppointmentCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
         private readonly IAppointmentService _appointmentService;
+        #endregion
+
+        #region Constructor
         public BookAppointmentCommandHandler(IStringLocalizer<SharedResources> localizer,
                                         IAppointmentService appointmentService,
                                         ICurrentUserService currentUserService,
@@ -28,7 +32,8 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
             _appointmentService = appointmentService;
             _currentUserService = currentUserService;
         }
-
+        #endregion
+        #region Functions
         public async Task<Response<string>> Handle(BookAppointmentCommand request, CancellationToken cancellationToken)
         {
             try
@@ -47,8 +52,9 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
 
                 var mappedBooking = _mapper.Map<Appointment>(request);
                 var appointmentId = await _appointmentService.BookAppointmentAsync(mappedBooking, patientId);
-
-                return Success<string>(appointmentId.ToString(), message: _localizer[SharedResourcesKeys.AppointmentBooked]);
+                if (appointmentId > 0)
+                    return Success<string>(appointmentId.ToString(), message: _localizer[SharedResourcesKeys.AppointmentBooked]);
+                return BadRequest<string>(_localizer[SharedResourcesKeys.AppointmentBookFailed]);
             }
             catch (InvalidOperationException ex)
             {
@@ -80,5 +86,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
             }
 
         }
+        #endregion
     }
 }

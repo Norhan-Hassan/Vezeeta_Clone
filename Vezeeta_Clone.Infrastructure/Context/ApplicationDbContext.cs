@@ -35,6 +35,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<SubSpecialization> SubSpecializations { get; set; }
+        public DbSet<ClinicImage> ClinicImages { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -120,15 +121,9 @@ namespace Vezeeta_Clone.Infrastructure.Context
                        .OnDelete(DeleteBehavior.Restrict);
 
             });
-            //one to one between Appointment and AvailableSlot
+
             builder.Entity<Appointment>(entity =>
             {
-                //entity.HasKey(a => a.ID);
-                //entity.HasOne(a => a.AvailableSlot)
-                //       .WithOne(a => a.Appointment)
-                //       .HasForeignKey<Appointment>(a => a.SlotId)
-                //       .OnDelete(DeleteBehavior.Restrict);
-
 
                 entity.HasOne(a => a.AvailableSlot)
                      .WithMany(s => s.Appointments)
@@ -139,8 +134,6 @@ namespace Vezeeta_Clone.Infrastructure.Context
                      .WithMany(p => p.Appointments)
                      .HasForeignKey(a => a.PatientId)
                      .OnDelete(DeleteBehavior.Restrict);
-
-
             });
 
             foreach (var relationship in builder.Model.GetEntityTypes()

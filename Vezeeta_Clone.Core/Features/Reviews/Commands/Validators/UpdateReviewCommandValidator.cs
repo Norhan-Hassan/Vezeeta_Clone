@@ -7,14 +7,20 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
 {
     public class UpdateReviewCommandValidator : AbstractValidator<UpdateReviewCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public UpdateReviewCommandValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
             RuleFor(x => x.Id)
@@ -30,5 +36,6 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
         {
 
         }
+        #endregion
     }
 }

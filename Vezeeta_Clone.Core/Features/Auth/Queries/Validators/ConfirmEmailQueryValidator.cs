@@ -7,13 +7,20 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Validators
 {
     public class ConfirmEmailQueryValidator : AbstractValidator<ConfirmEmailQuery>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public ConfirmEmailQueryValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
+
+        #region Functions
 
         public void ApplyValidationRules()
         {
@@ -29,5 +36,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Validators
         {
 
         }
+        #endregion
     }
 }

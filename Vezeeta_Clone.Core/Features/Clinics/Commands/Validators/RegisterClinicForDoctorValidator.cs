@@ -8,8 +8,12 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Validators
 {
     public class RegisterClinicForDoctorValidator : AbstractValidator<RegisterClinicForDoctorCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IClinicService _clinicService;
+        #endregion
+
+        #region Constructor
         public RegisterClinicForDoctorValidator(IStringLocalizer<SharedResources> localizer, IClinicService clinicService)
         {
             _localizer = localizer;
@@ -18,7 +22,8 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Validators
             ApplyCustomValidationRules();
         }
 
-
+        #endregion
+        #region Functions
         public void ApplyValidationRules()
         {
             RuleFor(x => x.ClinicName)
@@ -43,6 +48,7 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Validators
         {
 
         }
+        #endregion
     }
 }
 

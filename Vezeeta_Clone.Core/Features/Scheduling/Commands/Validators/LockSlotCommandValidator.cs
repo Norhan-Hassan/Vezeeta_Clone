@@ -7,13 +7,21 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
 {
     public class LockSlotCommandValidator : AbstractValidator<LockSlotCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+
+        #region Constructor
         public LockSlotCommandValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
+
+        #region Functions
         public void ApplyValidationRules()
         {
             RuleFor(x => x.SlotId)
@@ -29,5 +37,6 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
         {
 
         }
+        #endregion
     }
 }

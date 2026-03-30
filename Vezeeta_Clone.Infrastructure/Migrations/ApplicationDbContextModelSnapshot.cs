@@ -398,6 +398,31 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.ToTable("Clinics");
                 });
 
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.ClinicImage", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("clinicId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("clinicId");
+
+                    b.ToTable("ClinicImages");
+                });
+
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Diagnosis", b =>
                 {
                     b.Property<int>("ID")
@@ -658,6 +683,9 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
 
                     b.Property<int>("DoctorPatientId")
                         .HasColumnType("int");
+
+                    b.Property<string>("FileUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1168,6 +1196,17 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
                     b.Navigation("Region");
                 });
 
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.ClinicImage", b =>
+                {
+                    b.HasOne("Vezeeta_Clone.Data.Entities.Clinic", "Clinic")
+                        .WithMany("ClinicImages")
+                        .HasForeignKey("clinicId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clinic");
+                });
+
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Diagnosis", b =>
                 {
                     b.HasOne("Vezeeta_Clone.Data.Entities.MedicalRecord", "MedicalRecord")
@@ -1379,6 +1418,11 @@ namespace Vezeeta_Clone.Infrastructure.Migrations
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.City", b =>
                 {
                     b.Navigation("Regions");
+                });
+
+            modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Clinic", b =>
+                {
+                    b.Navigation("ClinicImages");
                 });
 
             modelBuilder.Entity("Vezeeta_Clone.Data.Entities.Doctor", b =>

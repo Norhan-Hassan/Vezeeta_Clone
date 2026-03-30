@@ -16,10 +16,13 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 {
     public class GetDoctorAppointmentsQueryHandler : ResponseHandler, IRequestHandler<GetDoctorAppointmentsQuery, Response<PaginatedResult<GetDoctorAppointmentsQueryResult>>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly IAppointmentService _appointmentService;
         private readonly IMapper _mapper;
+        #endregion
+        #region Constructor
         public GetDoctorAppointmentsQueryHandler(IStringLocalizer<SharedResources> localizer,
                                                ICurrentUserService currentUserService,
                                                   IAppointmentService appointmentService,
@@ -30,12 +33,14 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             _appointmentService = appointmentService;
             _mapper = mapper;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<PaginatedResult<GetDoctorAppointmentsQueryResult>>> Handle(GetDoctorAppointmentsQuery request, CancellationToken cancellationToken)
         {
             Expression<Func<Appointment, GetDoctorAppointmentsQueryResult>> expression =
                ex => new GetDoctorAppointmentsQueryResult(ex.ID,
-               string.Concat(ex.ActualPatientName ?? ex.Patient.ApplicationUser.FirstName, "", ex.Patient.ApplicationUser.LastName),
+               ex.ActualPatientName ?? string.Concat(ex.Patient.ApplicationUser.FirstName, "", ex.Patient.ApplicationUser.LastName),
                ex.ActualPatientPhone ?? ex.Patient.ApplicationUser.PhoneNumber,
                ex.AvailableSlot.Date, ex.AvailableSlot.StartTime, ex.AvailableSlot.EndTime,
 
@@ -59,5 +64,6 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
                 return NotFound<PaginatedResult<GetDoctorAppointmentsQueryResult>>(_localizer[SharedResourcesKeys.NoData]);
             return Success(paginatedResult);
         }
+        #endregion
     }
 }

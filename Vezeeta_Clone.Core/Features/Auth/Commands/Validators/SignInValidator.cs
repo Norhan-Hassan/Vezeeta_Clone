@@ -9,8 +9,13 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
 {
     public class SignInValidator : AbstractValidator<SignInCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
+
+        #endregion
+
+        #region Constructor
         public SignInValidator(IStringLocalizer<SharedResources> localizer, UserManager<ApplicationUser> userManager)
         {
             _localizer = localizer;
@@ -18,7 +23,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
 
         public void ApplyValidationRules()
         {
@@ -38,5 +45,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
                 ).WithMessage(x => _localizer[SharedResourcesKeys.EmailOrPassNotExist]);
 
         }
+        #endregion
     }
 }

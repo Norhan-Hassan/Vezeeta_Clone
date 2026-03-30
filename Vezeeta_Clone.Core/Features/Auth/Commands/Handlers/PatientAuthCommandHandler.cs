@@ -14,12 +14,14 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
     public class PatientAuthCommandHandler : ResponseHandler,
                                              IRequestHandler<RegisterPatientCommand, Response<string>>
     {
+        #region Fields
         private readonly IMapper _mapper;
         private readonly IAuthenticationService _authenticationService;
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IEmailService _emailService;
         private readonly IBackgroundJobService _backgroundJobService;
-
+        #endregion
+        #region Constructor
         public PatientAuthCommandHandler(IStringLocalizer<SharedResources> localizer,
                                         IAuthenticationService authenticationService,
                                         IEmailService emailService,
@@ -32,6 +34,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             _emailService = emailService;
             _localizer = localizer;
         }
+        #endregion
+
+        #region Functions
         public async Task<Response<string>> Handle(RegisterPatientCommand request, CancellationToken cancellationToken)
         {
             //mapping
@@ -73,5 +78,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             }
 
         }
+        #endregion
     }
 }

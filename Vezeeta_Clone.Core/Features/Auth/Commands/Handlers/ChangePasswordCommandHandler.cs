@@ -11,10 +11,12 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 {
     public class ChangePasswordCommandHandler : ResponseHandler, IRequestHandler<ChangePasswordCommand, Response<string>>
     {
-
+        #region Fields
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICurrentUserService _currentUserService;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+        #region Constructor
         public ChangePasswordCommandHandler(UserManager<ApplicationUser> userManager,
                                             IStringLocalizer<SharedResources> localizer,
                                             ICurrentUserService currentUserService) : base(localizer)
@@ -23,7 +25,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             _currentUserService = currentUserService;
             _localizer = localizer;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
             var user = await _currentUserService.GetCurrentUserAsync();
@@ -50,5 +54,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             }
             return NotFound<string>(_localizer[SharedResourcesKeys.UserNotFound]);
         }
+        #endregion
     }
 }

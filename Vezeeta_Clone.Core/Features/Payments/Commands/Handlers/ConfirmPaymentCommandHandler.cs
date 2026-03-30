@@ -9,16 +9,21 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 {
     public class ConfirmPaymentCommandHandler : ResponseHandler, IRequestHandler<ConfirmPaymentCommand, Response<string>>
     {
+        #region Fields
         private readonly IPaymentService _paymentService;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public ConfirmPaymentCommandHandler(IPaymentService paymentService, IStringLocalizer<SharedResources> localizer)
             : base(localizer)
         {
             _paymentService = paymentService;
             _localizer = localizer;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(ConfirmPaymentCommand request, CancellationToken cancellationToken)
         {
             var result = await _paymentService.ConfirmPaymentAsync(request.PaymentId, request.PaymentMethodId);
@@ -27,5 +32,6 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 
             return Success<string>(null, message: _localizer[SharedResourcesKeys.PaymentSuccess]);
         }
+        #endregion
     }
 }

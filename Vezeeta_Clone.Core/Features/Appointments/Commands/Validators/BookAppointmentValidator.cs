@@ -8,8 +8,12 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
 {
     public class BookAppointmentValidator : AbstractValidator<BookAppointmentCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
+        #endregion
+
+        #region Constructor
         public BookAppointmentValidator(IStringLocalizer<SharedResources> localizer, ICurrentUserService currentUserService)
         {
             _currentUserService = currentUserService;
@@ -17,7 +21,9 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
 
@@ -37,7 +43,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
 
         public void ApplyCustomValidationRules()
         {
-            //when not providing actual patient name or phone, get them from the current user 
             RuleFor(x => x)
             .MustAsync(async (command, cancellation) =>
             {
@@ -54,5 +59,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
                 return true;
             });
         }
+        #endregion
     }
 }

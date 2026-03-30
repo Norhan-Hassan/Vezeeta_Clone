@@ -45,10 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\MedicalRecords\Queries\Handlers\" />
-    <Folder Include="Features\MedicalRecords\Queries\Models\" />
-    <Folder Include="Features\MedicalRecords\Queries\Validators\" />
-    <Folder Include="Mapping\ClinicMapping\QueryMapping\" />
     <Folder Include="Mapping\MedicalRecordMapping\QueryMapping\" />
   </ItemGroup>
 

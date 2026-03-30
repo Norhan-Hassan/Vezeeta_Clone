@@ -13,13 +13,13 @@ namespace Vezeeta_Clone.Infrastructure.Hangfire
             // For development - allow all
             var httpContext = context.GetHttpContext();
 
-            // Option 1: Allow in development only
+            // Allow in development only
             if (httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
             {
                 return true;
             }
 
-            // Option 2: Check authentication and admin role
+            // Check authentication and admin role
             return httpContext.User?.Identity?.IsAuthenticated == true &&
                    httpContext.User.IsInRole(Roles.Admin);
         }

@@ -153,6 +153,12 @@
   <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
     <value>The appointment is not confirmed or the payment has not been completed</value>
   </data>
+  <data name="AtLeastOneImage" xml:space="preserve">
+    <value>Provide at least one image </value>
+  </data>
+  <data name="AtMostFiveImages" xml:space="preserve">
+    <value>At most 5 images are allowed</value>
+  </data>
   <data name="BadRequest" xml:space="preserve">
     <value>Bad Request In Processing this request</value>
   </data>
@@ -400,6 +406,9 @@ We've received a request to reset your account password. Please use the one-time
   </data>
   <data name="UnprocessableEntity" xml:space="preserve">
     <value>The data entered not satisfy the criteria </value>
+  </data>
+  <data name="UnSupportedImageType" xml:space="preserve">
+    <value>Unsupported image type. Please upload a valid image (JPG).</value>
   </data>
   <data name="Updated" xml:space="preserve">
     <value>Updated Successfully</value>

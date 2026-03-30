@@ -9,5 +9,9 @@ namespace Vezeeta_Clone.Service.Abstract
         Task<MedicalRecord> CreateMedicalRecordAsync(MedicalRecord medicalRecord, string doctorId, string patientId);
         Task<Diagnosis> CreateDiagnosisAsync(Diagnosis diagnosis, int medicalRecord);
         Task<EPrescription> CreateEPrescriptionAsync(EPrescription ePrescription, List<PrescriptionItem> prescriptionItems, int medicalRecord);
+
+        Task<MedicalRecord> GetMedicalRecordAsync(int medicalRecordId);
+        Task<bool> SaveMedicalRecordReport(string? file_url, int medicalRecordId);
+        Task<bool> UpdateDiagnosisAsync(int medicalRecordId, string description, string doctorId);
     }
 }

@@ -47,7 +47,6 @@ namespace Vezeeta_Clone.Api
                     .AddSupportedCultures(supportedCultures)
                     .AddSupportedUICultures(supportedCultures);
 
-                // Clear default providers and add only the ones you need
                 options.RequestCultureProviders.Clear();
                 options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider());
                 options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());

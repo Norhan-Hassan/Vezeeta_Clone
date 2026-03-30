@@ -8,6 +8,7 @@
         public const string BadRequest = "BadRequest";
         public const string UnprocessableEntity = "UnprocessableEntity";
         public const string NotFound = "NotFound";
+        public const string UnSupportedImageType = "UnSupportedImageType";
         public const string UserNotFound = "UserNotFound";
         public const string Updated = "Updated";
         public const string NoData = "NoData";
@@ -40,19 +41,16 @@
         public const string EmailFooter = "EmailFooter";
         public const string AlreadyInitiated = "AlreadyInitiated";
         public const string CompleteAppointment = "CompleteAppointment";
-
-        //
+        public const string AtLeastOneImage = "AtLeastOneImage";
+        public const string AtMostFiveImages = "AtMostFiveImages";
         public const string ResetPasswordCodeMessage = "ResetPasswordCodeMessage";
         public const string ResetPaswword = "ResetPaswword";
         public const string InvalidResetCode = "InvalidResetCode";
-
         public const string AppointmentConfirmation = "AppointmentConfirmation";
         public const string FailedToCancellAppointment = "FailedToCancellAppointment";
-        //
         public const string AppointmentCancelled = "AppointmentCancelled";
         public const string AppointmentCancellation = "AppointmentCancellation";
         public const string CancellationMessage = "CancellationMessage";
-
         public const string SignInSuccess = "SignInSuccess";
         public const string ValidToken = "ValidToken";
         public const string InValidToken = "InValidToken";
@@ -81,17 +79,13 @@
         public const string Thursday = "Thursday";
 
         public const string AppName = "AppName";
-
         public const string AppointmentBooked = "AppointmentBooked";
         public const string AppointmentBookFailed = "AppointmentBookFailed";
-
         public const string SlotAlreadyBooked = "SlotAlreadyBooked";
         public const string SlotIsLocked = "SlotIsLocked";
         public const string PastSlot = "PastSlot";
-
         public const string BookingCompleted = "BookingCompleted";
         public const string BookingCompletionFailed = "BookingCompletionFailed";
-
         public const string ReviewAlreadyExists = "ReviewAlreadyExists";
         public const string ReviewWithoutAppointment = "ReviewWithoutAppointment";
         public const string RatingRange = "RatingRange";
@@ -109,14 +103,8 @@
         public const string Dear = "Dear";
         public const string Clinic = "Clinic";
         public const string ThanksMessage = "ThanksMessage";
-
         public const string PaymentFailed = "PaymentFailed";
         public const string PaymentSuccess = "PaymentSuccess";
         public const string AlreadyPaid = "AlreadyPaid";
-
-
-        // public const string MaxLength = "MaxLength";
-
-
     }
 }

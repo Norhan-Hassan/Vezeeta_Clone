@@ -13,10 +13,14 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 {
     public class GetDoctorAvailableSlotsQueryHandler : ResponseHandler, IRequestHandler<GetDoctorAvailableSlotsQuery, Response<List<DoctorAvailableSlotQueryResult>>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly ISlotService _slotService;
         private readonly IMapper _mapper;
+        #endregion
+
+        #region Constructor
         public GetDoctorAvailableSlotsQueryHandler(IStringLocalizer<SharedResources> localizer,
                                     ICurrentUserService currentUserService,
                                                IMapper mapper,
@@ -27,6 +31,9 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             _localizer = localizer;
             _slotService = slotService;
         }
+        #endregion
+
+        #region Functions
 
         public async Task<Response<List<DoctorAvailableSlotQueryResult>>> Handle(GetDoctorAvailableSlotsQuery request, CancellationToken cancellationToken)
         {
@@ -52,5 +59,6 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 
             return Success(groupedSlots, _localizer[SharedResourcesKeys.Success]);
         }
+        #endregion
     }
 }

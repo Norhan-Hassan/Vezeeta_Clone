@@ -7,13 +7,20 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
 {
     public class MakeReviewCommandValidator : AbstractValidator<MakeReviewCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public MakeReviewCommandValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
+
+        #region Functions
 
         public void ApplyValidationRules()
         {
@@ -29,12 +36,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
         }
         public void ApplyCustomValidationRules()
         {
-            //RuleFor(x => x.IsAnonymous)
-            //    .MustAsync(async (isAnonymous, cancellationToken) =>
-            //    {
-            //        isAnonymous = isAnonymous == null ? false : isAnonymous;
-            //        return isAnonymous;
-            //    });
         }
+        #endregion
     }
 }

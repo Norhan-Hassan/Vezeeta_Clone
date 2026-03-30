@@ -7,13 +7,20 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
 {
     public class DeleteReviewCommandValidator : AbstractValidator<DeleteReviewCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public DeleteReviewCommandValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
+
+        #region Functions
 
         public void ApplyValidationRules()
         {
@@ -28,5 +35,6 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Validators
         {
 
         }
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.Clinics.Commands.Models;
+using Vezeeta_Clone.Core.Features.Clinics.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 using Vezeeta_Clone.Data.Commons;
 
@@ -15,10 +16,29 @@ namespace Vezeeta_Clone.Api.Controllers.V1
     {
         [HttpPost(Router.ClinicRouting.RegisterClinic)]
         [SwaggerOperation(Summary = "Register clinic for doctor", Description = "Register a new clinic with address, location, phone number and consultation price , doctor complete profile is required before")]
-        public async Task<IActionResult> CreateSpecialization([FromBody] RegisterClinicForDoctorCommand request)
+        public async Task<IActionResult> CreateSpecialization([FromBody] RegisterClinicForDoctorCommand command)
         {
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(command);
             return NewResult(response);
         }
+
+        [HttpPost(Router.ClinicRouting.AddClinicImages)]
+        [SwaggerOperation(Summary = "Add Images to clinic", Description = "Add Image To clinic of the registered doctor owner")]
+        public async Task<IActionResult> AddClinicImages([FromForm] AddClinicImagesCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return NewResult(response);
+
+        }
+        [AllowAnonymous]
+        [HttpGet(Router.ClinicRouting.GetClinicImages)]
+        [SwaggerOperation(Summary = "Get Clinic Images", Description = "Get clinic set of images of specified clinic by Id")]
+        public async Task<IActionResult> GetClinicImages([FromRoute] GetClinicImagesQuery query)
+        {
+            var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
+
     }
 }

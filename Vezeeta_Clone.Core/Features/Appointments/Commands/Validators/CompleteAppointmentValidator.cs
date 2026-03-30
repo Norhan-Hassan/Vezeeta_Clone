@@ -7,17 +7,20 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
 {
     public class CompleteAppointmentValidator : AbstractValidator<CompleteAppointmentCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public CompleteAppointmentValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
-
-
+        #region Functions
         public void ApplyValidationRules()
         {
             RuleFor(x => x.AppointmentId)
@@ -29,5 +32,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Validators
         {
 
         }
+        #endregion
     }
 }

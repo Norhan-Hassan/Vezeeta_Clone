@@ -8,9 +8,12 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
 {
     public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
     {
+        #region Fields
         private readonly IAuthenticationService _authenticationService;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public ChangePasswordValidator(IAuthenticationService authenticationService, IStringLocalizer<SharedResources> localizer)
         {
             _authenticationService = authenticationService;
@@ -18,7 +21,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
 
@@ -44,10 +49,12 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Validators
 
 
         }
+
         public void ApplyCustomValidationRules()
         {
 
         }
+        #endregion
 
     }
 }

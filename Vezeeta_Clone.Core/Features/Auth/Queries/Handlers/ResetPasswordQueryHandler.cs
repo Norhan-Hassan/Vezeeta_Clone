@@ -9,14 +9,19 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Handlers
 {
     public class ResetPasswordQueryHandler : ResponseHandler, IRequestHandler<ResetPasswordQuery, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IAuthenticationService _authenticationService;
+        #endregion
+
+        #region Constructor
         public ResetPasswordQueryHandler(IStringLocalizer<SharedResources> localizer, IAuthenticationService authenticationService) : base(localizer)
         {
             _localizer = localizer;
             _authenticationService = authenticationService;
         }
-
+        #endregion
+        #region Functions
         public async Task<Response<string>> Handle(ResetPasswordQuery request, CancellationToken cancellationToken)
         {
             var result = await _authenticationService.CheckResetPasswordCodeAsync(request.Email, request.Code);
@@ -30,5 +35,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Handlers
                 return BadRequest<string>(_localizer[SharedResourcesKeys.EmailIsNotExist]);
 
         }
+        #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace Vezeeta_Clone.Data.Entities
         public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
 
+        public string? FileUrl { get; set; }
         public ICollection<Diagnosis> Diagnoses { get; set; } = new HashSet<Diagnosis>();
         public ICollection<EPrescription> EPrescriptions { get; set; } = new HashSet<EPrescription>();
     }

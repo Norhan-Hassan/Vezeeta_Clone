@@ -15,7 +15,6 @@ namespace Vezeeta_Clone.Data.Entities
         public int ExperienceInYears { get; set; }
         public string? Picture { get; set; }
 
-
         [ForeignKey("University")]
         public int UniversityId { get; set; }
         public University University { get; set; }

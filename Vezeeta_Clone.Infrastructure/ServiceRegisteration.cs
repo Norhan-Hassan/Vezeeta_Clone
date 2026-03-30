@@ -41,19 +41,25 @@ namespace Vezeeta_Clone.Infrastructure
             //JWT Authentication
             var jwtSettings = new JwtSettings();
             configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
+
             //Email Settings
             var emailSettings = new EmailSettings();
             configuration.GetSection(nameof(EmailSettings)).Bind(emailSettings);
+
             //stripe payment
             var stripeSettings = new StripeSettings();
             configuration.GetSection(nameof(StripeSettings)).Bind(stripeSettings);
+
             //file storage settings
+            var blobSettings = new AzureStorageSettings();
+            configuration.GetSection(nameof(AzureStorageSettings)).Bind(blobSettings);
 
 
 
             services.AddSingleton(jwtSettings);
             services.AddSingleton(emailSettings);
             services.AddSingleton(stripeSettings);
+            services.AddSingleton(blobSettings);
 
             services.AddAuthentication(x =>
             {

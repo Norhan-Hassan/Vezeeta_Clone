@@ -73,5 +73,15 @@ namespace Vezeeta_Clone.Api.Controllers.V1
             return NewResult(response);
         }
 
+        [Authorize(Roles = Roles.Doctor)]
+        [HttpPost(Router.DoctorRouting.AddPicture)]
+        [SwaggerOperation(Summary = "Add Doctor picture ", Description = "Add Picture to current registered doctor ")]
+        public async Task<IActionResult> AddDoctorpicture([FromForm] AddDoctorPictureCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return NewResult(response);
+        }
+
+
     }
 }

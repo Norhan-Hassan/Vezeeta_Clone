@@ -13,16 +13,20 @@ using Vezeeta_Clone.Service.Abstract;
 namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
 {
     public class DoctorsQueryHandler : ResponseHandler,
-        IRequestHandler<GetDoctorsPaginatedQuery, Response<PaginatedResult<GetDoctorsPaginatedQueryResult>>>,
-        IRequestHandler<GetDoctorReviewsQuery, Response<PaginatedResult<GetDoctorReviewsQueryResult>>>,
-        IRequestHandler<GetDoctorDetailsQuery, Response<GetDoctorDetailsQueryResult>>,
-        IRequestHandler<GetDoctorExaminationDetailsQuery, Response<GetDoctorExaminationDetailsQueryResult>>
+                                                        IRequestHandler<GetDoctorsPaginatedQuery, Response<PaginatedResult<GetDoctorsPaginatedQueryResult>>>,
+                                                        IRequestHandler<GetDoctorReviewsQuery, Response<PaginatedResult<GetDoctorReviewsQueryResult>>>,
+                                                        IRequestHandler<GetDoctorDetailsQuery, Response<GetDoctorDetailsQueryResult>>,
+                                                        IRequestHandler<GetDoctorExaminationDetailsQuery, Response<GetDoctorExaminationDetailsQueryResult>>
 
 
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IDoctorService _doctorService;
         private readonly IMapper _mapper;
+        #endregion
+
+        #region Constructor
         public DoctorsQueryHandler(IStringLocalizer<SharedResources> localizer,
                                                IDoctorService doctorService,
                                                IMapper mapper) : base(localizer)
@@ -31,7 +35,9 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             _doctorService = doctorService;
             _mapper = mapper;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<PaginatedResult<GetDoctorsPaginatedQueryResult>>> Handle(GetDoctorsPaginatedQuery request, CancellationToken cancellationToken)
         {
 
@@ -93,7 +99,7 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Queries.Handlers
             return Success(doctorExaminationDetailsMapped);
         }
 
-
+        #endregion
 
 
     }

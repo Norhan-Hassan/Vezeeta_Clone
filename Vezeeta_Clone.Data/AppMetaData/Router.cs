@@ -19,6 +19,7 @@
             public const string CompleteInfo = Prefix + "complete-info";
             public const string GetSlots = Prefix + SingleUser + "/available-slots";
             public const string AppointmentsList = Prefix + "appointments/";
+            public const string AddPicture = Prefix + "picture/";
         }
 
         public static class PatientRouting
@@ -32,7 +33,6 @@
             public const string AddSchedule = Prefix;
             public const string LockSlot = Prefix + SingleEntity + "/lock-slot";
         }
-        //ReviewRouting
 
         public static class ReviewRouting
         {
@@ -55,6 +55,7 @@
             public const string Create = Prefix;
             public const string Diagnosis = Prefix + SingleEntity + "/diagnosis";
             public const string EPrescription = Prefix + SingleEntity + "/e-prescription";
+            public const string GenerateMedicalReport = Prefix + "medical-report";
 
         }
         public static class ClinicRouting
@@ -62,6 +63,8 @@
             public const string Prefix = Rule + "clinics/";
             public const string List = Prefix + "list/";
             public const string RegisterClinic = Prefix + "register-to-doctor/";
+            public const string AddClinicImages = Prefix + SingleEntity + "/image";
+            public const string GetClinicImages = Prefix + SingleEntity + "/images";
         }
 
         public static class AuthRouting

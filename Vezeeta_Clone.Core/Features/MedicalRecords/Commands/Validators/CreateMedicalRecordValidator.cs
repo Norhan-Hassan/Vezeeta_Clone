@@ -7,14 +7,20 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Validators
 {
     public class CreateMedicalRecordValidator : AbstractValidator<CreateMedicalRecordCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public CreateMedicalRecordValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
             RuleFor(x => x.PatientId)
@@ -30,5 +36,6 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Validators
 
 
         }
+        #endregion
     }
 }

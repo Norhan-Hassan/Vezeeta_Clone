@@ -47,5 +47,42 @@ namespace Vezeeta_Clone.Service.Implementation
                 throw; // Rethrow the exception to be handled by the caller
             }
         }
+        public async Task<Clinic?> GetClinicByIdAsync(int clinicId)
+        {
+            return await _unitOfWork._clinicRepo.GetTableNoTracking()
+                                    .Include(c => c.Doctor)
+                                     .FirstOrDefaultAsync(c => c.ID == clinicId);
+        }
+        public async Task SaveClinicImages(string doctorId, List<ClinicImage>? ClinicImages)
+        {
+            var clinic = await _unitOfWork._clinicRepo.GetTableNoTracking()
+                                     .Include(c => c.Doctor)
+                                     .FirstOrDefaultAsync(c => c.Doctor.AppUserID == doctorId);
+
+
+            foreach (var image in ClinicImages)
+            {
+                image.clinicId = clinic.ID;
+                await _unitOfWork._clinicImageRepo.AddAsync(image);
+            }
+
+            await _unitOfWork._clinicRepo.UpdateAsync(clinic);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<List<ClinicImage?>> GetClinicImagesByClinicIdAsync(int clinicId)
+        {
+            var clinic = await _unitOfWork._clinicRepo.GetTableNoTracking()
+                                     .FirstOrDefaultAsync(c => c.ID == clinicId);
+            if (clinic != null)
+            {
+                var clinicImages = await _unitOfWork._clinicImageRepo.GetTableNoTracking()
+                                            .Where(ci => ci.clinicId == clinicId)
+                                            .ToListAsync();
+                if (clinicImages != null)
+                    return clinicImages;
+            }
+            return new List<ClinicImage?>();
+        }
     }
 }

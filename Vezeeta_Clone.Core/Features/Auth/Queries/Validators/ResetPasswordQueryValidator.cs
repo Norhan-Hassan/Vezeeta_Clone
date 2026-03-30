@@ -7,14 +7,20 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Validators
 {
     public class ResetPasswordQueryValidator : AbstractValidator<ResetPasswordQuery>
     {
+        #region
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public ResetPasswordQueryValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
 
@@ -31,5 +37,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Validators
         {
 
         }
+        #endregion
     }
 }

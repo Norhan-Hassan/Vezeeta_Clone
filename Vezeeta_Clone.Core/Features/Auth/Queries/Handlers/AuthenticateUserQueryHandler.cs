@@ -9,9 +9,12 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Handlers
 {
     public class AuthenticateUserQueryHandler : ResponseHandler, IRequestHandler<AuthenticateUserQuery, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IAuthenticationService _authenticationService;
+        #endregion
 
+        #region Constructor
         public AuthenticateUserQueryHandler(IStringLocalizer<SharedResources> localizer,
                                     IAuthenticationService authenticationService) : base(localizer)
         {
@@ -19,7 +22,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Handlers
             _localizer = localizer;
         }
 
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(AuthenticateUserQuery request, CancellationToken cancellationToken)
         {
             var isValid = await _authenticationService.ValidateJwtToken(request.AccessToken);
@@ -27,5 +32,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Queries.Handlers
                 ? Success<string>(entity: request.AccessToken, message: _localizer[SharedResourcesKeys.ValidToken])
                 : BadRequest<string>(_localizer[SharedResourcesKeys.InValidToken]);
         }
+        #endregion
     }
 }

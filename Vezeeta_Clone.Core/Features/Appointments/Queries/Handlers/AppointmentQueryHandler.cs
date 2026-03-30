@@ -11,9 +11,13 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Queries.Handlers
 {
     public class AppointmentQueryHandler : ResponseHandler, IRequestHandler<GetAppointmentDetailesQuery, Response<GetAppointmentDetailsQueryResult>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
         private readonly IAppointmentService _appointmentService;
+        #endregion
+
+        #region Constructor
         public AppointmentQueryHandler(IStringLocalizer<SharedResources> localizer,
                                         IAppointmentService appointmentService,
                                         IMapper mapper) : base(localizer)
@@ -22,7 +26,9 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Queries.Handlers
             _mapper = mapper;
             _localizer = localizer;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<GetAppointmentDetailsQueryResult>> Handle(GetAppointmentDetailesQuery request, CancellationToken cancellationToken)
         {
 
@@ -37,5 +43,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Queries.Handlers
             return Success<GetAppointmentDetailsQueryResult>(mappedAppointment);
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

@@ -31,27 +31,25 @@ namespace Vezeeta_Clone.Core.Middleware
                 switch (error)
                 {
                     case UnauthorizedAccessException e:
-                        // custom application error
+
                         responseModel.Message = error.Message;
                         responseModel.StatusCode = HttpStatusCode.Unauthorized;
                         response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         break;
 
                     case ValidationException e:
-                        // custom validation error
+
                         responseModel.Message = error.Message;
                         responseModel.StatusCode = HttpStatusCode.UnprocessableEntity;
                         response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
                         break;
                     case KeyNotFoundException e:
-                        // not found error
                         responseModel.Message = error.Message; ;
                         responseModel.StatusCode = HttpStatusCode.NotFound;
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
 
                     case DbUpdateException e:
-                        // can't update error
                         responseModel.Message = e.Message;
                         responseModel.StatusCode = HttpStatusCode.BadRequest;
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -72,7 +70,7 @@ namespace Vezeeta_Clone.Core.Middleware
                         break;
 
                     default:
-                        // unhandled error
+
                         responseModel.Message = error.Message;
                         responseModel.StatusCode = HttpStatusCode.InternalServerError;
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;

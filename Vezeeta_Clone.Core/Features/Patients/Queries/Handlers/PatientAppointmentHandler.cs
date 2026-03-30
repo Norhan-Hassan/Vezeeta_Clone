@@ -15,11 +15,14 @@ namespace Vezeeta_Clone.Core.Features.Patients.Queries.Handlers
 {
     public class PatientAppointmentHandler : ResponseHandler, IRequestHandler<GetPatientAppointmentsQuery, Response<PaginatedResult<GetPatientAppointmentsQueryResult>>>
     {
+        #region Fields
         private readonly IMediator _mediator;
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly IAppointmentService _appointmentService;
+        #endregion
 
+        #region Constructor
         public PatientAppointmentHandler(IStringLocalizer<SharedResources> localizer,
                                             IMediator mediator,
                                             IAppointmentService appointmentService,
@@ -30,7 +33,9 @@ namespace Vezeeta_Clone.Core.Features.Patients.Queries.Handlers
             _appointmentService = appointmentService;
             _currentUserService = currentUserService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<PaginatedResult<GetPatientAppointmentsQueryResult>>> Handle(GetPatientAppointmentsQuery request, CancellationToken cancellationToken)
         {
             Expression<Func<Appointment, GetPatientAppointmentsQueryResult>> expression =
@@ -57,5 +62,6 @@ namespace Vezeeta_Clone.Core.Features.Patients.Queries.Handlers
                 return NotFound<PaginatedResult<GetPatientAppointmentsQueryResult>>(_localizer[SharedResourcesKeys.NoData]);
             return Success(paginatedResult);
         }
+        #endregion
     }
 }

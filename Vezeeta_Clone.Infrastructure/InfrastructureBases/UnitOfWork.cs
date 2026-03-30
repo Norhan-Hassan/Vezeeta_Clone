@@ -23,6 +23,7 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         public IMedicalRecordRepo _medicalRecordRepo { get; private set; }
         public IPaymentRepo _paymentRepo { get; private set; }
         public IPaymentEventRepo _paymentEventRepo { get; private set; }
+        public IClinicImageRepo _clinicImageRepo { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -42,6 +43,7 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
             _medicalRecordRepo = new MedicalRecordRepo(_context);
             _paymentRepo = new PaymentRepo(_context);
             _paymentEventRepo = new PaymentEventRepo(_context);
+            _clinicImageRepo = new ClinicImageRepo(_context);
         }
 
 

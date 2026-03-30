@@ -11,10 +11,13 @@ namespace Vezeeta_Clone.Core.Features.Payments.Queries.Handlers
 {
     public class GetPaymentByAppointmentIdQueryHandler : ResponseHandler, IRequestHandler<GetPaymentByAppointmentIdQuery, Response<GetPaymentInfoQueryResult>>
     {
+        #region Fileds
         private readonly IMapper _mapper;
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IAppointmentService _appointmentService;
+        #endregion
 
+        #region Constructot
         public GetPaymentByAppointmentIdQueryHandler(IAppointmentService appointmentService, IMapper mapper,
             IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
@@ -23,7 +26,9 @@ namespace Vezeeta_Clone.Core.Features.Payments.Queries.Handlers
             _localizer = localizer;
             _appointmentService = appointmentService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<GetPaymentInfoQueryResult>> Handle(GetPaymentByAppointmentIdQuery request, CancellationToken cancellationToken)
         {
 
@@ -33,5 +38,6 @@ namespace Vezeeta_Clone.Core.Features.Payments.Queries.Handlers
 
             return Success(_mapper.Map<GetPaymentInfoQueryResult>(appointment.Payment));
         }
+        #endregion
     }
 }

@@ -10,21 +10,23 @@ using Vezeeta_Clone.Service.ExternalServices.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 {
-    public class UpdateAppointmentAfterPaymentCommandHandler : ResponseHandler,
-      IRequestHandler<UpdateAppointmentAfterPaymentCommand, Response<string>>
+    public class UpdateAppointmentAfterPaymentCommandHandler : ResponseHandler, IRequestHandler<UpdateAppointmentAfterPaymentCommand, Response<string>>
     {
+        #region Fields
         private readonly IPaymentService _paymentService;
         private readonly IAppointmentService _appointmentService;
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IEmailService _emailService;
         private readonly IBackgroundJobService _backgroundJobService;
 
+        #endregion
 
+        #region Constructor
         public UpdateAppointmentAfterPaymentCommandHandler(IPaymentService paymentService,
-            IAppointmentService appointmentService,
-            IBackgroundJobService backgroundJobService,
-            IEmailService emailService,
-            IStringLocalizer<SharedResources> localizer) : base(localizer)
+                                                            IAppointmentService appointmentService,
+                                                            IBackgroundJobService backgroundJobService,
+                                                            IEmailService emailService,
+                                                            IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
             _paymentService = paymentService;
             _appointmentService = appointmentService;
@@ -32,12 +34,13 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
             _backgroundJobService = backgroundJobService;
             _localizer = localizer;
         }
-
+        #endregion
+        #region Functions
         public async Task<Response<string>> Handle(UpdateAppointmentAfterPaymentCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var appointment = await _paymentService.UpdateAppointmentStatusAfterPaymentAsync(request.PaymentId, request.IsPaid);
+                var appointment = await _paymentService.UpdateAppointmentStatusAfterPaymentAsync(request.PaymentId, request.IsPaid ??= false);
                 if (appointment == null)
                     return NotFound<string>();
 
@@ -113,6 +116,7 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
                 return BadRequest<string>(ex.Message);
             }
         }
+        #endregion
     }
 }
 

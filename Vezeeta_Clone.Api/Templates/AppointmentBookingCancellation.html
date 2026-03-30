@@ -2,55 +2,94 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
-<body style="margin:0; padding:40px 0; font-family: Arial, sans-serif; background-color: #FDEDEC;">
-    <div style="width:600px; margin:0 auto; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; overflow:hidden;">
+<body style="margin:0; padding:20px; font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #FDEDEC 0%, #F5CFCE 100%);">
+    <div style="width:100%; max-width:600px; margin:0 auto; background-color:#FFFFFF; border-radius:16px; box-shadow:0 8px 32px rgba(176, 42, 55, 0.12); overflow:hidden;">
 
-        <!-- Logo -->
-        <div style="padding:30px 0;">
-            <img src="https://res.cloudinary.com/ddtcswz77/image/upload/v1774491046/Logo_lotycd.png" alt="Logo" width="100" style="display:block; margin:0 auto;" />
+        <div style="background: linear-gradient(135deg, #B02A37 0%, #8B1E2A 100%); padding:40px 20px; text-align:center;">
+
+            <div style="margin-bottom:20px;">
+                <span style="display:inline-block; width:80px; height:80px; background-color:#F5CFCE; border-radius:50%; line-height:80px; font-size:48px; color:#B02A37;">✕</span>
+            </div>
+
+            <h1 style="margin:20px 0 10px 0; font-size:28px; font-weight:bold; color:#FFFFFF; letter-spacing:0.5px;">{AppointmentCancelled}</h1>
         </div>
 
-        <!-- App Name -->
-        <div style="padding-bottom:20px; font-size:24px; font-weight:bold;">
-            <span style="color:#22577A;">Sehatek.</span><span style="color:#57CC99;">com</span>
+        <div style="padding:30px 20px; text-align:center; background-color:#FAFAFA;">
+            <img src="https://sehatekstorage.blob.core.windows.net/images/Logo.png" alt="Logo" width="80" style="display:block; margin:0 auto 15px; max-width:100%;" />
+            <div style="font-size:18px; font-weight:bold;">
+                <span style="color:#22577A;">Sehatek.</span><span style="color:#57CC99;">com</span>
+            </div>
         </div>
 
+        <div style="padding:30px 20px; background-color:#FFFFFF;">
+            
+            <p style="margin:0 0 20px 0; color:#22577A; font-size:16px; font-weight:600;">
+                {Dear} <span style="color:#B02A37;">{PatientFirstName}</span>
+            </p>
 
-        <!-- Cancellation Icon -->
-        <div style="padding-bottom:20px;">
-            <span style="display:inline-block; font-size:50px; color:#B02A37;">&#10060;</span> <!-- Cross mark for cancellation -->
+            <div style="background-color:#FEF5F4; border-left:4px solid #B02A37; padding:15px; border-radius:8px; margin-bottom:25px;">
+                <p style="margin:0; color:#333333; font-size:15px; line-height:1.6;">
+                    {CancellationMessage}
+                </p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #FAFAFA 0%, #F5EFEF 100%); padding:20px; border-radius:12px; border:1px solid #F5CFCE; margin-bottom:25px;">
+                <h3 style="margin:0 0 20px 0; color:#22577A; font-size:16px; font-weight:bold; letter-spacing:0.5px;">{AppointmentDetails}</h3>
+
+ 
+                <div style="padding:0;">
+  
+                    <div style="display:flex; align-items:flex-start; margin-bottom:15px; padding-bottom:15px; border-bottom:1px solid #F5CFCE;">
+                        <div style="flex:1;">
+                            <p style="margin:0; font-size:12px; color:#B02A37; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">{Doctor}</p>
+                            <p style="margin:5px 0 0 0; font-size:15px; color:#22577A; font-weight:600;">Dr. {DoctorFullName}</p>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:flex-start; margin-bottom:15px; padding-bottom:15px; border-bottom:1px solid #F5CFCE;">
+                        <div style="flex:1;">
+                            <p style="margin:0; font-size:12px; color:#B02A37; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">{Date}</p>
+                            <p style="margin:5px 0 0 0; font-size:15px; color:#22577A; font-weight:600;">{AppointmentDate}</p>
+                        </div>
+                    </div>
+
+  
+                    <div style="display:flex; align-items:flex-start; margin-bottom:15px; padding-bottom:15px; border-bottom:1px solid #F5CFCE;">
+                        <div style="flex:1;">
+                            <p style="margin:0; font-size:12px; color:#B02A37; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">{Time}</p>
+                            <p style="margin:5px 0 0 0; font-size:15px; color:#22577A; font-weight:600;">{AppointmentTime}</p>
+                        </div>
+                    </div>
+
+       
+                    <div style="display:flex; align-items:flex-start;">
+                        <div style="flex:1;">
+                            <p style="margin:0; font-size:12px; color:#B02A37; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">{Clinic}</p>
+                            <p style="margin:5px 0 0 0; font-size:15px; color:#22577A; font-weight:600;">{ClinicName}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background-color:#FEF5F4; padding:15px; border-radius:10px; text-align:center; margin-bottom:20px;">
+                <p style="margin:0; color:#333333; font-size:14px; line-height:1.6;">
+                    {ThanksMessage}
+                </p>
+            </div>
         </div>
 
-        <!-- Email Content -->
-        <div style="padding: 0 30px 30px 30px; color: #333333; font-size: 16px; line-height: 1.6; text-align: center">
-
-            <h2 style="margin-top:0; font-size:22px; font-weight:bold; color:#B02A37;">{AppointmentCancelled}</h2>
-
-            <p>{Dear} <strong>{PatientFirstName}</strong>,</p>
-
-            <p>{CancellationMessage}</p>
-
-            <hr style="border:none; border-top:1px solid #ddd; margin:20px 0;" />
-
-            <h3 style="margin-bottom:10px;">{AppointmentDetails}:</h3>
-            <ul style="padding-left: 20px; margin-top: 0; text-align: center">
-                <li><strong>{Doctor}:</strong> Dr. {DoctorFullName}</li>
-                <li><strong>{Date}:</strong> {AppointmentDate}</li>
-                <li><strong>{Time}:</strong> {AppointmentTime}</li>
-                <li><strong>{Clinic}:</strong> {ClinicName}</li>
-            </ul>
-
-            <hr style="border:none; border-top:1px solid #ddd; margin:20px 0;" />
-
-            <p>{ThanksMessage}</p>
+        <div style="padding:25px 20px; text-align:center; background: linear-gradient(135deg, #FAFAFA 0%, #F5EFEF 100%); border-top:1px solid #F5CFCE;">
+            <p style="margin:0 0 15px 0; font-size:12px; color:#B02A37; font-weight:500;">
+                {EmailFooter}
+            </p>
+            <p style="margin:10px 0 0 0; font-size:11px; color:#D4898E;">
+                © 2026 Sehatek.com • Medical Appointment Platform
+            </p>
         </div>
 
-        <!-- Footer -->
-        <div style="padding:20px; text-align:center; font-size:12px; color:#B02A37; background-color:#FDEDEC;">
-            {EmailFooter}
-        </div>
-
+        <div style="height:1px; background-color:#F5CFCE;"></div>
     </div>
 </body>
 </html>

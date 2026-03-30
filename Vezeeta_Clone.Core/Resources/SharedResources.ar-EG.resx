@@ -153,6 +153,12 @@
   <data name="AppointmentStatusPaymentStatus" xml:space="preserve">
     <value>الميعاد لم يؤكد او لم يتم اكمال عملية الدفع</value>
   </data>
+  <data name="AtLeastOneImage" xml:space="preserve">
+    <value>ارفق صورة واحده على الاقل</value>
+  </data>
+  <data name="AtMostFiveImages" xml:space="preserve">
+    <value>لا يمكن رفع أكثر من 5 صور</value>
+  </data>
   <data name="BadRequest" xml:space="preserve">
     <value>حدث خطا ما اثناء معالجة الطلب</value>
   </data>
@@ -399,6 +405,9 @@
   </data>
   <data name="UnprocessableEntity" xml:space="preserve">
     <value>هذه البيانات غير صالحه</value>
+  </data>
+  <data name="UnSupportedImageType" xml:space="preserve">
+    <value>الامتداد غير مسموح به حاول ارفاق صورة بامتداد اخر(jpg)</value>
   </data>
   <data name="Updated" xml:space="preserve">
     <value>تم التعديل بنجاح</value>

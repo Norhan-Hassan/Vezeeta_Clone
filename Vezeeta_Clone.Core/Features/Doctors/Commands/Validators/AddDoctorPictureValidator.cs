@@ -5,28 +5,34 @@ using Vezeeta_Clone.Core.Resources;
 
 namespace Vezeeta_Clone.Core.Features.Doctors.Commands.Validators
 {
-    public class CompleteDoctorInfoCommandValidator : AbstractValidator<CompleteDoctorInfoCommand>
+    public class AddDoctorPictureValidator : AbstractValidator<AddDoctorPictureCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
-        public CompleteDoctorInfoCommandValidator(IStringLocalizer<SharedResources> localizer)
+        #endregion
+
+        #region Constructor
+        public AddDoctorPictureValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Functions
         public void ApplyValidationRules()
         {
-            RuleFor(x => x.Description)
+            RuleFor(x => x.Picture)
                 .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
                 .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);
 
         }
         public void ApplyCustomValidationRules()
         {
-            RuleFor(x => x.SubSpecializations)
-                .Must(subSpecializations => subSpecializations!.Length <= 3 && subSpecializations!.Length >= 0);
+
 
         }
+        #endregion
     }
 }

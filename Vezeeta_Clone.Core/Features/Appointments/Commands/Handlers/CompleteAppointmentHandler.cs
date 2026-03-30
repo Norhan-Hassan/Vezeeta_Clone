@@ -11,9 +11,13 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
     public class CompleteAppointmentHandler : ResponseHandler,
         IRequestHandler<CompleteAppointmentCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IMapper _mapper;
         private readonly IAppointmentService _appointmentService;
+        #endregion
+
+        #region Constructor
         public CompleteAppointmentHandler(IStringLocalizer<SharedResources> localizer,
                                         IAppointmentService appointmentService,
                                         IMapper mapper) : base(localizer)
@@ -22,6 +26,9 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
             _mapper = mapper;
             _localizer = localizer;
         }
+        #endregion
+
+        #region Functions
 
         public async Task<Response<string>> Handle(CompleteAppointmentCommand request, CancellationToken cancellationToken)
         {
@@ -39,6 +46,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
             return BadRequest<string>(_localizer[SharedResourcesKeys.BookingCompletionFailed]);
         }
 
-
+        #endregion
     }
 }

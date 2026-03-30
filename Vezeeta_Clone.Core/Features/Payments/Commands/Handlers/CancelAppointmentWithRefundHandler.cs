@@ -11,17 +11,20 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 {
     public class CancelAppointmentWithRefundHandler : ResponseHandler, IRequestHandler<CancelAppointmentWithRefundCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IPaymentService _paymentService;
         private readonly IEmailService _emailService;
         private readonly IBackgroundJobService _backgroundJobService;
         private readonly IAppointmentService _appointmentService;
+        #endregion
 
+        #region Constructor
         public CancelAppointmentWithRefundHandler(IEmailService emailService,
-            IPaymentService paymentService,
-            IBackgroundJobService backgroundJobService,
-                IAppointmentService appointmentService,
-            IStringLocalizer<SharedResources> localizer) : base(localizer)
+                                                    IPaymentService paymentService,
+                                                    IBackgroundJobService backgroundJobService,
+                                                    IAppointmentService appointmentService,
+                                                    IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
             _paymentService = paymentService;
             _localizer = localizer;
@@ -29,6 +32,9 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
             _backgroundJobService = backgroundJobService;
             _emailService = emailService;
         }
+        #endregion
+
+        #region Functions
 
         public async Task<Response<string>> Handle(CancelAppointmentWithRefundCommand request, CancellationToken cancellationToken)
         {
@@ -97,5 +103,6 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 
             return Success<string>(null, message: _localizer[SharedResourcesKeys.AppointmentCancelled]);
         }
+        #endregion
     }
 }

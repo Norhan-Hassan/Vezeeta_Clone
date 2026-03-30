@@ -61,161 +61,6 @@ HTTP Request
 
 ---
 
-## 📋 Project Structure
-
-```
-Vezeeta_Clone.Api/
-├── Base/
-│   └── AppControllerBase.cs    #  Base controller with MediatR + Response mapping
-├── Controllers/
-│   ├── AuthenticationController.cs    #  Register, SignIn, RefreshToken, ChangePassword
-│   ├── SpecializationsController.cs     #  CRUD for specializations
-│   ├── DoctorsController.cs #  Doctor operations
-│   ├── AppointmentsController.cs        #  Appointment management
-│   ├── ReviewsController.cs     #  Patient reviews
-│   ├── MedicalRecordsController.cs      #  Medical records, diagnoses, prescriptions
-│   └── ClinicsController.cs             #  Clinic registration
-├── Program.cs       #  App entry point, DI, middleware pipeline
-└── appsettings.json
-
-Vezeeta_Clone.Core/
-├── Bases/
-│   ├── Response.cs    #  Generic API response wrapper
-│   └── ResponseHandler.cs         #  Standardized response factory methods
-├── Behavior/
-│   └── ValidationBehavior.cs            #  MediatR pipeline for FluentValidation
-├── Features/
-│   ├── Auth/       #  Authentication & Authorization
-│   ├── Doctors/             #  Doctor profile & details
-│   ├── Appointments/             #  Appointment booking & management
-│   ├── Schedules/   #  Availability & slot management
-│ ├── Reviews/        #  Doctor reviews
-│   ├── MedicalRecords/     #  Medical records, diagnoses, prescriptions
-│   ├── Clinics/      #  Clinic registration
-│   ├── Specializations/      #  Specializations & sub-specializations
-│   └── Patients/         #  Patient operations
-├── Mapping/           #  AutoMapper CQRS profiles
-├── Middleware/
-│   └── ErrorHandlerMiddleware.cs        #  Global exception handling
-├── Resources/
-│   ├── SharedResources.cs            # 🌐 Localization resources
-│   └── SharedResourcesKeys.cs           #  Localization key constants
-└── ModuleCoreDependencies.cs      #  MediatR, AutoMapper, FluentValidation DI
-
-Vezeeta_Clone.Service/
-├── Abstract/
-│   ├── IAuthenticationService.cs        #  Auth service interface
-│   ├── IAuthorizationService.cs         #  Authorization service interface
-│   ├── IDoctorService.cs      #  Doctor service interface
-│   ├── ISpecializationService.cs        #  Specialization service interface
-│   ├── IAppointmentService.cs           #  Appointment service interface
-│   ├── IClinicService.cs                #  Clinic service interface
-│   ├── IMedicalRecordService.cs         #  Medical record service interface
-│   ├── IReviewService.cs        #  Review service interface
-│   ├── IDoctorAvailabilityService.cs    #  Availability service interface
-│   ├── ISlotGenerationService.cs        #  Slot generation service interface
-│   ├── IPaymentService.cs #  Payment service interface
-│   └── IPaymentProcessingStrategy.cs    #  Payment processor strategy interface
-├── AppUserAuthServices/
-│   ├── Abstract/
-│   │ └── ICurrentUserService.cs         #  Get current authenticated user from JWT claims
-│└── Implementation/
-│       └── CurrentUserService.cs        #  JWT claims extraction implementation
-├── Implementation/
-│   ├── AuthenticationService.cs         #  JWT generation, refresh tokens, registration
-│   ├── AuthorizationService.cs          #  Role CRUD operations
-│   ├── DoctorService.cs                 #  Doctor business logic
-│   ├── SpecializationService.cs         #  Specialization operations
-│   ├── AppointmentService.cs            #  Appointment booking with concurrency handling
-│   ├── ClinicService.cs                 #  Clinic management
-│   ├── MedicalRecordService.cs          #  Medical records, diagnoses, prescriptions
-│   ├── ReviewService.cs                 #  Review CRUD operations
-│   ├── DoctorAvailabilityService.cs     #  Availability management with validation
-│   ├── SlotGenerationService.cs         #  Intelligent slot generation engine
-│   └── PaymentService.cs                #  Payment operations
-├── Payments/
-│   ├── IPaymentProcessingStrategy.cs    #  Strategy interface for payment processors
-│   └── StripePaymentProcessingStrategy.cs #  Stripe integration implementation
-├── BackgroundJobServices/
-│   ├── Abstract/
-│   │   └── IBackgroundJobService.cs     #  Fire-and-forget, scheduled, recurring jobs
-│   └── Implementation/
-│       └── BackgroundJobService.cs      #  Hangfire integration
-└── ModuleServiceDependencies.cs#  Service layer DI
-
-Vezeeta_Clone.Infrastructure/
-├── Abstract/            #  Repository interfaces
-├── Payments/
-│   ├── IPaymentProcessingStrategy.cs    #  Strategy pattern interface
-│   └── StripePaymentProcessingStrategy.cs #  Stripe implementation
-├── Context/
-│   └── ApplicationDbContext.cs   #  EF Core DbContext with soft delete filters
-├── InfrastructureBases/
-│   ├── IGenericRepositoryAsync.cs       #  Generic repository interface
-│   ├── GenericRepositoryAsync.cs        #  Generic repository with transactions
-│   └── IUnitOfWork.cs  #  Unit of Work pattern
-├── Repos/   #  Concrete repository implementations
-│   ├── AppointmentRepo.cs
-│   ├── ClinicRepo.cs
-│   ├── MedicalRecordRepo.cs
-│   ├── ReviewRepo.cs
-│   ├── PaymentRepo.cs
-│   ├── PaymentEventRepo.cs
-│   └── ... (other repos)
-├── Seeder/
-│   ├── RoleSeeder.cs    #  Seeds Admin, Doctor, Patient roles
-│   ├── UserSeeder.cs     #  Seeds default Admin user
-│   └── SpecializationSeeder.cs          #  Seeds specializations with sub-specializations
-├── ServiceRegistration.cs             #  Identity, JWT, Swagger, Stripe configuration
-├── ModuleInfrastructureDependencies.cs  #  Repository DI
-└── Migrations/   #  Database migrations
-
-Vezeeta_Clone.Data/
-├── Entities/
-│   ├── ApplicationUser.cs     #  Base user entity
-│   ├── Doctor.cs          #  Doctor entity
-│   ├── Patient.cs        #  Patient entity
-│   ├── Appointment.cs         #  Appointment entity with Payment FK
-│   ├── Payment.cs     # 💳 Multi-provider payment entity including cash
-│   ├── PaymentEvent.cs                  #  Webhook events from payment providers
-│   ├── DoctorAvailability.cs            #  Doctor availability entity
-│   ├── DoctorAvailabilitySlot.cs        #  Individual appointment slots
-│   ├── Clinic.cs           #  Clinic entity
-│   ├── Review.cs             #  Patient reviews entity
-│   ├── DoctorPatient.cs          #  Doctor-patient relationship tracking
-│   ├── MedicalRecord.cs            #  Medical record entity
-│   ├── Diagnosis.cs #  Diagnosis entity
-│   ├── EPrescription.cs    #  E-prescription entity
-│   ├── PrescriptionItem.cs   #  Prescription medication items
-│   ├── Specialization.cs # Specialization entity
-│   ├── SubSpecialization.cs  # Sub-specialization entity
-│   ├── Notification.cs       #  Notification entity
-│   ├── UserToken.cs    # JWT token persistence
-│   ├── City.cs, Region.cs, Location.cs  #  Geographic entities
-│   └── University.cs     #  Educational institution entity
-├── Enums/
-│   ├── AppointmentStatus.cs #  Upcoming, Completed, Cancelled
-│   ├── SlotStatus.cs#  Available, Booked, Locked
-│   ├── AvailabilityMethod.cs    #  Online, Offline
-│   ├── PaymentStatus.cs    #  Pending, Paid, Failed
-│   ├── PaymentProvider.cs        #  Cash, Stripe, PayPal
-│   ├── PaymentEventType.cs   #  Success, Failed, Webhook
-│   ├── Gender.cs   #  Male, Female, Other
-│├── BloodType.cs     #  Blood types
-│ └── Title.cs      #  Dr., Prof., etc.
-├── Commons/
-│   └── Roles.cs #  Role constants (Admin, Doctor, Patient)
-├── Helper/
-│   ├── JwtSettings.cs   #  JWT configuration model
-│   └── AppUserClaimModel.cs      #  Custom claim model
-├── Results/
-│   └── JwtAuthResult.cs          #  Access + Refresh token result
-└── AppMetaData/
-    └── Router.cs   #  Centralized API route constants
-```
-
----
-
 ## Domain Entities
 
 ### User Management
@@ -437,9 +282,15 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 | `POST`   | `refresh-token`          | Get new access token via refresh token | ❌   |
 | `GET`    | `check-token-validation` | Validate a JWT token                   | ❌   |
 | `POST`   | `change-password`        | Change current user password           | ✅   |
-| `POST`   | `role/create`            | Create a new role                      | ✅   |
-| `PUT`    | `role/update`            | Update an existing role                | ✅   |
-| `DELETE` | `role/delete`            | Delete a role                          | ✅   |
+
+
+### Authorization (`api/v1/authorization/`)
+
+| Method   | Route    | Description          | Auth |
+| -------- | -------- | ------------------------ | ---- |
+| `POST`   | `add`    | Create a new role | ✅   |
+| `PUT`    | `update` | Update an existing role  | ✅   |
+| `DELETE` | `delete` | Delete a role         | ✅   |
 
 ### Doctors (`api/v1/doctors/`)
 
@@ -473,19 +324,19 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 
 ### Schedules (`api/v1/schedules/`)
 
-| Method | Route            | Description                        | Auth |
+| Method | Route            | Description                   | Auth |
 | ------ | ---------------- | ---------------------------------- | ---- |
-| `POST` | `/`              | Set doctor availability            | ✅   |
-| `POST` | `{Id}/lock-slot` | Lock specific slot                 | ✅   |
-| `GET`  | `{doctorId}`     | Get doctor's availability patterns | ❌   |
+| `POST` | `/`          | Set doctor availability schedule   | ✅   |
+| `PUT`  | `{Id}/lock-slot` | Lock specific appointment slot     | ✅   |
 
 ### Medical Records (`api/v1/medical-records/`)
 
-| Method | Route                 | Description           | Auth |
-| ------ | --------------------- | --------------------- | ---- |
-| `POST` | `/`                   | Create medical record | ✅   |
-| `POST` | `{Id}/diagnosis`      | Add diagnosis         | ✅   |
-| `POST` | `{Id}/e-prescription` | Create e-prescription | ✅   |
+| Method | Route       | Description        | Auth |
+| ------ | ---------------------- | ------------------------ | ---- |
+| `POST` | `/`     | Create medical record    | ✅   |
+| `POST` | `{Id}/diagnosis`       | Create diagnosis in medical record | ✅   |
+| `POST` | `{Id}/e-prescription`  | Create E-prescription in medical record | ✅   |
+| `GET`  | `generate-report`| Generate medical report PDF | ✅   |
 
 ### Reviews (`api/v1/reviews/`)
 
@@ -501,6 +352,8 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 | ------ | --------------------- | -------------------------- | ---- |
 | `GET`  | `list/`               | List all clinics           | ❌   |
 | `POST` | `register-to-doctor/` | Register clinic for doctor | ✅   |
+| `POST` | `/`                   | Add images for clinic      | ✅   |
+| `GET`  | `{Id}/images/`        | Get images of clinic       | ❌  |
 
 ### Patients (`api/v1/patients/`)
 
@@ -510,7 +363,7 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 
 ---
 
-## Features (Latest Release)
+## Features
 
 ### 1️⃣ **Intelligent Slot Generation System**
 
@@ -547,9 +400,8 @@ Validation and slot generation triggering on availability creation.
 
 ### 4️⃣ **Payment Processing System**
 
-- 💳 Multi-provider support (Cash, Stripe, PayPal) via strategy pattern
 - Payment status tracking (Pending, Paid, Failed)
-- Webhook event logging with retry tracking
+- Payment event logging 
 - Idempotent operations with provider metadata storage (JSON)
 - Payment integration with Appointments
 
@@ -579,6 +431,35 @@ Validation and slot generation triggering on availability creation.
 - Prevent multiple clinics per doctor
 - Require profile completion before clinic registration
 
+### 8️⃣ **Clinic Image Management**
+
+- **Batch Upload**: Upload multiple clinic images in one request
+- **Azure Blob Storage**: Images stored in cloud with unique naming (GUID-based)
+- **Authorization**: Only clinic owner (doctor) can upload images
+- **Validation**: Input validation for file presence and uniqueness
+- **Error Handling**: Graceful handling of upload failures with proper logging
+- **Automatic URL Generation**: Returns blob URLs for uploaded images
+
+### 9️⃣ **External Services Integration** 
+
+- **Azure Blob Storage**: File upload/download with configurable containers and validation
+- **Email Notifications**: Background email sending via Hangfire
+- **PDF Generation**: Medical report creation with QuestPDF
+- Proper placement in **Service Layer** following SOLID principles and Dependency Inversion
+
+### **Enhanced Payment Workflow** 
+
+- **Success Path**: Appointment confirmation with status-specific email
+- **Failure Path**: Automatic slot release and failure notification
+- **Refund Processing**: Stripe automatic refunds and cash refund tracking
+- **Cancellation Workflow**: Complete cancellation with refund coordination
+
+### 1️⃣1️⃣ **Comprehensive API Documentation** 
+
+- SwaggerOperation attributes on all 10 controllers
+- 50+ endpoints with meaningful summaries and descriptions
+- Full Swagger/OpenAPI integration with JWT support
+
 ---
 
 ## Database Diagram (Entity Relationships)
@@ -588,10 +469,11 @@ ApplicationUser (IdentityUser)
  ├── 1:1 → Doctor
  │    ├── N:1 → Specialization
  │    │    └── 1:N → SubSpecialization
- │    ├── N:N → SubSpecialization (via DoctorSubSpecializations)
+ │    ├── N:N → SubSpecialization (via DoctorSubSpecialSpecializations)
  │    ├── 1:1 → Clinic
  │    │         ├── N:1 → Region → City
  │    │         └── N:1 → Location (GPS)
+ │    │         └── 1:N(1-5) → ClinicImage 
  │    ├── 1:N → DoctorAvailability
  │          └── 1:N → DoctorAvailabilitySlot
  │    │     └── 1:N → Appointment
@@ -612,7 +494,7 @@ ApplicationUser (IdentityUser)
 
 Payment
  ├── N:1 → Appointment
- └── 1:N → PaymentEvent (Webhook tracking)
+ └── 1:N → PaymentEvent 
 ```
 
 All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading deletes.
@@ -635,6 +517,8 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
 | `Stripe.net`                                        | Latest  | Stripe payment processing     |
 | `Hangfire.Core`                                     | 1.8.13  | Background job processing     |
 | `Hangfire.SqlServer`                                | 1.8.13  | SQL Server job storage        |
+| `Azure.Storage.Blobs`                               | Latest  | Azure Blob Storage integration|
+| `QuestPDF`                                          | Latest  | PDF generation                |
 
 ---
 
@@ -675,6 +559,11 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
        "ValidateIssuerSigningKey": true,
        "AccessTokenExpireDate": 7,
        "RefreshTokenExpireDate": 2
+     },
+     "AzureStorageSettings":{
+        "DefaultContainer":"name",
+        "ReportContainer":"name",
+        "ConnectionString":"connection_string_"
      },
      "StripeSettings": {
        "SecretKey": "sk_test_YOUR_STRIPE_SECRET_KEY",
@@ -726,11 +615,13 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
 - **JWT Security** — access + refresh token pattern with database-backed revocation
 - **Current User Abstraction** — `ICurrentUserService` for clean auth context access
 - **Restrict Delete Behavior** — all foreign keys use `DeleteBehavior.Restrict`
-- **Background Jobs** — Hangfire for async slot generation without blocking API
+- **Background Jobs** — Hangfire for async slot generation and email notifications
 - **Slot Deduplication** — HashSet-based O(1) duplicate detection
 - **UTC Timezone Consistency** — all time operations use UTC for global compatibility
 - **Transaction Support** — generic repository provides transaction management (Begin, Commit, Rollback)
 - **Concurrency Handling** — optimistic locking with retry logic for slot booking
-- **Payment Webhooks** — event logging system for payment provider webhooks
+- **Payment Event logging** — event logging system for payment provider 
+- **Refund Processing** — Stripe refunds tracking with proper error handling 
 - **Appointment Validation** — multi-level checks for slot availability, past slots, double bookings
-- **Clinic Validation** — Egyptian phone format validation, profile completion checks
+- **Clinic Validation** — Egyptian phone format validation, Doctor profile completion checks
+- **API Documentation** — SwaggerOperation attributes on all endpoints 

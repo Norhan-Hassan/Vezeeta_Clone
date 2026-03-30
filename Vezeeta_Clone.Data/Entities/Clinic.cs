@@ -22,5 +22,6 @@ namespace Vezeeta_Clone.Data.Entities
         [ForeignKey("Doctor")]
         public string? DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
+        public ICollection<ClinicImage>? ClinicImages { get; set; }
     }
 }

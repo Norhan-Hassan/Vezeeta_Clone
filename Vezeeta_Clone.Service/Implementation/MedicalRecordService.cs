@@ -104,5 +104,69 @@ namespace Vezeeta_Clone.Service.Implementation
             }
             throw new InvalidOperationException("NoMedicalRecordExist");
         }
+        public async Task<MedicalRecord> GetMedicalRecordAsync(int medicalRecordId)
+        {
+            var medicalRecord = await _unitOfWork._medicalRecordRepo.GetTableNoTracking()
+                                    .Include(mr => mr.DoctorPatient)
+                                        .ThenInclude(dp => dp.Patient)
+                                            .ThenInclude(p => p.ApplicationUser)
+                                    .Include(mr => mr.DoctorPatient)
+                                        .ThenInclude(dp => dp.Doctor)
+                                            .ThenInclude(d => d.ApplicationUser)
+                                    .Include(mr => mr.DoctorPatient)
+                                        .ThenInclude(dp => dp.Doctor)
+                                            .ThenInclude(d => d.Clinic)
+                                    .Include(mr => mr.DoctorPatient)
+                                        .ThenInclude(dp => dp.Doctor)
+                                            .ThenInclude(d => d.Specialization)
+                                    .Include(mr => mr.EPrescriptions)
+                                        .ThenInclude(ep => ep.prescriptions)
+                                    .Include(mr => mr.Diagnoses)
+                                    .Include(mr => mr.Appointment)
+                                    .ThenInclude(a => a.AvailableSlot)
+                                    .FirstOrDefaultAsync(mr => mr.ID == medicalRecordId);
+
+            if (medicalRecord == null)
+            {
+                return null;
+            }
+            return medicalRecord;
+        }
+
+        public async Task<bool> SaveMedicalRecordReport(string? file_url, int medicalRecordId)
+        {
+            var medicalRecord = await _unitOfWork._medicalRecordRepo.GetByIntIdAsync(medicalRecordId);
+            if (medicalRecord == null || medicalRecord.Diagnoses.Count == 0 || medicalRecord.EPrescriptions.Count == 0)
+            {
+                return false;
+            }
+            medicalRecord.FileUrl = file_url;
+            await _unitOfWork._medicalRecordRepo.UpdateAsync(medicalRecord);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+
+        }
+
+        public async Task<bool> UpdateDiagnosisAsync(int medicalRecordId, string description, string doctorId)
+        {
+            var medicalRecord = await _unitOfWork._medicalRecordRepo.GetByIntIdAsync(medicalRecordId);
+            if (medicalRecord == null || medicalRecord.Diagnoses.Count == 0 || medicalRecord.EPrescriptions.Count == 0)
+            {
+                return false;
+            }
+
+            var diagnosis = _unitOfWork._diagnosisRepo.GetTableAsTracking()
+                            .FirstOrDefault(d => d.MedicalRecordId == medicalRecordId);
+            if (diagnosis == null)
+            {
+                return false;
+            }
+            diagnosis.Description = description;
+            diagnosis.UpdatedAt = DateTime.UtcNow;
+            await _unitOfWork._diagnosisRepo.UpdateAsync(diagnosis);
+            var result = await _unitOfWork.SaveChangesAsync();
+            return result > 0;
+
+        }
     }
 }

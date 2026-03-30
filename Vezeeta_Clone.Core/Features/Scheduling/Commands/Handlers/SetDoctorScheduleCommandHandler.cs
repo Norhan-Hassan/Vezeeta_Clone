@@ -12,10 +12,14 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
 {
     public class SetDoctorScheduleCommandHandler : ResponseHandler, IRequestHandler<SetDoctorScheduleCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly IDoctorAvailabilityService _scheduleService;
         private readonly IMapper _mapper;
+        #endregion
+
+        #region Constructor
         public SetDoctorScheduleCommandHandler(IStringLocalizer<SharedResources> localizer,
                                             IDoctorAvailabilityService scheduleService,
                                             ICurrentUserService currentUserService,
@@ -26,6 +30,9 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
             _currentUserService = currentUserService;
             _mapper = mapper;
         }
+        #endregion
+
+        #region Functions
 
         public async Task<Response<string>> Handle(SetDoctorScheduleCommand request, CancellationToken cancellationToken)
         {
@@ -51,5 +58,6 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
             }
 
         }
+        #endregion
     }
 }

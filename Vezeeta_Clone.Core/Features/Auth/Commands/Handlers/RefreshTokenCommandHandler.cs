@@ -11,16 +11,20 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 {
     public class RefreshTokenCommandHandler : ResponseHandler, IRequestHandler<RefreshTokenCommand, Response<JwtAuthResult>>
     {
+        #region Fields
         private readonly IAuthenticationService _authenticationService;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public RefreshTokenCommandHandler(IAuthenticationService authenticationService,
                                     IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
             _localizer = localizer;
             _authenticationService = authenticationService;
         }
-
+        #endregion
+        #region Functions
         public async Task<Response<JwtAuthResult>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
             JwtAuthResult jwtAuthResult = new JwtAuthResult();
@@ -34,5 +38,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
                 return Unauthorized<JwtAuthResult>(ex.Message);
             }
         }
+        #endregion
     }
 }

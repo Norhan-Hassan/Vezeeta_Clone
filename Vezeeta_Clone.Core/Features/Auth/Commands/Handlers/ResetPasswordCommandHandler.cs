@@ -13,10 +13,14 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
                                                 IRequestHandler<ResetPasswordCommand, Response<string>>,
                                                 IRequestHandler<ResetPasswordInActionCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IAuthenticationService _autheticationService;
         private readonly IBackgroundJobService _backgroundJobService;
         private readonly IEmailService _emailService;
+        #endregion
+
+        #region Constructor
         public ResetPasswordCommandHandler(IStringLocalizer<SharedResources> localizer,
             IBackgroundJobService backgroundJobService,
             IEmailService emailService,
@@ -27,7 +31,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             _backgroundJobService = backgroundJobService;
             _emailService = emailService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             var result = await _autheticationService.GetResetPasswordCodeAsync(request.Email);
@@ -72,5 +78,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
                 return NotFound<string>(SharedResourcesKeys.EmailIsNotExist);
             }
         }
+        #endregion
     }
 }

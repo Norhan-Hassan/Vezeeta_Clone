@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Vezeeta_Clone.Api.Base;
 using Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Models;
+using Vezeeta_Clone.Core.Features.MedicalRecords.Queries.Models;
 using Vezeeta_Clone.Data.AppMetaData;
 using Vezeeta_Clone.Data.Commons;
 
@@ -39,6 +40,16 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         {
             command.MedicalRecordId = Id;
             var response = await _mediator.Send(command);
+            return NewResult(response);
+        }
+
+
+        [HttpGet(Router.MedicalRecordRouting.GenerateMedicalReport)]
+        [Authorize(Roles = Roles.Patient)]
+        [SwaggerOperation(Summary = "Generate Medical Report", Description = "generate Medical Report according to its id")]
+        public async Task<IActionResult> GenerateMedicalReport([FromQuery] GetMedicalReportQuery query)
+        {
+            var response = await _mediator.Send(query);
             return NewResult(response);
         }
     }

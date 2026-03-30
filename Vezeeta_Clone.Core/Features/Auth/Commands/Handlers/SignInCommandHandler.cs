@@ -12,11 +12,14 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 {
     public class SignInCommandHandler : ResponseHandler, IRequestHandler<SignInCommand, Response<JwtAuthResult>>
     {
+        #region Fields
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAuthenticationService _authenticationService;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public SignInCommandHandler(UserManager<ApplicationUser> userManager,
                                 SignInManager<ApplicationUser> signInManager,
                                 IAuthenticationService authenticationService,
@@ -27,7 +30,9 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             _authenticationService = authenticationService;
             _localizer = localizer;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
@@ -45,5 +50,6 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
 
             return Success<JwtAuthResult>(result, message: _localizer[SharedResourcesKeys.SignInSuccess]);
         }
+        #endregion
     }
 }

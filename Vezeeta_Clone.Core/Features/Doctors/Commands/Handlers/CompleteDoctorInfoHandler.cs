@@ -9,13 +9,17 @@ using Vezeeta_Clone.Service.AppUserAuthServices.Abstract;
 
 namespace Vezeeta_Clone.Core.Features.Doctors.Commands.Handlers
 {
-    public class DoctorCommandHandler : ResponseHandler, IRequestHandler<CompleteDoctorInfoCommand, Response<string>>
+    public class CompleteDoctorInfoHandler : ResponseHandler, IRequestHandler<CompleteDoctorInfoCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly IDoctorService _doctorService;
         private readonly IMapper _mapper;
-        public DoctorCommandHandler(IStringLocalizer<SharedResources> localizer,
+        #endregion
+
+        #region Constructor
+        public CompleteDoctorInfoHandler(IStringLocalizer<SharedResources> localizer,
                                       IMapper mapper,
                                       ICurrentUserService currentUserService,
                                       IDoctorService doctor) : base(localizer)
@@ -25,7 +29,8 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Commands.Handlers
             _currentUserService = currentUserService;
             _doctorService = doctor;
         }
-
+        #endregion
+        #region Functions
         public async Task<Response<string>> Handle(CompleteDoctorInfoCommand request, CancellationToken cancellationToken)
         {
             //get doctor
@@ -42,7 +47,6 @@ namespace Vezeeta_Clone.Core.Features.Doctors.Commands.Handlers
                 return BadRequest<string>(_localizer[SharedResourcesKeys.FailedToCompleteDoctorInfo]);
             }
         }
+        #endregion
     }
 }
-//Doctor info completed successfully
-//Failed to complete doctor info

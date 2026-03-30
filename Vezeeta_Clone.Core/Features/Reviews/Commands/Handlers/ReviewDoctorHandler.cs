@@ -14,10 +14,14 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
                                                       , IRequestHandler<UpdateReviewCommand, Response<string>>
                                                        , IRequestHandler<DeleteReviewCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
         private readonly IReviewService _reviewService;
+        #endregion
+
+        #region Constructors
         public ReviewDoctorHandler(IStringLocalizer<SharedResources> localizer,
                                             ICurrentUserService currentUserService,
                                                      IMapper mapper,
@@ -28,7 +32,9 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
             _mapper = mapper;
             _reviewService = reviewService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(MakeReviewCommand request, CancellationToken cancellationToken)
         {
             var patientId = _currentUserService.GetCurrentUserId();
@@ -99,6 +105,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
             }
             return BadRequest<string>(_localizer[SharedResourcesKeys.FailedToDelete]);
         }
+        #endregion
     }
 }
 

@@ -8,8 +8,13 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
 {
     public class SetDoctorScheduleCommandValidator : AbstractValidator<SetDoctorScheduleCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly IDoctorAvailabilityService _scheduleService;
+        #endregion
+
+
+        #region Constructor
         public SetDoctorScheduleCommandValidator(IStringLocalizer<SharedResources> localizer,
 
                                                  IDoctorAvailabilityService scheduleService)
@@ -20,7 +25,9 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
             ApplyValidationRules();
             ApplyCustomValidationRules();
         }
+        #endregion
 
+        #region Fnctions
 
         public void ApplyValidationRules()
         {
@@ -56,5 +63,6 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Validators
 
 
         }
+        #endregion
     }
 }

@@ -2,35 +2,46 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
-<body style="margin:0; padding:40px 0; font-family: Arial, sans-serif; background-color: #C7F9CC;">
-    <div style="width:600px; margin:0 auto; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; overflow:hidden;">
+<body style="margin:0; padding:20px; font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #C7F9CC 0%, #80ED99 100%);">
+    <div style="width:100%; max-width:600px; margin:0 auto; background-color:#FFFFFF; border-radius:16px; box-shadow:0 8px 32px rgba(34, 87, 122, 0.15); overflow:hidden;">
 
-        <!-- Logo -->
-        <div style="padding:30px 0;">
-            <img src="https://res.cloudinary.com/ddtcswz77/image/upload/v1774491046/Logo_lotycd.png" alt="Logo" width="100" style="display:block; margin:0 auto;" />
+        <div style="background: linear-gradient(135deg, #22577A 0%, #38A3A5 100%); padding:40px 20px; text-align:center;">
+            
+            <img src="https://sehatekstorage.blob.core.windows.net/images/Logo.png" alt="Logo" width="80" style="display:block; margin:0 auto 20px; max-width:100%;" />
+
+        
+            <div style="font-size:20px; font-weight:bold;">
+                <span style="color:#FFFFFF;">Sehatek.</span><span style="color:#80ED99;">com</span>
+            </div>
         </div>
 
-        <!-- App Name -->
-        <div style="padding-bottom:20px; font-size:24px; font-weight:bold;">
-            <span style="color:#22577A;">Sehatek.</span><span style="color:#57CC99;">com</span>
+        <div style="padding:40px 20px; background-color:#FFFFFF;">
+
+            <div style="margin-bottom:30px;">
+                <p style="margin:0; color:#333333; font-size:16px; line-height:1.8; font-weight:500;">
+                    {BodyText}
+                </p>
+            </div>
+
+            <div style="text-align:center; margin-bottom:30px;">
+                <a href="{ConfirmUrl}" style="display:inline-block; background: linear-gradient(135deg, #38A3A5 0%, #22577A 100%); color:#FFFFFF; padding:14px 40px; text-decoration:none; border-radius:10px; font-weight:600; font-size:15px; box-shadow:0 4px 15px rgba(34, 87, 122, 0.2); transition:all 0.3s ease;">
+                    {ButtonText}
+                </a>
+            </div>
         </div>
 
-        <!-- Content -->
-        <div style="padding:0 30px 30px 30px; color:#333333; font-size:16px; line-height:1.6;">
-            <p style="font-size:18px; font-weight:500; margin-bottom:20px;">
-                {BodyText}
+        <div style="padding:25px 20px; text-align:center; background: linear-gradient(135deg, #F8FFFE 0%, #E8F7F5 100%); border-top:1px solid #C7F9CC;">
+            <p style="margin:0 0 12px 0; font-size:12px; color:#22577A; font-weight:500;">
+                {EmailFooter}
             </p>
-            <a href="{ConfirmUrl}" style="display:inline-block; background-color:#38A3A5; color:#ffffff; padding:14px 28px; text-decoration:none; border-radius:8px; font-weight:bold; font-size:16px; box-shadow:0 4px 12px rgba(0,0,0,0.15); margin-top:20px;">
-                {ButtonText}
-            </a>
+            <p style="margin:8px 0 0 0; font-size:11px; color:#80ED99;">
+                © 2026 Sehatek.com • Medical Platform
+            </p>
         </div>
 
-        <!-- Footer -->
-        <div style="padding: 20px; text-align: center; font-size: 12px; color: #22577A; background-color: #F9F9F9;">
-            {EmailFooter}
-        </div>
-
+        <div style="height:1px; background-color:#C7F9CC;"></div>
     </div>
 </body>
 </html>

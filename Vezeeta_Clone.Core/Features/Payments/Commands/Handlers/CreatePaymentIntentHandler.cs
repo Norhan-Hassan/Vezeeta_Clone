@@ -11,10 +11,13 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
 {
     public class CreatePaymentIntentCommandHandler : ResponseHandler, IRequestHandler<CreatePaymentIntentCommand, Response<PaymentIntentResponseResult>>
     {
+        #region Fields
         private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
 
+        #region Constructor
         public CreatePaymentIntentCommandHandler(IPaymentService paymentService, IMapper mapper,
             IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
@@ -22,7 +25,9 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
             _mapper = mapper;
             _localizer = localizer;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<PaymentIntentResponseResult>> Handle(CreatePaymentIntentCommand request, CancellationToken cancellationToken)
         {
             try
@@ -51,5 +56,6 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
                 return BadRequest<PaymentIntentResponseResult>(ex.Message);
             }
         }
+        #endregion
     }
 }

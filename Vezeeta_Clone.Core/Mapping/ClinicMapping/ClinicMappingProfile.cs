@@ -6,8 +6,9 @@ namespace Vezeeta_Clone.Core.Mapping.ClinicMapping
     {
         public ClinicMappingProfile()
         {
+            AddClinicImageMapping();
             RegisterDoctorClinicMapping();
-
+            GetClinicImagesMapping();
         }
     }
 }

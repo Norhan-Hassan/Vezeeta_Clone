@@ -11,9 +11,13 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
 {
     public class LockSlotCommandHandler : ResponseHandler, IRequestHandler<LockSlotCommand, Response<string>>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         private readonly ICurrentUserService _currentUserService;
         private readonly ISlotService _slotService;
+        #endregion
+
+        #region Constructor
         public LockSlotCommandHandler(IStringLocalizer<SharedResources> localizer,
                                      ISlotService slotService,
                                       ICurrentUserService currentUserService) : base(localizer)
@@ -22,7 +26,9 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
             _slotService = slotService;
             _currentUserService = currentUserService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(LockSlotCommand request, CancellationToken cancellationToken)
         {
             var roles = await _currentUserService.GetCurrentUserRolesAsync();
@@ -42,5 +48,6 @@ namespace Vezeeta_Clone.Core.Features.Scheduling.Commands.Handlers
                 return BadRequest<string>(_localizer[SharedResourcesKeys.FailToUpdate]);
             }
         }
+        #endregion
     }
 }

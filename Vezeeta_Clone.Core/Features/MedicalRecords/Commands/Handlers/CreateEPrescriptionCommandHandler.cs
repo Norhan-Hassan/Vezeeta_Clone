@@ -13,10 +13,14 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Handlers
 {
     public class CreateEPrescriptionCommandHandler : ResponseHandler, IRequestHandler<CreateEPrescriptionCommand, Response<string>>
     {
+        #region Fields
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public CreateEPrescriptionCommandHandler(IMapper mapper, ICurrentUserService currentUserService, IMedicalRecordService medicalRecordService, IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
             _localizer = localizer;
@@ -24,7 +28,9 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Handlers
             _currentUserService = currentUserService;
             _medicalRecordService = medicalRecordService;
         }
+        #endregion
 
+        #region Functions
         public async Task<Response<string>> Handle(CreateEPrescriptionCommand request, CancellationToken cancellationToken)
         {
             var roles = await _currentUserService.GetCurrentUserRolesAsync();
@@ -51,5 +57,6 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Handlers
             }
             return BadRequest<string>(_localizer[SharedResourcesKeys.FailToAdd]);
         }
+        #endregion
     }
 }

@@ -7,12 +7,19 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Validators
 {
     public class ConfirmPaymentValidator : AbstractValidator<ConfirmPaymentCommand>
     {
+        #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
+        #endregion
+
+        #region Constructor
         public ConfirmPaymentValidator(IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             ApplyValidationRules();
         }
+        #endregion
+
+        #region Functions
 
         public void ApplyValidationRules()
         {
@@ -24,5 +31,6 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Validators
               .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.NotEmpty])
               .NotNull().WithMessage(_localizer[SharedResourcesKeys.Required]);
         }
+        #endregion
     }
 }
