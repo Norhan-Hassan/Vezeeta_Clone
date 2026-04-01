@@ -83,7 +83,7 @@ HTTP Request
 
 | Entity         | Description                                                                                                                                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Payment`      | Provider (Cash/Stripe/PayPal), Amount, Currency, Status, Client secret, Timestamps, Failure tracking, Idempotency key, Provider metadata (JSON) |
+| `Payment`      | Provider (Cash/Stripe), Amount, Currency, Status, Client secret, Timestamps, Failure tracking, Idempotency key, Provider metadata (JSON) |
 | `PaymentEvent` | Webhook events from providers, Raw payload storage, Event data, Retry tracking                                                                  |
 
 ### Medical & Clinical
@@ -373,6 +373,7 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 | Method | Route     | Description      | Auth |
 | ------ | --------------- | ------------------------------------------------------------ | ---- |
 | `GET`  | `appointments`  | Get paginated list of patient's appointments with filtering  | ✅   |
+| `GET`  | `/`  | Get profile of current logged in patient  | ✅   |
 
 ---
 
@@ -391,7 +392,7 @@ Automatically generates bookable appointment slots based on flexible doctor sche
 
 ### 2️⃣ **Background Job Processing with Hangfire**
 
-Asynchronous slot generation via fire-and-forget and recurring jobs.
+Asynchronous slot generation via Enqueue and recurring jobs.
 
 **Features:**
 
@@ -578,6 +579,12 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
         "ReportContainer":"name",
         "ConnectionString":"connection_string_"
      },
+      "emailSettings":{
+         "port": 465,
+         "host": "smtp.gmail.com",
+         "fromEmail": "your_gmail@gmail.com",
+          "password": "Application-email_key"
+      },
      "StripeSettings": {
        "SecretKey": "sk_test_YOUR_STRIPE_SECRET_KEY",
        "PublishableKey": "pk_test_YOUR_STRIPE_PUBLISHABLE_KEY"
