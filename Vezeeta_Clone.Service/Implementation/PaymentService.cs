@@ -62,7 +62,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 Provider = provider,
                 Amount = amount,
                 Currency = "EGP",
-                Status = PaymentStatus.Pending, // Initial status set to Pending
+                Status = PaymentStatus.Pending,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 PayerEmail = appointment.Patient?.ApplicationUser.Email,
@@ -292,7 +292,7 @@ namespace Vezeeta_Clone.Service.Implementation
                     appointment.AvailableSlot.IsBooked = false;
                     appointment.AvailableSlot.Status = SlotStatus.Available;
 
-                    // Track slot update
+
                     await _unitOfWork._availabilitySlotRepo.UpdateAsync(appointment.AvailableSlot);
                 }
             }
@@ -424,6 +424,7 @@ namespace Vezeeta_Clone.Service.Implementation
             return true;
         }
 
+        //inside backend for now 
         private string GenerateIdempotencyKey(int appointmentId, PaymentProvider provider)
         {
             return $"{provider}_{appointmentId}_{DateTime.UtcNow:yyyyMMddHHmmssfff}";

@@ -26,6 +26,7 @@
         {
             public const string Prefix = Rule + "patients/";
             public const string AppointmentsList = Prefix + "appointments/";
+            public const string PatientProfile = Prefix;
         }
         public static class ScheduleRouting
         {

@@ -22,10 +22,6 @@ namespace Vezeeta_Clone.Infrastructure.InfrastructureBases
         #endregion
 
 
-        #region Methods
-
-        #endregion
-
         #region Actions
         public virtual async Task<T> GetByIntIdAsync(int id)
         {

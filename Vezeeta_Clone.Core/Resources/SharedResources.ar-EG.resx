@@ -300,6 +300,9 @@
   <data name="NotFound" xml:space="preserve">
     <value>غير موجود</value>
   </data>
+  <data name="NotSpecified" xml:space="preserve">
+    <value>غير محدد بعد</value>
+  </data>
   <data name="NoWhiteSpace" xml:space="preserve">
     <value>اسم المستخدم لا يجب أن يحتوي على أي مسافات</value>
   </data>

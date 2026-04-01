@@ -21,5 +21,11 @@ namespace Vezeeta_Clone.Service.Implementation
             var patient = appointment.Patient;
             return patient;
         }
+
+        public async Task<Patient> GetPatientByIdAsync(string patientId)
+        {
+            var patient = await _unitOfWork._patientRepo.GetTableNoTracking().Include(p => p.ApplicationUser).FirstOrDefaultAsync(p => p.AppUserID == patientId);
+            return patient;
+        }
     }
 }

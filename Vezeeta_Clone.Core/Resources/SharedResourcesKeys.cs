@@ -78,6 +78,8 @@
         public const string Wednesday = "Wednesday";
         public const string Thursday = "Thursday";
 
+        public const string NotSpecified = "NotSpecified";
+
         public const string AppName = "AppName";
         public const string AppointmentBooked = "AppointmentBooked";
         public const string AppointmentBookFailed = "AppointmentBookFailed";

@@ -6,11 +6,11 @@ namespace Vezeeta_Clone.Data.Entities
     {
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [ForeignKey("DoctorPatient")]
+        [ForeignKey(nameof(DoctorPatient))]
         public int DoctorPatientId { get; set; }
         public DoctorPatient DoctorPatient { get; set; }
 
-        [ForeignKey("Appointment")]
+        [ForeignKey(nameof(Appointment))]
         public int AppointmentId { get; set; }
         public Appointment Appointment { get; set; }
 

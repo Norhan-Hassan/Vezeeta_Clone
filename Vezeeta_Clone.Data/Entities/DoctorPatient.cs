@@ -4,11 +4,11 @@ namespace Vezeeta_Clone.Data.Entities
 {
     public class DoctorPatient : BaseEntity
     {
-        [ForeignKey("Doctor")]
+        [ForeignKey(nameof(Doctor))]
         public string DoctorId { get; set; }
         public Doctor Doctor { get; set; }
 
-        [ForeignKey("Patient")]
+        [ForeignKey(nameof(Patient))]
         public string PatientId { get; set; }
         public Patient Patient { get; set; }
         public int TotalVisits { get; set; }

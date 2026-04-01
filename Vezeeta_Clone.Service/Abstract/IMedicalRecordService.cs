@@ -12,6 +12,5 @@ namespace Vezeeta_Clone.Service.Abstract
 
         Task<MedicalRecord> GetMedicalRecordAsync(int medicalRecordId);
         Task<bool> SaveMedicalRecordReport(string? file_url, int medicalRecordId);
-        Task<bool> UpdateDiagnosisAsync(int medicalRecordId, string description, string doctorId);
     }
 }

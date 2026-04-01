@@ -13,11 +13,21 @@ namespace Vezeeta_Clone.Api.Controllers.V1
     [Authorize(Roles = Roles.Patient)]
     public class PatientsController : AppControllerBase
     {
+
         [HttpGet(Router.PatientRouting.AppointmentsList)]
         [SwaggerOperation(Summary = "Get patient appointments", Description = "Get paginated list of appointments for the current patient with filtering options")]
         public async Task<IActionResult> GetPatientAppointments([FromQuery] GetPatientAppointmentsQuery query)
         {
             var response = await _mediator.Send(query);
+            return NewResult(response);
+        }
+
+        //GetPatientProfile
+        [HttpGet(Router.PatientRouting.PatientProfile)]
+        [SwaggerOperation(Summary = "Get patient profile", Description = "Get profile data for the current patient with filtering options")]
+        public async Task<IActionResult> GetPatientProfile()
+        {
+            var response = await _mediator.Send(new GetPatientProfileQuery());
             return NewResult(response);
         }
     }

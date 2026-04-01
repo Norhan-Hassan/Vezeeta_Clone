@@ -89,19 +89,19 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
             {
                 column.Spacing(12);
 
-                // ===== PATIENT INFORMATION SECTION =====
+
                 column.Item().Element(c => ComposePatientInfo(c, data));
 
-                // ===== APPOINTMENT SECTION =====
+
                 column.Item().Element(c => ComposeAppointmentDetails(c, data));
 
-                // ===== DIAGNOSIS SECTION =====
+
                 if (data.Diagnoses?.Any() == true)
                 {
                     column.Item().Element(c => ComposeDiagnosis(c, data));
                 }
 
-                // ===== MEDICATIONS SECTION =====
+
                 if (data.Medications?.Any() == true)
                 {
                     column.Item().Element(c => ComposeMedications(c, data));
@@ -113,7 +113,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
         {
             container.Column(column =>
             {
-                // Section Header
+
                 column.Item().Row(row =>
                 {
                     row.RelativeItem().Column(col =>
@@ -127,12 +127,12 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     row.ConstantItem(3).Background(PrimaryLight);
                 });
 
-                column.Item().Height(8); // Spacing
+                column.Item().Height(8);
 
-                // Patient & Doctor Info Grid
+
                 column.Item().Row(row =>
                 {
-                    // Patient Column
+
                     row.RelativeItem().PaddingRight(15).Column(patientCol =>
                     {
                         patientCol.Item().Text("Patient")
@@ -157,7 +157,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                             .FontColor("#666");
                     });
 
-                    // Doctor Column
+
                     row.RelativeItem().Column(doctorCol =>
                     {
                         doctorCol.Item().Text("Practitioner")
@@ -201,7 +201,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     });
                 });
 
-                // Decorative bottom line
+
                 column.Item().Height(1).Background(SecondaryLight);
             });
         }
@@ -210,7 +210,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
         {
             container.Column(column =>
             {
-                // Section Header
+
                 column.Item().Row(row =>
                 {
                     row.RelativeItem().Column(col =>
@@ -224,9 +224,8 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     row.ConstantItem(3).Background(PrimaryMedium);
                 });
 
-                column.Item().Height(8); // Spacing
+                column.Item().Height(8);
 
-                // Appointment Details
                 column.Item().Row(row =>
                 {
                     row.RelativeItem().Column(dateCol =>
@@ -254,9 +253,8 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     });
                 });
 
-                column.Item().Height(8); // Spacing
+                column.Item().Height(8);
 
-                // VisitDetails Details
                 column.Item().Row(row =>
                 {
                     row.RelativeItem().Column(dateCol =>
@@ -295,7 +293,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     });
                 });
 
-                // Decorative bottom line
+
                 column.Item().Height(1).Background(SecondaryLight);
             });
         }
@@ -304,7 +302,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
         {
             container.Column(column =>
             {
-                // Section Header with accent
+
                 column.Item().Row(row =>
                 {
                     row.RelativeItem().Column(col =>
@@ -320,7 +318,6 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
 
                 column.Item().Height(8);
 
-                // Diagnoses List
                 column.Item().Column(diagCol =>
                 {
                     diagCol.Spacing(4);
@@ -342,7 +339,6 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     }
                 });
 
-                // Decorative bottom line
                 column.Item().Height(1).Background(SecondaryLight);
             });
         }
@@ -351,7 +347,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
         {
             container.Column(column =>
             {
-                // Section Header
+
                 column.Item().Row(row =>
                 {
                     row.RelativeItem().Column(col =>
@@ -367,7 +363,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
 
                 column.Item().Height(8);
 
-                // Medications Table Style
+
                 column.Item().Column(medCol =>
                 {
                     medCol.Spacing(6);
@@ -382,7 +378,6 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
 
                         medCol.Item().Row(medRow =>
                         {
-                            // Medication name
                             medRow.RelativeItem(2).Column(nameCol =>
                             {
                                 nameCol.Item().Text("Medication")
@@ -396,7 +391,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                                     .FontColor(PrimaryDark);
                             });
 
-                            // Dosage
+
                             medRow.RelativeItem(1).Column(dosageCol =>
                             {
                                 dosageCol.Item().Text("Dosage")
@@ -414,7 +409,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                     }
                 });
 
-                // Notes Section
+
                 if (!string.IsNullOrWhiteSpace(data.Notes))
                 {
                     column.Item().Height(8);
@@ -437,7 +432,7 @@ namespace Vezeeta_Clone.Service.ExternalServices.Implementations
                         });
                 }
 
-                // Final decorative line
+
                 column.Item().Height(1).Background(SecondaryLight);
             });
         }

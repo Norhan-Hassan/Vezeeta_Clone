@@ -147,26 +147,6 @@ namespace Vezeeta_Clone.Service.Implementation
 
         }
 
-        public async Task<bool> UpdateDiagnosisAsync(int medicalRecordId, string description, string doctorId)
-        {
-            var medicalRecord = await _unitOfWork._medicalRecordRepo.GetByIntIdAsync(medicalRecordId);
-            if (medicalRecord == null || medicalRecord.Diagnoses.Count == 0 || medicalRecord.EPrescriptions.Count == 0)
-            {
-                return false;
-            }
 
-            var diagnosis = _unitOfWork._diagnosisRepo.GetTableAsTracking()
-                            .FirstOrDefault(d => d.MedicalRecordId == medicalRecordId);
-            if (diagnosis == null)
-            {
-                return false;
-            }
-            diagnosis.Description = description;
-            diagnosis.UpdatedAt = DateTime.UtcNow;
-            await _unitOfWork._diagnosisRepo.UpdateAsync(diagnosis);
-            var result = await _unitOfWork.SaveChangesAsync();
-            return result > 0;
-
-        }
     }
 }

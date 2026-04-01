@@ -41,10 +41,9 @@ namespace Vezeeta_Clone.Service.Implementation
             }
             catch (Exception ex)
             {
-                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
-                Console.WriteLine($"An error occurred while adding the clinic: {ex.Message}");
+
                 transaction.Rollback();
-                throw; // Rethrow the exception to be handled by the caller
+                throw;
             }
         }
         public async Task<Clinic?> GetClinicByIdAsync(int clinicId)

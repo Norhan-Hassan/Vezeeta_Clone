@@ -58,7 +58,7 @@ namespace Vezeeta_Clone.Service.Implementation
         public Task<List<Specialization>> GetSpecializationsAsync()
         {
             var specializations = _unitOfWork._specializationRepo.GetTableNoTracking()
-                                                     //.OrderByDescending(s => s.Doctors!.Count) //later when i have doctors data to order by the number of doctors in each specialization
+                                                     .OrderByDescending(s => s.Doctors!.Count)
                                                      .ToListAsync();
             return specializations;
         }

@@ -15,7 +15,6 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Handlers
     {
         #region Fields
         private readonly IMedicalRecordService _medicalRecordService;
-        private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
         private readonly IStringLocalizer<SharedResources> _localizer;
@@ -26,13 +25,11 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Handlers
         public CreateDiagnosisCommandHandler(IStringLocalizer<SharedResources> localizer,
                                                 IMapper mapper,
                                                 IMedicalRecordService medicalRecordService,
-                                                IPaymentService paymentService,
                                                 ICurrentUserService currentUserService) : base(localizer)
         {
             _localizer = localizer;
             _mapper = mapper;
             _currentUserService = currentUserService;
-            _paymentService = paymentService;
             _medicalRecordService = medicalRecordService;
         }
         #endregion
