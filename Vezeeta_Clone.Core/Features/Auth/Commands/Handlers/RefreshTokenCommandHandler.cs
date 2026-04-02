@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -35,6 +36,7 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             }
             catch (SecurityTokenException ex)
             {
+                Log.Error(ex.Message);
                 return Unauthorized<JwtAuthResult>(ex.Message);
             }
         }

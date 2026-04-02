@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Specializations.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -65,6 +66,7 @@ namespace Vezeeta_Clone.Core.Features.Specializations.Commands.Handlers
             }
             catch (KeyNotFoundException ex)
             {
+                Log.Error(ex.Message);
                 return NotFound<string>(_localizer[SharedResourcesKeys.NotFound]);
             }
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -51,6 +52,7 @@ namespace Vezeeta_Clone.Core.Features.MedicalRecords.Commands.Handlers
             }
             catch (InvalidOperationException ex)
             {
+                Log.Error(ex.Message);
                 if (ex.Message.Contains("NoMedicalRecordExist"))
                 {
                     return NotFound<string>();

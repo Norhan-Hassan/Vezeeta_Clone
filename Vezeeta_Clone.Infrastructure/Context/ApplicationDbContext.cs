@@ -36,6 +36,7 @@ namespace Vezeeta_Clone.Infrastructure.Context
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<SubSpecialization> SubSpecializations { get; set; }
         public DbSet<ClinicImage> ClinicImages { get; set; }
+        public DbSet<OnlineMeeting> OnlineMeetings { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

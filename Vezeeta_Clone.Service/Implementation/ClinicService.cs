@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Infrastructure.InfrastructureBases;
 using Vezeeta_Clone.Service.Abstract;
@@ -43,6 +44,7 @@ namespace Vezeeta_Clone.Service.Implementation
             {
 
                 transaction.Rollback();
+                Log.Error(ex.Message);
                 throw;
             }
         }

@@ -28,6 +28,8 @@ namespace Vezeeta_Clone.Data.Entities
         public int SlotId { get; set; }
         public DoctorAvailabilitySlot? AvailableSlot { get; set; }
 
+        public OnlineMeeting? onlineMeeting { get; set; }
+
         [ForeignKey(nameof(Payment))]
         public int? PaymentId { get; set; }
         public Payment? Payment { get; set; }

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Appointments.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -44,16 +45,19 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
                 if (roles.Contains(Roles.Patient))
                 {
                     patientId = _currentUserService.GetCurrentUserId();
+
                 }
                 else
                 {
-                    return Unauthorized<string>();
+                    return Unauthorized<string>(_localizer[SharedResourcesKeys.UnAuthorized]);
                 }
 
                 var mappedBooking = _mapper.Map<Appointment>(request);
                 var appointmentId = await _appointmentService.BookAppointmentAsync(mappedBooking, patientId);
                 if (appointmentId > 0)
+                {
                     return Success<string>(appointmentId.ToString(), message: _localizer[SharedResourcesKeys.AppointmentBooked]);
+                }
                 return BadRequest<string>(_localizer[SharedResourcesKeys.AppointmentBookFailed]);
             }
             catch (InvalidOperationException ex)
@@ -74,14 +78,18 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Commands.Handlers
                 {
                     return BadRequest<string>(_localizer[SharedResourcesKeys.SlotAlreadyBooked]);
                 }
+                Log.Error(ex.Message);
                 return BadRequest<string>(ex.Message);
             }
             catch (DbUpdateConcurrencyException ex)
             {
+                Log.Error(ex.Message);
                 return BadRequest<string>(_localizer[SharedResourcesKeys.AppointmentBookFailed]);
+
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
                 return BadRequest<string>(ex.Message);
             }
 

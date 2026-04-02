@@ -41,7 +41,6 @@ namespace Vezeeta_Clone.Core.Features.Appointments.Queries.Handlers
             var mappedAppointment = _mapper.Map<GetAppointmentDetailsQueryResult>(appointment);
 
             return Success<GetAppointmentDetailsQueryResult>(mappedAppointment);
-            throw new NotImplementedException();
         }
         #endregion
     }

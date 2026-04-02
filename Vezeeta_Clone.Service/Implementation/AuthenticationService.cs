@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -78,7 +79,7 @@ namespace Vezeeta_Clone.Service.Implementation
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                //log the exception  //LATER
+                Log.Error(ex.Message);
                 throw;
             }
 
@@ -110,7 +111,7 @@ namespace Vezeeta_Clone.Service.Implementation
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                //log the exception  //LATER
+                Log.Error(ex.Message);
                 throw;
             }
 
@@ -203,7 +204,7 @@ namespace Vezeeta_Clone.Service.Implementation
             }
             catch (Exception ex)
             {
-                //log the exception  //LATER
+                Log.Error(ex.Message);
                 throw;
             }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Stripe;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Entities.Enums;
@@ -110,6 +111,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
                 catch (StripeException ex)
                 {
+                    Log.Error(ex.Message);
                     payment.Status = PaymentStatus.Failed;
                     payment.FailureReason = ex.Message;
                     payment.FailureCode = ex.StripeError?.Code;
@@ -188,6 +190,7 @@ namespace Vezeeta_Clone.Service.Implementation
             }
             catch (StripeException ex)
             {
+                Log.Error(ex.Message);
                 payment.Status = PaymentStatus.Failed;
                 payment.FailureReason = ex.Message;
                 payment.FailureCode = ex.StripeError?.Code;
@@ -243,6 +246,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
+                    Log.Error(ex.Message);
                     throw new InvalidOperationException($"Failed to update appointment after payment: {ex.Message}", ex);
                 }
             }
@@ -262,6 +266,7 @@ namespace Vezeeta_Clone.Service.Implementation
             }
             else if (appointment.Status == AppointmentStatus.Confirmed && appointment.Payment.Status == PaymentStatus.Paid)
             {
+
                 throw new InvalidOperationException("alreadyconfirmedandpaid");
             }
             payment.Status = PaymentStatus.Paid;
@@ -353,8 +358,9 @@ namespace Vezeeta_Clone.Service.Implementation
 
                     return true;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Log.Error(ex.Message);
                     await transaction.RollbackAsync();
                     throw;
                 }
@@ -390,7 +396,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
                 catch (StripeException ex)
                 {
-
+                    Log.Error(ex.Message);
                     await LogPaymentEventAsync(
                         payment.ID,
                         PaymentEventType.PaymentIntentFailed,

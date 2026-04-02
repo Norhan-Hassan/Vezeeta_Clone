@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
+using Serilog;
 using Vezeeta_Clone.Core;
 using Vezeeta_Clone.Core.Middleware;
 using Vezeeta_Clone.Data.Entities;
@@ -37,6 +38,13 @@ namespace Vezeeta_Clone.Api
 
             #endregion
 
+            #region Logging
+            Log.Logger = new LoggerConfiguration()
+              .ReadFrom.Configuration(builder.Configuration)
+              .CreateLogger();
+            builder.Services.AddSerilog();
+            #endregion
+
             #region Localization
             //builder.Services.AddLocalization(opt => opt.ResourcesPath = "Resources");
             builder.Services.AddLocalization();
@@ -53,8 +61,11 @@ namespace Vezeeta_Clone.Api
             });
             #endregion
 
-            #region Seeding Database Roles ,Admin User and Doctors' Specializations 
             var app = builder.Build();
+
+            #region Seeding Database Roles ,Admin User and Doctors' Specializations 
+
+
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

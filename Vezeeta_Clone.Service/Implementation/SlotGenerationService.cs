@@ -43,8 +43,8 @@ namespace Vezeeta_Clone.Service.Implementation
                 if (availability.DayOfWeek.HasValue)
                 {
                     var lastSlotDateForAvailability = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
-                        .Where(s => s.DoctorAvailabilityId == availability.ID)
-                        .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
+                        .Where(s => s.DoctorAvailabilityId == availability.ID && s.Availability.frequency == ScheduleFrequency.Weekly)
+                        // .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
                         .MaxAsync(s => (DateOnly?)s.Date);
 
                     if (lastSlotDateForAvailability != null)
@@ -100,7 +100,7 @@ namespace Vezeeta_Clone.Service.Implementation
             var slots = new List<DoctorAvailabilitySlot>();
 
             var lastWeeklyDate = existingSlots
-                               .Where(s => !s.IsDeleted)
+                               //.Where(s => !s.IsDeleted) 
                                .OrderBy(s => s.Date)
                                .Select(s => s.Date)
                                .LastOrDefault();
@@ -183,8 +183,8 @@ namespace Vezeeta_Clone.Service.Implementation
 
                 var lastSlotDate = await _unitOfWork._availabilitySlotRepo.GetTableNoTracking()
                     .Include(s => s.Availability)
-                    .Where(s => s.Availability.DoctorId == doctorId)
-                    .Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
+                    .Where(s => s.Availability.DoctorId == doctorId && s.Availability.frequency == ScheduleFrequency.Weekly)
+                    //.Where(s => s.Availability.frequency == ScheduleFrequency.Weekly)
                     .MaxAsync(s => (DateOnly?)s.Date);
 
                 if (lastSlotDate == null)
@@ -195,7 +195,7 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
 
                 var remainingDays = lastSlotDate.Value.DayNumber - today.DayNumber;
-                Console.WriteLine($"Doctor {doctorId} has last slot on {lastSlotDate.Value}, remaining days: {remainingDays}");
+
                 if (remainingDays < requiredWeeks * 7)
                 {
                     await GenerateSlotsAsync(doctorId, requiredWeeks);

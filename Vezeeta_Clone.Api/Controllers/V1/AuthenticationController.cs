@@ -38,7 +38,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
 
         [Authorize]
         [HttpPost(Router.AuthRouting.ChangePassword)]
-        [SwaggerOperation(Summary = "Change password", Description = "Update user password for authenticated users")]
+        [SwaggerOperation(Summary = "Change password", Description = "Update user password for authenticated users", OperationId = "ResetPassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
         {
             var response = await _mediator.Send(command);
@@ -46,7 +46,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpPost(Router.AuthRouting.ResetPassword)]
-        [SwaggerOperation(Summary = "Request password reset", Description = "Send password reset code to user email")]
+        [SwaggerOperation(Summary = "Request password reset", Description = "Send password reset code to user email", OperationId = "ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromQuery] ResetPasswordCommand command)
         {
             var response = await _mediator.Send(command);
@@ -54,7 +54,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpGet(Router.AuthRouting.CheckResetPassword)]
-        [SwaggerOperation(Summary = "Verify reset password code", Description = "Validate password reset code sent to user email")]
+        [SwaggerOperation(Summary = "Verify reset password code", Description = "Validate password reset code sent to user email", OperationId = "ResetPassword")]
         public async Task<IActionResult> CheckResetPassword([FromQuery] ResetPasswordQuery query)
         {
             var response = await _mediator.Send(query);
@@ -62,7 +62,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpPost(Router.AuthRouting.ResetPasswordInAction)]
-        [SwaggerOperation(Summary = "Reset password with code", Description = "Complete password reset using verification code")]
+        [SwaggerOperation(Summary = "Reset password with code", Description = "Complete password reset using verification code", OperationId = "ResetPassword")]
         public async Task<IActionResult> ResetPasswordInAction([FromBody] ResetPasswordInActionCommand command)
         {
             var response = await _mediator.Send(command);

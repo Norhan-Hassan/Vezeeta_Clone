@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Clinics.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -59,6 +60,7 @@ namespace Vezeeta_Clone.Core.Features.Clinics.Commands.Handlers
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
                 if (ex.Message.Contains("CompleteProfile"))
                 {
                     return BadRequest<string>(_localizer[SharedResourcesKeys.CompleteProfileToAddClinic]);

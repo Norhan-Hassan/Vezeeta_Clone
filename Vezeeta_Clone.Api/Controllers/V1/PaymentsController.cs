@@ -15,7 +15,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
     public class PaymentsController : AppControllerBase
     {
         [HttpPost(Router.PaymentRouting.CreatePaymentIntent)]
-        [SwaggerOperation(Summary = "Create payment intent", Description = "Initiate payment for appointment booking. Supports Stripe card payments and cash payment options")]
+        [SwaggerOperation(Summary = "Create payment intent", Description = "Initiate payment for appointment booking. Supports Stripe card payments and cash payment options", OperationId = "Payment")]
         public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentCommand request)
         {
             var response = await _mediator.Send(request);
@@ -23,7 +23,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpPost(Router.PaymentRouting.ConfirmPayment)]
-        [SwaggerOperation(Summary = "Confirm Stripe payment", Description = "Confirm payment after Stripe payment method submission and validate transaction")]
+        [SwaggerOperation(Summary = "Confirm Stripe payment", Description = "Confirm payment after Stripe payment method submission and validate transaction", OperationId = "Payment")]
         public async Task<IActionResult> ConfirmPayment([FromBody] ConfirmPaymentCommand request)
         {
             var response = await _mediator.Send(request);
@@ -31,7 +31,7 @@ namespace Vezeeta_Clone.Api.Controllers.V1
         }
 
         [HttpPost(Router.PaymentRouting.UpdateAppointmentAfterPayment)]
-        [SwaggerOperation(Summary = "Update appointment after payment", Description = "Finalize appointment confirmation after successful payment and send confirmation email")]
+        [SwaggerOperation(Summary = "Update appointment after payment", Description = "Finalize appointment confirmation after successful payment and send confirmation email", OperationId = "Payment")]
         public async Task<IActionResult> UpdateAppointmentAfterPayment([FromBody] UpdateAppointmentAfterPaymentCommand request)
         {
             var response = await _mediator.Send(request);

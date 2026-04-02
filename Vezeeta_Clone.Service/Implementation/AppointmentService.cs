@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Vezeeta_Clone.Data.Entities;
 using Vezeeta_Clone.Data.Entities.Enums;
 using Vezeeta_Clone.Infrastructure.InfrastructureBases;
@@ -78,12 +79,12 @@ namespace Vezeeta_Clone.Service.Implementation
                 }
                 catch (InvalidOperationException ex)
                 {
-                    //log the exception
+                    Log.Error(ex.Message);
                     throw;
                 }
                 catch (Exception ex)
                 {
-                    //log the exception
+                    Log.Error(ex.Message);
                     throw;
                 }
             }

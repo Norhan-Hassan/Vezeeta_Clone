@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Auth.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -75,10 +76,12 @@ namespace Vezeeta_Clone.Core.Features.Auth.Commands.Handlers
             }
             catch (FileNotFoundException ex)
             {
+                Log.Error(ex.Message);
                 return BadRequest<string>(ex.Message);
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
                 return UnprocessableEntity<string>(_localizer[SharedResourcesKeys.FailedToRegister]);
             }
 

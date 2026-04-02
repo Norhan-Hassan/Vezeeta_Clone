@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Payments.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -98,6 +99,7 @@ namespace Vezeeta_Clone.Core.Features.Payments.Commands.Handlers
             }
             catch (InvalidOperationException ex)
             {
+                Log.Error(ex.Message);
                 if (ex.Message.Contains("PendingAppointment"))
                 {
                     return NotFound<string>(_localizer[SharedResourcesKeys.CompleteAppointment]);

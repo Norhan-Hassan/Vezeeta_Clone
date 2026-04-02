@@ -44,7 +44,7 @@ namespace Vezeeta_Clone.Service.Implementation
                                                               .AnyAsync(r => r.PatientId == patientId && r.DoctorId == review.DoctorId);
 
             var patientDoctorAppointment = await _unitOfWork._appointmentRepo.GetTableNoTracking()
-                                                                    .AnyAsync(a => a.DoctorId == review.DoctorId && a.PatientId == patientId && a.Status == AppointmentStatus.Completed);
+                                                                    .AnyAsync(a => a.DoctorId == review.DoctorId && a.PatientId == patientId && a.Status == AppointmentStatus.Confirmed);
             if (patientReview)
                 throw new InvalidOperationException("AlreadyReviewed");
 

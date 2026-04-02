@@ -19,6 +19,7 @@ namespace Vezeeta_Clone.Core
             //Fluent Validation
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             return services;
         }
     }

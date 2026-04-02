@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 using Vezeeta_Clone.Core.Bases;
 using Vezeeta_Clone.Core.Features.Reviews.Commands.Models;
 using Vezeeta_Clone.Core.Resources;
@@ -46,6 +47,7 @@ namespace Vezeeta_Clone.Core.Features.Reviews.Commands.Handlers
             }
             catch (InvalidOperationException ex)
             {
+                Log.Error(ex.Message);
                 if (ex.Message.Contains("DoesnotHaveAppointment"))
                 {
                     return BadRequest<string>(_localizer[SharedResourcesKeys.ReviewWithoutAppointment]);

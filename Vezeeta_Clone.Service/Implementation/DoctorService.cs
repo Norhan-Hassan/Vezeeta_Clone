@@ -180,23 +180,3 @@ namespace Vezeeta_Clone.Service.Implementation
         #endregion
     }
 }
-//public async Task<double> GetDoctorAverageRatingNumber(string id)
-//{
-//    var doctorRatingNumber = await _doctorRepo.GetTableNoTracking()
-//                             .Include(d => d.Reviews)
-//                             .Where(d => d.AppUserID == id)
-//                             .Select(d => d.Reviews.Any()
-//                                          ? d.Reviews.Average(r => r.Rating)
-//                                          : 0).FirstOrDefaultAsync();
-
-//    return doctorRatingNumber;
-//}
-
-//public async Task<int> GetDoctorRatingCount(string id)
-//{
-//    var doctorRatingCount = await _doctorRepo.GetTableNoTracking()
-//                                  .Include(d => d.Reviews)
-//                                  .Where(d => d.AppUserID == id)
-//                                  .Select(d => d.Reviews.Count()).FirstOrDefaultAsync();
-//    return doctorRatingCount;
-//}
