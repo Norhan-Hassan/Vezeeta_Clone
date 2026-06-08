@@ -274,105 +274,105 @@ public const string PasswordChangedSuccess = "PasswordChangedSuccess";
 
 ### Authentication (`api/v1/auth/`)
 
-| Method   | Route            | Description        | Auth |
-| -------- | ------------------------ | -------------------------------------------------------------- | ---- |
-| `POST`   | `doctor-register`        | Register a new doctor account with email and password          | ❌   |
-| `POST`   | `patient-register` | Register a new patient account with personal information       | ❌   |
-| `POST`   | `signIn`       | Authenticate user and retrieve JWT access and refresh tokens   | ❌   |
-| `POST`   | `change-password`        | Update current user password for authenticated users           | ✅   |
-| `POST`   | `reset-password`       | Request password reset code sent to email     | ❌   |
-| `GET`    | `check-reset-password`   | Verify and validate password reset code | ❌   |
-| `POST`   | `reset-password-in-action` | Complete password reset using verification code     | ❌   |
-| `GET`    | `confirm-email`     | Confirm email address and activate user account     | ❌   |
-| `POST`   | `refresh-token`       | Generate new access token using refresh token          | ❌   |
-| `GET`    | `validate-token`         | Validate JWT token expiration and validity| ❌   |
+| Method | Route                      | Description                                                  | Auth |
+| ------ | -------------------------- | ------------------------------------------------------------ | ---- |
+| `POST` | `doctor-register`          | Register a new doctor account with email and password        | ❌   |
+| `POST` | `patient-register`         | Register a new patient account with personal information     | ❌   |
+| `POST` | `signIn`                   | Authenticate user and retrieve JWT access and refresh tokens | ❌   |
+| `POST` | `change-password`          | Update current user password for authenticated users         | ✅   |
+| `POST` | `reset-password`           | Request password reset code sent to email                    | ❌   |
+| `GET`  | `check-reset-password`     | Verify and validate password reset code                      | ❌   |
+| `POST` | `reset-password-in-action` | Complete password reset using verification code              | ❌   |
+| `GET`  | `confirm-email`            | Confirm email address and activate user account              | ❌   |
+| `POST` | `refresh-token`            | Generate new access token using refresh token                | ❌   |
+| `GET`  | `validate-token`           | Validate JWT token expiration and validity                   | ❌   |
 
 ### Authorization (`api/v1/authorization/`)
 
-| Method   | Route    | Description         | Auth |
-| -------- | -------- | ---------------------------------------- | ---- |
-| `POST`   | `add`    | Create a new role for authorization      | ✅ |
+| Method   | Route    | Description                         | Auth |
+| -------- | -------- | ----------------------------------- | ---- |
+| `POST`   | `add`    | Create a new role for authorization | ✅   |
 | `PUT`    | `update` | Update existing role details        | ✅   |
-| `DELETE` | `delete` | Delete a role from system            | ✅   |
+| `DELETE` | `delete` | Delete a role from system           | ✅   |
 
 ### Doctors (`api/v1/doctors/`)
 
-| Method | Route        | Description       | Auth |
-| ------ | -------------------------- | ------------------------------------------------------ | ---- |
-| `GET`  | `list`            | Get paginated list of all doctors with filtering      | ❌   |
-| `GET`  | `{Id:Guid}`       | Get complete detailed information for a doctor        | ❌   |
-| `GET`  | `{Id}/reviews`     | Get paginated reviews and ratings for a doctor        | ❌   |
-| `GET`  | `{Id}/examination-details` | Get examination details and services offered          | ❌   |
-| `GET`  | `{Id}/available-slots`     | Get available appointment slots grouped by date | ❌   |
-| `GET`  | `appointments`             | Get paginated list of doctor's appointments           | ✅   |
-| `POST` | `complete-info`            | Complete doctor profile for clinic registration     | ✅   |
-| `POST` | `add-picture`        | Upload doctor's profile picture to storage          | ✅   |
+| Method | Route                      | Description                                      | Auth |
+| ------ | -------------------------- | ------------------------------------------------ | ---- |
+| `GET`  | `list`                     | Get paginated list of all doctors with filtering | ❌   |
+| `GET`  | `{Id:Guid}`                | Get complete detailed information for a doctor   | ❌   |
+| `GET`  | `{Id}/reviews`             | Get paginated reviews and ratings for a doctor   | ❌   |
+| `GET`  | `{Id}/examination-details` | Get examination details and services offered     | ❌   |
+| `GET`  | `{Id}/available-slots`     | Get available appointment slots grouped by date  | ❌   |
+| `GET`  | `appointments`             | Get paginated list of doctor's appointments      | ✅   |
+| `POST` | `complete-info`            | Complete doctor profile for clinic registration  | ✅   |
+| `POST` | `add-picture`              | Upload doctor's profile picture to storage       | ✅   |
 
 ### Specializations (`api/v1/specializations/`)
 
-| Method | Route       | Description  | Auth |
-| ------ | -------------------------- | ---------------------------------------------------------------- | ---- |
-| `GET`  | `list`   | Get list of all medical specializations with bilingual names     | ❌   |
-| `GET`  | `{Id}/sub-specializations` | Get all sub-specializations for a specialization         | ❌   |
-| `POST` | `create`  | Create new medical specialization (Admin only)  | ✅   |
-| `PUT`  | `{Id}`     | Update specialization details and information (Admin only)       | ✅   |
+| Method | Route                      | Description                                                  | Auth |
+| ------ | -------------------------- | ------------------------------------------------------------ | ---- |
+| `GET`  | `list`                     | Get list of all medical specializations with bilingual names | ❌   |
+| `GET`  | `{Id}/sub-specializations` | Get all sub-specializations for a specialization             | ❌   |
+| `POST` | `create`                   | Create new medical specialization (Admin only)               | ✅   |
+| `PUT`  | `{Id}`                     | Update specialization details and information (Admin only)   | ✅   |
 
 ### Appointments (`api/v1/appointments/`)
 
-| Method | Route      | Description       | Auth |
-| ------ | ------------- | ------------------------------------------------------ | ---- |
-| `POST` | `/`      | Create new appointment booking by selecting doctor and slot | ✅   |
-| `PUT`  | `{Id}`        | Complete appointment booking confirmation process      | ✅   |
-| `GET`  | `{Id}`        | Get detailed information for specific appointment      | ✅   |
+| Method | Route  | Description                                                 | Auth |
+| ------ | ------ | ----------------------------------------------------------- | ---- |
+| `POST` | `/`    | Create new appointment booking by selecting doctor and slot | ✅   |
+| `PUT`  | `{Id}` | Complete appointment booking confirmation process           | ✅   |
+| `GET`  | `{Id}` | Get detailed information for specific appointment           | ✅   |
 
 ### Schedules (`api/v1/schedules/`)
 
-| Method | Route  | Description     | Auth |
-| ------ | ------------------ | -------------------------------------------------------------- | ---- |
-| `POST` | `/`     | Set doctor availability with weekly recurring or one-time slots | ✅   |
-| `PUT`  | `{Id}/lock-slot`   | Lock specific appointment slot to prevent bookings         | ✅   |
-| `GET`  | `{doctorId}`       | Get doctor's availability patterns and schedules          | ❌   |
+| Method | Route            | Description                                                     | Auth |
+| ------ | ---------------- | --------------------------------------------------------------- | ---- |
+| `POST` | `/`              | Set doctor availability with weekly recurring or one-time slots | ✅   |
+| `PUT`  | `{Id}/lock-slot` | Lock specific appointment slot to prevent bookings              | ✅   |
+| `GET`  | `{doctorId}`     | Get doctor's availability patterns and schedules                | ❌   |
 
 ### Medical Records (`api/v1/medical-records/`)
 
-| Method | Route            | Description  | Auth |
-| ------ | ------------------ | --------------------------------------------------------- | ---- |
-| `POST` | `/`| Create medical record for patient after appointment  | ✅   |
-| `POST` | `{Id}/diagnosis`   | Add diagnosis findings to medical record          | ✅   |
-| `POST` | `{Id}/e-prescription` | Create electronic prescription with medications          | ✅   |
-| `GET`  | `generate-report`  | Generate PDF medical report for patient            | ✅   |
+| Method | Route                 | Description                                         | Auth |
+| ------ | --------------------- | --------------------------------------------------- | ---- |
+| `POST` | `/`                   | Create medical record for patient after appointment | ✅   |
+| `POST` | `{Id}/diagnosis`      | Add diagnosis findings to medical record            | ✅   |
+| `POST` | `{Id}/e-prescription` | Create electronic prescription with medications     | ✅   |
+| `GET`  | `generate-report`     | Generate PDF medical report for patient             | ✅   |
 
 ### Reviews (`api/v1/reviews/`)
 
-| Method   | Route  | Description    | Auth |
+| Method   | Route  | Description                                               | Auth |
 | -------- | ------ | --------------------------------------------------------- | ---- |
 | `POST`   | `/`    | Create review and rating for doctor with optional comment | ✅   |
-| `PUT`    | `{Id}` | Update existing review rating and comment      | ✅   |
-| `DELETE` | `{Id}` | Delete an existing review     | ✅   |
+| `PUT`    | `{Id}` | Update existing review rating and comment                 | ✅   |
+| `DELETE` | `{Id}` | Delete an existing review                                 | ✅   |
 
 ### Clinics (`api/v1/clinics/`)
 
-| Method | Route         | Description       | Auth |
-| ------ | ------------- | -------------------------------------------------------------- | ---- |
-| `POST` | `/`           | Register clinic for doctor with location and contact details   | ✅   |
-| `POST` | `add-images`  | Upload multiple clinic images to Azure Blob Storage        | ✅   |
-| `GET`  | `{Id}/images` | Get list of clinic images by clinic ID       | ❌   |
+| Method | Route         | Description                                                  | Auth |
+| ------ | ------------- | ------------------------------------------------------------ | ---- |
+| `POST` | `/`           | Register clinic for doctor with location and contact details | ✅   |
+| `POST` | `add-images`  | Upload multiple clinic images to Azure Blob Storage          | ✅   |
+| `GET`  | `{Id}/images` | Get list of clinic images by clinic ID                       | ❌   |
 
 ### Payments (`api/v1/payments/`)
 
-| Method | Route    | Description       | Auth |
-| ------ | ------------------------------ | ----------------------------------------------------- | ---- |
-| `POST` | `create-payment-intent`        | Create payment intent for appointment booking         | ✅   |
-| `POST` | `confirm-payment`       | Confirm Stripe payment and validate transaction       | ✅   |
-| `POST` | `update-appointment-after-payment` | Finalize appointment after successful payment   | ✅   |
-| `GET`  | `{Id}`    | Get payment details and status by appointment ID      | ✅   |
-| `POST` | `{Id}/cancel-with-refund`      | Cancel appointment and process refund         | ✅   |
+| Method | Route                              | Description                                      | Auth |
+| ------ | ---------------------------------- | ------------------------------------------------ | ---- |
+| `POST` | `create-payment-intent`            | Create payment intent for appointment booking    | ✅   |
+| `POST` | `confirm-payment`                  | Confirm Stripe payment and validate transaction  | ✅   |
+| `POST` | `update-appointment-after-payment` | Finalize appointment after successful payment    | ✅   |
+| `GET`  | `{Id}`                             | Get payment details and status by appointment ID | ✅   |
+| `POST` | `{Id}/cancel-with-refund`          | Cancel appointment and process refund            | ✅   |
 
 ### Patients (`api/v1/patients/`)
 
-| Method | Route     | Description      | Auth |
-| ------ | --------------- | ------------------------------------------------------------ | ---- |
-| `GET`  | `appointments`  | Get paginated list of patient's appointments with filtering  | ✅   |
+| Method | Route          | Description                                                 | Auth |
+| ------ | -------------- | ----------------------------------------------------------- | ---- |
+| `GET`  | `appointments` | Get paginated list of patient's appointments with filtering | ✅   |
 
 ---
 
@@ -414,7 +414,7 @@ Validation and slot generation triggering on availability creation.
 ### 4️⃣ **Payment Processing System**
 
 - Payment status tracking (Pending, Paid, Failed)
-- Payment event logging 
+- Payment event logging
 - Idempotent operations with provider metadata storage (JSON)
 - Payment integration with Appointments
 
@@ -453,21 +453,21 @@ Validation and slot generation triggering on availability creation.
 - **Error Handling**: Graceful handling of upload failures with proper logging
 - **Automatic URL Generation**: Returns blob URLs for uploaded images
 
-### 9️⃣ **External Services Integration** 
+### 9️⃣ **External Services Integration**
 
 - **Azure Blob Storage**: File upload/download with configurable containers and validation
 - **Email Notifications**: Background email sending via Hangfire
 - **PDF Generation**: Medical report creation with QuestPDF
 - Proper placement in **Service Layer** following SOLID principles and Dependency Inversion
 
-### **Enhanced Payment Workflow** 
+### **Enhanced Payment Workflow**
 
 - **Success Path**: Appointment confirmation with status-specific email
 - **Failure Path**: Automatic slot release and failure notification
 - **Refund Processing**: Stripe automatic refunds and cash refund tracking
 - **Cancellation Workflow**: Complete cancellation with refund coordination
 
-### 1️⃣1️⃣ **Comprehensive API Documentation** 
+### 1️⃣1️⃣ **Comprehensive API Documentation**
 
 - SwaggerOperation attributes on all 10 controllers
 - 50+ endpoints with meaningful summaries and descriptions
@@ -486,7 +486,7 @@ ApplicationUser (IdentityUser)
  │    ├── 1:1 → Clinic
  │    │         ├── N:1 → Region → City
  │    │         └── N:1 → Location (GPS)
- │    │         └── 1:N(1-5) → ClinicImage 
+ │    │         └── 1:N(1-5) → ClinicImage
  │    ├── 1:N → DoctorAvailability
  │          └── 1:N → DoctorAvailabilitySlot
  │    │     └── 1:N → Appointment
@@ -507,7 +507,7 @@ ApplicationUser (IdentityUser)
 
 Payment
  ├── N:1 → Appointment
- └── 1:N → PaymentEvent 
+ └── 1:N → PaymentEvent
 ```
 
 All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading deletes.
@@ -516,22 +516,22 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
 
 ## NuGet Dependencies
 
-| Package                                             | Version | Purpose                       |
-| --------------------------------------------------- | ------- | ----------------------------- |
-| `Microsoft.EntityFrameworkCore.SqlServer`           | 9.0.10  | SQL Server provider           |
-| `Microsoft.AspNetCore.Identity.EntityFrameworkCore` | 9.0.10  | Identity with EF Core         |
-| `Microsoft.AspNetCore.Authentication.JwtBearer`     | 9.0.13  | JWT authentication            |
-| `MediatR`                                           | 14.1.0  | CQRS mediator pattern         |
-| `AutoMapper`                                        | 16.1.0  | Object-to-object mapping      |
-| `FluentValidation`                                  | 12.1.1  | Request validation            |
-| `FluentValidation.DependencyInjectionExtensions`    | 12.1.1  | FluentValidation DI           |
-| `Swashbuckle.AspNetCore`                            | 9.0.6   | Swagger/OpenAPI documentation |
-| `Swashbuckle.AspNetCore.Annotations`                | 9.0.6   | Swagger endpoint annotations  |
-| `Stripe.net`                                        | Latest  | Stripe payment processing     |
-| `Hangfire.Core`                                     | 1.8.13  | Background job processing     |
-| `Hangfire.SqlServer`                                | 1.8.13  | SQL Server job storage        |
-| `Azure.Storage.Blobs`                               | Latest  | Azure Blob Storage integration|
-| `QuestPDF`                                          | Latest  | PDF generation                |
+| Package                                             | Version | Purpose                        |
+| --------------------------------------------------- | ------- | ------------------------------ |
+| `Microsoft.EntityFrameworkCore.SqlServer`           | 9.0.10  | SQL Server provider            |
+| `Microsoft.AspNetCore.Identity.EntityFrameworkCore` | 9.0.10  | Identity with EF Core          |
+| `Microsoft.AspNetCore.Authentication.JwtBearer`     | 9.0.13  | JWT authentication             |
+| `MediatR`                                           | 14.1.0  | CQRS mediator pattern          |
+| `AutoMapper`                                        | 16.1.0  | Object-to-object mapping       |
+| `FluentValidation`                                  | 12.1.1  | Request validation             |
+| `FluentValidation.DependencyInjectionExtensions`    | 12.1.1  | FluentValidation DI            |
+| `Swashbuckle.AspNetCore`                            | 9.0.6   | Swagger/OpenAPI documentation  |
+| `Swashbuckle.AspNetCore.Annotations`                | 9.0.6   | Swagger endpoint annotations   |
+| `Stripe.net`                                        | Latest  | Stripe payment processing      |
+| `Hangfire.Core`                                     | 1.8.13  | Background job processing      |
+| `Hangfire.SqlServer`                                | 1.8.13  | SQL Server job storage         |
+| `Azure.Storage.Blobs`                               | Latest  | Azure Blob Storage integration |
+| `QuestPDF`                                          | Latest  | PDF generation                 |
 
 ---
 
@@ -573,14 +573,34 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
        "AccessTokenExpireDate": 7,
        "RefreshTokenExpireDate": 2
      },
-     "AzureStorageSettings":{
-        "DefaultContainer":"name",
-        "ReportContainer":"name",
-        "ConnectionString":"connection_string_"
+     "AzureStorageSettings": {
+       "DefaultContainer": "name",
+       "ReportContainer": "name",
+       "ConnectionString": "connection_string_"
      },
      "StripeSettings": {
        "SecretKey": "sk_test_YOUR_STRIPE_SECRET_KEY",
        "PublishableKey": "pk_test_YOUR_STRIPE_PUBLISHABLE_KEY"
+     },
+     "serilog": {
+       "Using": ["Serilog.Sinks.MSSqlServer", "Serilog.Sinks.Console"],
+       "MinimumLevel": {
+         "Default": "Information",
+         "Override": { "Microsoft": "Error" }
+       },
+       "WriteTo": [
+         {
+           "Name": "MSSqlServer", //log into db
+           "Args": {
+             "ConnectionString": "connection_string",
+             "TableName": "Logs",
+             "AutoCreateSqlTable": true
+           }
+         },
+         {
+           "Name": "Console" //log into console
+         }
+       ]
      }
    }
    ```
@@ -626,8 +646,8 @@ All foreign key relationships use `DeleteBehavior.Restrict` to prevent cascading
 - **UTC Timezone Consistency** — all time operations use UTC for global compatibility
 - **Transaction Support** — generic repository provides transaction management (Begin, Commit, Rollback)
 - **Concurrency Handling** — optimistic locking with retry logic for slot booking
-- **Payment Event logging** — event logging system for payment provider 
-- **Refund Processing** — Stripe refunds tracking with proper error handling 
+- **Payment Event logging** — event logging system for payment provider
+- **Refund Processing** — Stripe refunds tracking with proper error handling
 - **Appointment Validation** — multi-level checks for slot availability, past slots, double bookings
 - **Clinic Validation** — Egyptian phone format validation, Doctor profile completion checks
-- **API Documentation** — SwaggerOperation attributes on all endpoints 
+- **API Documentation** — SwaggerOperation attributes on all endpoints
